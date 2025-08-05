@@ -175,7 +175,8 @@
                     </div>
                     <div class="form-group">
                         <div class="form-check form-switch">
-                            <input type="checkbox" class="form-check-input" id="is_active" name="is_active" checked>
+                            <input type="hidden" name="is_active" value="0">
+                            <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1" checked>
                             <label class="form-check-label" for="is_active">Active</label>
                         </div>
                     </div>
@@ -224,7 +225,8 @@
                     </div>
                     <div class="form-group">
                         <div class="form-check form-switch">
-                            <input type="checkbox" class="form-check-input" id="edit_is_active" name="is_active">
+                            <input type="hidden" name="is_active" value="0">
+                            <input type="checkbox" class="form-check-input" id="edit_is_active" name="is_active" value="1">
                             <label class="form-check-label" for="edit_is_active">Active</label>
                         </div>
                     </div>

@@ -68,7 +68,7 @@ class SubjectController extends Controller
             'description' => 'nullable|string|max:1000',
             'teacher_ids' => 'required|array|min:1',
             'teacher_ids.*' => 'exists:teachers,id',
-            'is_active' => 'boolean'
+            'is_active' => 'nullable|boolean'
         ]);
 
         if ($validator->fails()) {
@@ -138,7 +138,7 @@ class SubjectController extends Controller
         
         // Return JSON for AJAX requests
         if (request()->ajax()) {
-            return response()->json($subject);
+            return response()->json($subject->load('teachers'));
         }
         
         $teachers = Teacher::active()->get();
@@ -152,16 +152,20 @@ class SubjectController extends Controller
     {
         $subject = Subject::findOrFail($id);
         
+        // Debug: Log the request data
+        \Log::info('Update subject request data:', $request->all());
+        
         $validator = Validator::make($request->all(), [
             'subject_code' => 'required|string|max:50|unique:subjects,subject_code,' . $id,
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'teacher_ids' => 'required|array|min:1',
             'teacher_ids.*' => 'exists:teachers,id',
-            'is_active' => 'boolean'
+            'is_active' => 'nullable|boolean'
         ]);
 
         if ($validator->fails()) {
+            \Log::error('Subject update validation failed:', $validator->errors()->toArray());
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()

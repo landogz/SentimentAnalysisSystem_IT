@@ -64,7 +64,7 @@ class TeacherController extends Controller
             'department' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:1000',
-            'is_active' => 'boolean'
+            'is_active' => 'nullable|boolean'
         ]);
 
         if ($validator->fails()) {
@@ -133,7 +133,7 @@ class TeacherController extends Controller
             'department' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:1000',
-            'is_active' => 'boolean'
+            'is_active' => 'nullable|boolean'
         ]);
 
         if ($validator->fails()) {

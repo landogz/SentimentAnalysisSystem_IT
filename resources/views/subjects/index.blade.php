@@ -205,7 +205,8 @@
                     </div>
                     <div class="form-group">
                         <div class="form-check form-switch">
-                            <input type="checkbox" class="form-check-input" id="is_active" name="is_active" checked>
+                            <input type="hidden" name="is_active" value="0">
+                            <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1" checked>
                             <label class="form-check-label" for="is_active">Active</label>
                         </div>
                     </div>
@@ -230,6 +231,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="editSubjectForm">
+                @csrf
                 <input type="hidden" id="edit_subject_id" name="subject_id">
                 <div class="modal-body">
                     <div class="form-group">
@@ -247,7 +249,7 @@
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input teacher-checkbox" 
                                            id="edit_teacher_{{ $teacher->id }}" 
-                                           name="edit_teacher_ids[]" 
+                                           name="teacher_ids[]" 
                                            value="{{ $teacher->id }}">
                                     <label class="form-check-label" for="edit_teacher_{{ $teacher->id }}">
                                         {{ $teacher->name }} ({{ $teacher->department }})
@@ -259,7 +261,7 @@
                     </div>
                     <div class="form-group">
                         <label for="edit_primary_teacher_id">Primary Teacher</label>
-                        <select class="form-control" id="edit_primary_teacher_id" name="edit_primary_teacher_id" required>
+                        <select class="form-control" id="edit_primary_teacher_id" name="primary_teacher_id" required>
                             <option value="">Select Primary Teacher</option>
                         </select>
                         <small class="text-muted">The primary teacher will be marked with a star</small>
@@ -270,7 +272,8 @@
                     </div>
                     <div class="form-group">
                         <div class="form-check form-switch">
-                            <input type="checkbox" class="form-check-input" id="edit_is_active" name="is_active">
+                            <input type="hidden" name="is_active" value="0">
+                            <input type="checkbox" class="form-check-input" id="edit_is_active" name="is_active" value="1">
                             <label class="form-check-label" for="edit_is_active">Active</label>
                         </div>
                     </div>
@@ -316,7 +319,7 @@ $(document).ready(function() {
         e.preventDefault();
         
         // Validate that at least one teacher is selected
-        const selectedTeachers = $('.teacher-checkbox:checked');
+        const selectedTeachers = $('#addSubjectModal .teacher-checkbox:checked');
         if (selectedTeachers.length === 0) {
             showError('Please select at least one teacher.');
             return;
@@ -362,7 +365,10 @@ $(document).ready(function() {
         e.preventDefault();
         
         // Validate that at least one teacher is selected
-        const selectedTeachers = $('.teacher-checkbox:checked');
+        const selectedTeachers = $('#editSubjectModal .teacher-checkbox:checked');
+        console.log('Selected teachers count:', selectedTeachers.length); // Debug log
+        console.log('Selected teachers:', selectedTeachers.map(function() { return this.value; }).get()); // Debug log
+        
         if (selectedTeachers.length === 0) {
             showError('Please select at least one teacher.');
             return;
@@ -377,10 +383,16 @@ $(document).ready(function() {
         
         const subjectId = $('#edit_subject_id').val();
         
+        const formData = $(this).serialize();
+        console.log('Sending form data:', formData); // Debug log
+        console.log('Form elements:', $(this).find('input, select, textarea').map(function() {
+            return { name: this.name, value: this.value, type: this.type };
+        }).get()); // Debug log
+        
         $.ajax({
             url: `/subjects/${subjectId}`,
             method: 'PUT',
-            data: $(this).serialize(),
+            data: formData,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -395,8 +407,14 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr) {
+                console.log('Error response:', xhr.responseJSON); // Debug log
                 if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    showError('Please check the form and try again.');
+                    const errors = xhr.responseJSON.errors;
+                    let errorMessage = 'Validation errors:\n';
+                    for (const field in errors) {
+                        errorMessage += `${field}: ${errors[field].join(', ')}\n`;
+                    }
+                    showError(errorMessage);
                 } else {
                     showError('An error occurred while updating the subject.');
                 }
@@ -405,28 +423,64 @@ $(document).ready(function() {
     });
 });
 
+// Function to update primary teacher options based on selected teachers
+function updatePrimaryTeacherOptions() {
+    const modal = $(this).closest('.modal');
+    const selectedTeachers = modal.find('.teacher-checkbox:checked');
+    const primarySelect = modal.find('select[name*="primary_teacher_id"]');
+    
+    // Clear current options
+    primarySelect.find('option:not(:first)').remove();
+    
+    // Add options for selected teachers
+    selectedTeachers.each(function() {
+        const teacherId = $(this).val();
+        const teacherName = $(this).closest('.form-check').find('label').text().trim();
+        primarySelect.append(`<option value="${teacherId}">${teacherName}</option>`);
+    });
+    
+    // If only one teacher is selected, auto-select as primary
+    if (selectedTeachers.length === 1) {
+        primarySelect.val(selectedTeachers.val());
+    }
+}
+
 function filterSubjects() {
     const search = $('#searchInput').val().toLowerCase();
-    const teacher = $('#teacherFilter').val();
+    const teacherId = $('#teacherFilter').val();
     const status = $('#statusFilter').val();
     
     $('#subjectsTable tbody tr').each(function() {
         const row = $(this);
         const code = row.find('td:first').text().toLowerCase();
         const name = row.find('td:nth-child(2)').text().toLowerCase();
-        const teacherName = row.find('td:nth-child(3)').text();
+        const teacherCell = row.find('td:nth-child(3)');
         const isActive = row.find('td:nth-child(7)').text().includes('Active');
         
         let show = true;
         
+        // Search filter
         if (search && !code.includes(search) && !name.includes(search)) {
             show = false;
         }
         
-        if (teacher && !teacherName.includes(teacher)) {
-            show = false;
+        // Teacher filter
+        if (teacherId) {
+            let hasTeacher = false;
+            teacherCell.find('.badge').each(function() {
+                const teacherName = $(this).text().trim();
+                // Check if this teacher matches the selected teacher
+                if (teacherName.includes($('#teacherFilter option:selected').text())) {
+                    hasTeacher = true;
+                    return false; // break the loop
+                }
+            });
+            if (!hasTeacher) {
+                show = false;
+            }
         }
         
+        // Status filter
         if (status) {
             if (status === 'active' && !isActive) show = false;
             if (status === 'inactive' && isActive) show = false;
@@ -449,25 +503,37 @@ function editSubject(id) {
             'X-Requested-With': 'XMLHttpRequest'
         },
         success: function(data) {
+            console.log('Subject data received:', data); // Debug log
             $('#edit_subject_id').val(id);
             $('#edit_subject_code').val(data.subject_code);
             $('#edit_name').val(data.name);
             $('#edit_description').val(data.description || '');
             $('#edit_is_active').prop('checked', data.is_active);
             
-            // Clear all teacher checkboxes first
-            $('.teacher-checkbox').prop('checked', false);
+            // Clear all teacher checkboxes in the edit modal first
+            $('#editSubjectModal .teacher-checkbox').prop('checked', false);
             
             // Check the assigned teachers
+            console.log('Teachers data:', data.teachers); // Debug log
             if (data.teachers && data.teachers.length > 0) {
                 data.teachers.forEach(function(teacher) {
+                    console.log('Checking teacher:', teacher.id); // Debug log
                     $(`#edit_teacher_${teacher.id}`).prop('checked', true);
+                });
+                
+                // Populate primary teacher dropdown
+                const primarySelect = $('#edit_primary_teacher_id');
+                primarySelect.find('option:not(:first)').remove();
+                
+                data.teachers.forEach(function(teacher) {
+                    const teacherName = $(`#edit_teacher_${teacher.id}`).closest('.form-check').find('label').text().trim();
+                    primarySelect.append(`<option value="${teacher.id}">${teacherName}</option>`);
                 });
                 
                 // Set primary teacher
                 const primaryTeacher = data.teachers.find(t => t.pivot.is_primary);
                 if (primaryTeacher) {
-                    $('#edit_primary_teacher_id').val(primaryTeacher.id);
+                    primarySelect.val(primaryTeacher.id);
                 }
             }
             
@@ -514,20 +580,6 @@ function deleteSubject(id) {
                 }
             });
         }
-    });
-}
-
-function updatePrimaryTeacherOptions() {
-    const selectedTeachers = $('.teacher-checkbox:checked');
-    const primarySelect = $('#primary_teacher_id, #edit_primary_teacher_id');
-    
-    primarySelect.empty();
-    primarySelect.append('<option value="">Select Primary Teacher</option>');
-    
-    selectedTeachers.each(function() {
-        const teacherId = $(this).val();
-        const teacherName = $(this).next('label').text();
-        primarySelect.append(`<option value="${teacherId}">${teacherName}</option>`);
     });
 }
 </script>
