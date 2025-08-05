@@ -15,15 +15,16 @@ A comprehensive **Student Feedback and Sentiment Analysis System** built with La
 - **CRUD Operations** - Add, Edit, Delete, View teachers
 - **Department Assignment** - Organize teachers by departments
 - **Contact Information** - Email, phone, bio management
-- **Status Control** - Active/Inactive teacher status
+- **Status Control** - Active/Inactive teacher status with proper validation
 - **Performance Metrics** - Average ratings and survey counts
 
 ### 📚 **Subject Management**
 - **Multi-Teacher Support** - Assign multiple teachers to subjects
 - **Primary Teacher** - Designate primary instructor with star icon
 - **Subject Details** - Code, name, description management
-- **Status Control** - Active/Inactive subject status
+- **Status Control** - Active/Inactive subject status with proper validation
 - **Performance Analytics** - Ratings and sentiment statistics
+- **Advanced Filtering** - Search by teacher, status, and text
 
 ### 📝 **Public Survey System**
 - **Star Rating System** - 1.0 to 5.0 decimal ratings
@@ -130,13 +131,15 @@ After running the seeders, you can log in with:
 3. **Edit Teacher**: Click edit icon on any teacher row
 4. **Delete Teacher**: Click delete icon (only if no surveys exist)
 5. **View Details**: Click view icon for detailed information
+6. **Status Updates**: Toggle Active/Inactive status with proper validation
 
 ### 📚 **Managing Subjects**
 1. Go to **Subjects** in the sidebar
 2. **Add Subject**: Click "Add Subject" button
 3. **Assign Teachers**: Select multiple teachers, designate primary
-4. **Edit Subject**: Click edit icon to modify details
+4. **Edit Subject**: Click edit icon to modify details (assigned teachers are pre-checked)
 5. **View Details**: Click view icon for subject analytics
+6. **Advanced Search**: Use filters by teacher, status, or text search
 
 ### 📝 **Public Survey**
 1. Navigate to `/survey` (public access)
@@ -187,6 +190,18 @@ The system uses a rule-based approach with predefined keyword lists:
 - **Decimal Support**: Ratings from 1.0 to 5.0
 - **Star Interface**: Visual star rating selector
 - **Average Calculations**: Automatic average rating computation
+
+### 🔍 **Advanced Search & Filtering**
+- **Text Search**: Search subjects by code or name
+- **Teacher Filter**: Filter subjects by assigned teachers
+- **Status Filter**: Filter by active/inactive status
+- **Combined Filters**: Use multiple filters simultaneously
+
+### 📄 **Custom Pagination**
+- **Bootstrap 5 Styling**: Professional pagination design
+- **Responsive Layout**: Works on all screen sizes
+- **Results Counter**: Shows current range and total
+- **Navigation Controls**: Previous/Next with page numbers
 
 ## 🔒 Security Features
 
@@ -241,6 +256,34 @@ For support and questions:
 - **v1.0.0** - Initial release with core features
 - **v1.1.0** - Added pagination fixes and UI improvements
 - **v1.2.0** - Enhanced sentiment analysis and reporting
+- **v1.3.0** - Fixed CRUD operations and search functionality
+  - ✅ Fixed assigned teachers not checked in edit modal
+  - ✅ Fixed is_active validation errors for checkboxes
+  - ✅ Fixed teacher status updates
+  - ✅ Fixed subject search and filtering
+  - ✅ Added comprehensive debugging and error handling
+  - ✅ Enhanced pagination with Bootstrap 5 styling
+  - ✅ Improved form validation and user feedback
+
+## 🐛 Recent Bug Fixes
+
+### **✅ CRUD Operations**
+- **Edit Modal**: Assigned teachers now properly checked when editing subjects
+- **Form Validation**: Fixed checkbox validation errors for active/inactive status
+- **Status Updates**: Teacher and subject status changes now work correctly
+- **Error Handling**: Enhanced error messages and debugging information
+
+### **✅ Search & Filtering**
+- **Teacher Filter**: Fixed subject filtering by assigned teachers
+- **Text Search**: Improved search functionality for subjects
+- **Combined Filters**: Multiple filters now work together seamlessly
+- **Real-time Updates**: Filters apply immediately without page refresh
+
+### **✅ UI/UX Improvements**
+- **Pagination**: Custom Bootstrap 5 pagination with proper styling
+- **Form Feedback**: Better validation messages and user notifications
+- **Debug Information**: Console logs for troubleshooting
+- **Responsive Design**: Improved mobile compatibility
 
 ---
 
