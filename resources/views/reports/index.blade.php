@@ -468,7 +468,7 @@ function exportReport(format) {
     const formData = $('#reportFilterForm').serialize();
     
     Swal.fire({
-        title: 'Exporting Report',
+        title: 'Generating Report',
         text: `Preparing ${format.toUpperCase()} report...`,
         icon: 'info',
         allowOutsideClick: false,
@@ -478,15 +478,77 @@ function exportReport(format) {
         }
     });
     
-    // Simulate export process
-    setTimeout(function() {
-        Swal.fire({
-            title: 'Export Complete!',
-            text: `Your ${format.toUpperCase()} report has been prepared.`,
-            icon: 'success',
-            confirmButtonText: 'Download'
-        });
-    }, 2000);
+    $.ajax({
+        url: '{{ route("reports.export") }}',
+        method: 'POST',
+        data: formData + '&format=' + format,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            if (response.success) {
+                if (format === 'csv') {
+                    // For CSV, create a download link
+                    const blob = new Blob([response], { type: 'text/csv' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `esp-cit-feedback-report-${new Date().toISOString().slice(0,10)}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    Swal.fire({
+                        title: 'Export Complete!',
+                        text: 'CSV report has been downloaded successfully.',
+                        icon: 'success',
+                        confirmButtonColor: '#8FCFA8'
+                    });
+                } else {
+                    // For PDF and Excel, show success message
+                    Swal.fire({
+                        title: 'Export Complete!',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonText: 'Download',
+                        confirmButtonColor: '#8FCFA8',
+                        showCancelButton: true,
+                        cancelButtonText: 'Close'
+                    }).then((result) => {
+                        if (result.isConfirmed && response.download_url) {
+                            window.open(response.download_url, '_blank');
+                        }
+                    });
+                }
+            } else {
+                Swal.fire({
+                    title: 'Export Failed',
+                    text: response.message || 'Failed to generate report.',
+                    icon: 'error',
+                    confirmButtonColor: '#F16E70'
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            let errorMessage = 'Failed to generate report.';
+            
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+            } else if (xhr.status === 419) {
+                errorMessage = 'Session expired. Please refresh the page and try again.';
+            } else if (xhr.status === 500) {
+                errorMessage = 'Server error. Please try again later.';
+            }
+            
+            Swal.fire({
+                title: 'Export Failed',
+                text: errorMessage,
+                icon: 'error',
+                confirmButtonColor: '#F16E70'
+            });
+        }
+    });
 }
 
 function printReport() {

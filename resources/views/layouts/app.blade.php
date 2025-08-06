@@ -442,10 +442,11 @@
                 justify-content: center !important;
             }
             .brand-image {
-                height: 35px !important;
+                height: 45px !important;
             }
             .brand-text {
-                font-size: 1.2rem !important;
+                font-size: 1.4rem !important;
+                font-weight: 600 !important;
             }
             .nav-sidebar .nav-link {
                 padding: 1rem 1.5rem !important;
@@ -682,6 +683,54 @@
             }
         }
         
+        /* Session Expired Alert Styling */
+        .session-expired-popup {
+            border-radius: 12px !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+        }
+        
+        .session-expired-title {
+            color: var(--dark-gray) !important;
+            font-family: 'Poppins', sans-serif !important;
+            font-weight: 600 !important;
+            font-size: 1.5rem !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        .session-expired-content {
+            color: var(--dark-gray) !important;
+            font-family: 'Poppins', sans-serif !important;
+            font-size: 1rem !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* Custom hourglass icon styling */
+        .swal2-icon.swal2-warning {
+            border-color: var(--golden-orange) !important;
+            color: var(--golden-orange) !important;
+        }
+        
+        .swal2-icon.swal2-warning .swal2-icon-content {
+            color: var(--golden-orange) !important;
+        }
+        
+        /* Mobile responsive session alert */
+        @media (max-width: 768px) {
+            .session-expired-popup {
+                margin: 1rem !important;
+                width: calc(100% - 2rem) !important;
+            }
+            
+            .session-expired-title {
+                font-size: 1.3rem !important;
+            }
+            
+            .session-expired-content {
+                font-size: 0.95rem !important;
+            }
+        }
+        
         /* Mobile Table Scrolling Fixes */
         @media (max-width: 768px) {
             .table-responsive {
@@ -829,21 +878,23 @@
 
         <!-- Sidebar Overlay for Mobile -->
         <div class="sidebar-overlay"></div>
-        
+
         <!-- Main Sidebar Container -->
         @auth
         <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: var(--dark-gray) !important;">
-            <!-- Brand Logo -->
-            <a href="{{ route('dashboard') }}" class="brand-link" style="background-color: var(--dark-gray); padding: 15px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" class="brand-image" style="height: 30px; width: auto; margin-right: 12px;">
-                <span class="brand-text" style="color: white; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 1.1rem;">ESP-CIT</span>
-            </a>
-
             <!-- Sidebar -->
             <div class="sidebar" style="background-color: var(--dark-gray);">
+                <!-- Brand Logo at Top -->
+                <div class="text-center" style="padding: 25px 15px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
+                    <a href="{{ route('dashboard') }}" style="text-decoration: none; display: block;">
+                        <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" style="height: 150px; width: auto; margin-bottom: 10px; filter: brightness(1.1) contrast(1.1);">
+                        <div style="color: white; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.4rem; margin-top: 5px;">ESP-CIT</div>
+                    </a>
+                </div>
+                
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" style="padding: 0 15px;">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" style="padding: 0px;">
                         <li class="nav-item">
                             <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
                                 <i class="nav-icon fas fa-tachometer-alt" style="color: white; margin-right: 12px;"></i>
@@ -1033,6 +1084,62 @@
             $('body').on('touchmove', function(e) {
                 if ($('body').hasClass('sidebar-open')) {
                     e.preventDefault();
+                }
+            });
+
+            // Session expiration detection
+            let sessionTimeout;
+            const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+            function resetSessionTimer() {
+                clearTimeout(sessionTimeout);
+                sessionTimeout = setTimeout(function() {
+                    showSessionExpiredAlert();
+                }, SESSION_TIMEOUT);
+            }
+
+            function showSessionExpiredAlert() {
+                Swal.fire({
+                    title: 'Your session has expired',
+                    text: 'Due to inactivity, your session has expired. Please refresh to continue.',
+                    icon: 'warning',
+                    iconColor: '#F5B445',
+                    background: '#ffffff',
+                    confirmButtonColor: '#98AAE7',
+                    confirmButtonText: 'Refresh Page',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showCancelButton: false,
+                    customClass: {
+                        popup: 'session-expired-popup',
+                        title: 'session-expired-title',
+                        content: 'session-expired-content'
+                    },
+                    didOpen: () => {
+                        // Add custom styling
+                        const popup = Swal.getPopup();
+                        popup.style.borderRadius = '12px';
+                        popup.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                    }
+                });
+            }
+
+            // Reset timer on user activity
+            $(document).on('mousemove keypress click scroll', function() {
+                resetSessionTimer();
+            });
+
+            // Initialize session timer
+            resetSessionTimer();
+
+            // Check for server-side session expiration
+            $(document).ajaxError(function(event, xhr, settings) {
+                if (xhr.status === 419) { // CSRF token mismatch (session expired)
+                    showSessionExpiredAlert();
                 }
             });
         });

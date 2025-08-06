@@ -130,22 +130,22 @@ A modern, responsive web application for collecting and analyzing student feedba
 ### **Setup Instructions**
 
 1. **Clone the repository**
-   ```bash
+```bash
    git clone [repository-url]
    cd SentimentAnalysisSystem
-   ```
+```
 
 2. **Install dependencies**
-   ```bash
-   composer install
-   npm install
-   ```
+```bash
+composer install
+npm install
+```
 
 3. **Environment setup**
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
 4. **Database configuration**
    ```bash
