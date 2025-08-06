@@ -95,10 +95,24 @@ class TeacherController extends Controller
      */
     public function show(string $id)
     {
-        $teacher = Teacher::with(['subjects', 'surveys'])
+        $teacher = Teacher::with(['subjects' => function($query) {
+                $query->withCount('surveys')
+                      ->withAvg('surveys', 'rating');
+            }, 'surveys.subject'])
             ->withCount('surveys')
             ->withAvg('surveys', 'rating')
             ->findOrFail($id);
+        
+        // Calculate additional statistics
+        $teacher->subjects_count = $teacher->subjects->count();
+        $teacher->total_surveys = $teacher->surveys_count;
+        $teacher->average_rating = $teacher->surveys_avg_rating ?? 0.0;
+        
+        // Debug information
+        \Log::info('Teacher ID: ' . $teacher->id);
+        \Log::info('Subjects count: ' . $teacher->subjects_count);
+        \Log::info('Subjects: ' . $teacher->subjects->pluck('name')->toJson());
+        \Log::info('Surveys count: ' . $teacher->surveys_count);
         
         $sentimentStats = $teacher->getSentimentStats();
         

@@ -8,6 +8,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,14 +65,64 @@ Route::middleware('auth')->group(function () {
     Route::resource('subjects', SubjectController::class);
     Route::get('/subjects-ajax', [SubjectController::class, 'getSubjects'])->name('subjects.ajax');
     
+    // User management
+    Route::resource('users', UserController::class);
+    Route::get('/users-ajax', [UserController::class, 'getUsers'])->name('users.ajax');
+    
     // Reports
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::post('/reports/export', [ReportsController::class, 'export'])->name('reports.export');
+    Route::get('/reports/teachers-ajax', [ReportsController::class, 'getTeachersAjax'])->name('reports.teachers-ajax');
+    Route::get('/reports/subjects-ajax', [ReportsController::class, 'getSubjectsAjax'])->name('reports.subjects-ajax');
+    Route::get('/reports/rating-distribution', [ReportsController::class, 'getRatingDistribution'])->name('reports.rating-distribution');
+    Route::get('/reports/filtered-stats', [ReportsController::class, 'getFilteredStats'])->name('reports.filtered-stats');
 });
 
 // Fallback route
 Route::fallback(function () {
     return redirect()->route('survey.index');
+});
+
+// Temporary route for adding sample data (remove in production)
+Route::get('/add-sample-data', function() {
+    $teachers = \App\Models\Teacher::all();
+    $subjects = \App\Models\Subject::all();
+    
+    if ($teachers->isEmpty() || $subjects->isEmpty()) {
+        return 'No teachers or subjects found.';
+    }
+    
+    // Add sample surveys
+    $sampleData = [
+        ['rating' => 4.5, 'sentiment' => 'positive', 'feedback' => 'Excellent teaching!'],
+        ['rating' => 3.8, 'sentiment' => 'positive', 'feedback' => 'Good course structure.'],
+        ['rating' => 4.2, 'sentiment' => 'positive', 'feedback' => 'Very knowledgeable.'],
+        ['rating' => 2.5, 'sentiment' => 'negative', 'feedback' => 'Could improve.'],
+        ['rating' => 3.0, 'sentiment' => 'neutral', 'feedback' => 'Average course.'],
+    ];
+    
+    foreach ($teachers as $teacher) {
+        $teacherSubjects = $teacher->subjects;
+        if ($teacherSubjects->isNotEmpty()) {
+            for ($i = 0; $i < 2; $i++) {
+                $data = $sampleData[array_rand($sampleData)];
+                $subject = $teacherSubjects->random();
+                
+                \App\Models\Survey::create([
+                    'teacher_id' => $teacher->id,
+                    'subject_id' => $subject->id,
+                    'rating' => $data['rating'],
+                    'sentiment' => $data['sentiment'],
+                    'feedback_text' => $data['feedback'],
+                    'student_name' => 'Test Student ' . ($i + 1),
+                    'student_email' => 'test' . ($i + 1) . '@student.edu',
+                    'ip_address' => '127.0.0.1'
+                ]);
+            }
+        }
+    }
+    
+    return 'Sample data added successfully!';
 });
 
 require __DIR__.'/auth.php';

@@ -126,25 +126,30 @@
                 </h3>
             </div>
             <div class="card-body">
-                <div class="row text-center">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas id="subjectSentimentPieChart" style="height: 200px;"></canvas>
+                    </div>
+                </div>
+                <div class="row mt-3 text-center">
                     <div class="col-4">
                         <div class="text-success">
                             <i class="fas fa-thumbs-up fa-2x"></i>
-                            <h4>{{ $sentimentStats['positive']['count'] }}</h4>
+                            <h5>{{ $sentimentStats['positive']['count'] }}</h5>
                             <small>Positive ({{ $sentimentStats['positive']['percentage'] }}%)</small>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="text-warning">
                             <i class="fas fa-minus-circle fa-2x"></i>
-                            <h4>{{ $sentimentStats['neutral']['count'] }}</h4>
+                            <h5>{{ $sentimentStats['neutral']['count'] }}</h5>
                             <small>Neutral ({{ $sentimentStats['neutral']['percentage'] }}%)</small>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="text-danger">
                             <i class="fas fa-thumbs-down fa-2x"></i>
-                            <h4>{{ $sentimentStats['negative']['count'] }}</h4>
+                            <h5>{{ $sentimentStats['negative']['count'] }}</h5>
                             <small>Negative ({{ $sentimentStats['negative']['percentage'] }}%)</small>
                         </div>
                     </div>
@@ -301,4 +306,37 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    // Subject Sentiment Pie Chart
+    const subjectSentimentCtx = document.getElementById('subjectSentimentPieChart').getContext('2d');
+    new Chart(subjectSentimentCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Positive', 'Neutral', 'Negative'],
+            datasets: [{
+                data: [
+                    {{ $sentimentStats['positive']['count'] }}, 
+                    {{ $sentimentStats['neutral']['count'] }}, 
+                    {{ $sentimentStats['negative']['count'] }}
+                ],
+                backgroundColor: ['#8FCFA8', '#F5B445', '#F16E70'], // Green, Yellow, Red
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+});
+</script>
+@endpush 

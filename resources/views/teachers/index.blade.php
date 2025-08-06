@@ -3,6 +3,7 @@
 @section('title', 'Teachers - Student Feedback System')
 
 @section('page-title', 'Teachers Management')
+@section('icon', 'chalkboard-teacher')
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -12,10 +13,10 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        <div class="card">
+        <div class="card card-outline card-primary">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-chalkboard-teacher mr-1"></i>
+                    <i class="fas fa-chalkboard-teacher mr-2"></i>
                     Teachers List
                 </h3>
                 <div class="card-tools">
@@ -25,16 +26,21 @@
                 </div>
             </div>
             <div class="card-body">
-                <!-- Search and Filter -->
+                <!-- Search and Filter Controls -->
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <input type="text" class="form-control" id="searchInput" placeholder="Search teachers...">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control search-box" id="searchInput" placeholder="Search teachers...">
+                        </div>
                     </div>
                     <div class="col-md-3">
                         <select class="form-control" id="departmentFilter">
                             <option value="">All Departments</option>
-                            @foreach($departments as $department)
-                                <option value="{{ $department }}">{{ $department }}</option>
+                            @foreach($departments ?? [] as $dept)
+                                <option value="{{ $dept }}">{{ $dept }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -46,15 +52,15 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <button type="button" class="btn btn-secondary btn-block" id="clearFilters">
-                            <i class="fas fa-times mr-1"></i>Clear
+                        <button type="button" class="btn btn-outline-secondary btn-block" id="clearFilters">
+                            <i class="fas fa-times"></i> Clear
                         </button>
                     </div>
                 </div>
 
                 <!-- Teachers Table -->
                 <div class="table-responsive">
-                    <table class="table table-striped" id="teachersTable">
+                    <table class="table table-hover" id="teachersTable">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -80,10 +86,10 @@
                                 <td>
                                     <span class="badge badge-info">{{ $teacher->department }}</span>
                                 </td>
-                                <td>{{ $teacher->phone ?? 'N/A' }}</td>
+                                <td>{{ $teacher->phone ?: 'N/A' }}</td>
                                 <td>
                                     @if($teacher->surveys_avg_rating)
-                                        <span class="rating-stars">
+                                        <div class="rating-stars">
                                             @for($i = 1; $i <= 5; $i++)
                                                 @if($i <= $teacher->surveys_avg_rating)
                                                     <i class="fas fa-star"></i>
@@ -93,8 +99,8 @@
                                                     <i class="far fa-star"></i>
                                                 @endif
                                             @endfor
-                                        </span>
-                                        <span class="ml-1">{{ number_format($teacher->surveys_avg_rating, 1) }}</span>
+                                        </div>
+                                        <small class="text-muted">{{ number_format($teacher->surveys_avg_rating, 1) }}</small>
                                     @else
                                         <span class="text-muted">No ratings</span>
                                     @endif
@@ -111,13 +117,13 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-info" onclick="viewTeacher({{ $teacher->id }})">
+                                        <button type="button" class="btn btn-sm btn-info" onclick="viewTeacher({{ $teacher->id }})" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-warning" onclick="editTeacher({{ $teacher->id }})">
+                                        <button type="button" class="btn btn-sm btn-warning" onclick="editTeacher({{ $teacher->id }})" title="Edit Teacher">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteTeacher({{ $teacher->id }})">
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteTeacher({{ $teacher->id }})" title="Delete Teacher">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -125,7 +131,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="text-center">No teachers found.</td>
+                                <td colspan="8" class="text-center text-muted">No teachers found.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -147,11 +153,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i class="fas fa-plus mr-1"></i>Add New Teacher
+                    <i class="fas fa-plus mr-2"></i>Add New Teacher
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="addTeacherForm">
+                @csrf
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="name">Full Name</label>
@@ -196,11 +203,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i class="fas fa-edit mr-1"></i>Edit Teacher
+                    <i class="fas fa-edit mr-2"></i>Edit Teacher
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="editTeacherForm">
+                @csrf
                 <input type="hidden" id="edit_teacher_id" name="teacher_id">
                 <div class="modal-body">
                     <div class="form-group">
@@ -346,7 +354,7 @@ function filterTeachers() {
             show = false;
         }
         
-        if (department && dept !== department) {
+        if (department && !dept.includes(department)) {
             show = false;
         }
         
@@ -379,6 +387,7 @@ function editTeacher(id) {
             $('#edit_phone').val(data.phone || '');
             $('#edit_bio').val(data.bio || '');
             $('#edit_is_active').prop('checked', data.is_active);
+            
             const modal = new bootstrap.Modal(document.getElementById('editTeacherModal'));
             modal.show();
         },

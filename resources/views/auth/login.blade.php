@@ -2,208 +2,477 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <title>Login - Student Feedback System</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/css/adminlte.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-family: 'Source Sans Pro', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .login-container {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 1rem auto;
+            max-width: 450px;
             overflow: hidden;
-            width: 100%;
-            max-width: 400px;
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                margin: 0.5rem;
+                border-radius: 15px;
+            }
         }
         
         .login-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 2rem;
+            padding: 3rem 2rem;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @media (max-width: 768px) {
+            .login-header {
+                padding: 2rem 1rem;
+            }
+        }
+        
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .login-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .login-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        .login-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .login-header p {
+                font-size: 1rem;
+            }
         }
         
         .login-body {
-            padding: 2rem;
+            padding: 3rem 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .login-body {
+                padding: 2rem 1rem;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
         }
         
         .form-control {
             border: 2px solid #e9ecef;
-            border-radius: 8px;
-            padding: 0.75rem;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 1rem;
             transition: all 0.3s ease;
+            background-color: #f8f9fa;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
+        @media (max-width: 768px) {
+            .form-control {
+                padding: 0.875rem;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
         }
         
         .form-control:focus {
             border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-        
-        .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-        
-        .btn-login:hover {
+            box-shadow: 0 0 0 0.3rem rgba(102, 126, 234, 0.15);
+            background-color: white;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
         
         .input-group-text {
             background: #f8f9fa;
             border: 2px solid #e9ecef;
             border-right: none;
+            border-radius: 12px 0 0 12px;
         }
         
         .form-control {
             border-left: none;
+            border-radius: 0 12px 12px 0;
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 1.25rem 3rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        @media (max-width: 768px) {
+            .btn-login {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .btn-login:active {
+            transform: translateY(-1px);
+        }
+        
+        .btn-login:disabled {
+            opacity: 0.6;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-toggle {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-left: none;
+            border-radius: 0 12px 12px 0;
+            color: #6c757d;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-toggle:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .form-check {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-check-input {
+            border: 2px solid #e9ecef;
+            border-radius: 4px;
+        }
+        
+        .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+        
+        .form-check-label {
+            color: #495057;
+            font-weight: 500;
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
         }
         
         .error-feedback {
             color: #dc3545;
             font-size: 0.875rem;
-            margin-top: 0.25rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
         }
         
-        .alert {
-            border-radius: 8px;
-            border: none;
+        .links-section {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .links-section a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .links-section a:hover {
+            color: #5a6fd8;
+            text-decoration: underline;
+        }
+        
+        .divider {
+            margin: 2rem 0;
+            border-top: 1px solid #e9ecef;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: 'or';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0 1rem;
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .footer {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+        
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Mobile-specific improvements */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+            
+            /* Improve touch targets */
+            .form-check-input {
+                min-width: 20px;
+                min-height: 20px;
+            }
+            
+            /* Better spacing for mobile */
+            .mb-3 {
+                margin-bottom: 1rem !important;
+            }
+            
+            /* Improve button touch area */
+            .btn {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        
+        /* Prevent zoom on double tap (iOS) */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            select,
+            textarea,
+            input {
+                font-size: 16px;
+            }
+        }
+        
+        /* Smooth scrolling for mobile */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Better focus indicators for accessibility */
+        .form-control:focus,
+        .btn:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+        
+        /* Loading animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .fa-spin {
+            animation: spin 1s linear infinite;
         }
     </style>
 </head>
 
 <body>
-    <div class="login-container">
-        <!-- Login Header -->
-        <div class="login-header">
-            <h1><i class="fas fa-graduation-cap me-2"></i>Student Feedback System</h1>
-            <p class="mb-0">Admin Login</p>
-        </div>
-
-        <!-- Login Form -->
-        <div class="login-body">
-            @if(session('status'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div class="alert alert-danger alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <ul class="mb-0">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('login') }}" id="loginForm">
-                @csrf
-                
-                <div class="form-group mb-3">
-                    <label for="email" class="form-label">
-                        <i class="fas fa-envelope me-2"></i>Email Address
-                    </label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-envelope"></i>
-                        </span>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                               id="email" name="email" value="{{ old('email') }}" 
-                               placeholder="Enter your email" required autofocus>
+    <div class="container">
+        <div class="login-container">
+            <div class="login-header">
+                <h1><i class="fas fa-graduation-cap me-2"></i>Student Feedback System</h1>
+                <p>Admin Login</p>
+            </div>
+            
+            <div class="login-body">
+                @if(session('status'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        {{ session('status') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    @error('email')
-                        <div class="error-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                @endif
 
-                <div class="form-group mb-3">
-                    <label for="password" class="form-label">
-                        <i class="fas fa-lock me-2"></i>Password
-                    </label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-lock"></i>
-                        </span>
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                               id="password" name="password" placeholder="Enter your password" required>
-                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                            <i class="fas fa-eye"></i>
-                        </button>
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    @error('password')
-                        <div class="error-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                @endif
 
-                <div class="form-group mb-3">
+                <form method="POST" action="{{ route('login') }}" id="loginForm">
+                    @csrf
+                    
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" 
+                                   id="email" name="email" value="{{ old('email') }}" 
+                                   placeholder="Enter your email" required autofocus>
+                        </div>
+                        @error('email')
+                            <div class="error-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" 
+                                   id="password" name="password" placeholder="Enter your password" required>
+                            <button type="button" class="btn btn-toggle" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        @error('password')
+                            <div class="error-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="remember" name="remember">
                         <label class="form-check-label" for="remember">
                             Remember me
                         </label>
                     </div>
-                </div>
 
-                <div class="form-group mb-3">
-                    <button type="submit" class="btn btn-login" id="loginBtn">
-                        <i class="fas fa-sign-in-alt me-2"></i>Login
-                    </button>
-                </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-login" id="loginBtn">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </div>
+                </form>
 
-                <div class="text-center">
-                    <a href="{{ route('password.request') }}" class="text-muted">
+                <div class="links-section">
+                    <a href="{{ route('password.request') }}">
                         <i class="fas fa-key me-1"></i>Forgot your password?
                     </a>
                 </div>
-            </form>
 
-            <hr class="my-4">
+                <div class="divider"></div>
 
-            <div class="text-center">
-                <p class="text-muted mb-0">
-                    Don't have an account? 
-                    <a href="{{ route('register') }}" class="text-primary">
-                        <i class="fas fa-user-plus me-1"></i>Register here
+                <div class="links-section">
+                    <p class="text-muted mb-0">
+                        Don't have an account? 
+                        <a href="{{ route('register') }}">
+                            <i class="fas fa-user-plus me-1"></i>Register here
+                        </a>
+                    </p>
+                </div>
+
+                <div class="links-section">
+                    <a href="{{ route('survey.index') }}">
+                        <i class="fas fa-external-link-alt me-1"></i>Access Public Survey
                     </a>
-                </p>
+                </div>
             </div>
-
-            <div class="text-center mt-3">
-                <a href="{{ route('survey.index') }}" class="text-muted">
-                    <i class="fas fa-external-link-alt me-1"></i>Access Public Survey
-                </a>
-            </div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; {{ date('Y') }} Student Feedback System. All rights reserved.</p>
         </div>
     </div>
 
@@ -230,15 +499,71 @@
                 }
             });
 
-            // Form submission
-            $('#loginForm').submit(function() {
-                $('#loginBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Logging in...');
+            // Form submission with AJAX
+            $('#loginForm').submit(function(e) {
+                e.preventDefault();
+                
+                const loginBtn = $('#loginBtn');
+                const originalText = loginBtn.html();
+                
+                loginBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Logging in...');
+                
+                $.ajax({
+                    url: '{{ route("login") }}',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: response.message,
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(function() {
+                                window.location.href = response.redirect;
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        let errorMessage = 'An error occurred during login.';
+                        
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        } else if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            const errors = xhr.responseJSON.errors;
+                            errorMessage = Object.values(errors).flat().join('\n');
+                        }
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Login Failed',
+                            text: errorMessage,
+                            confirmButtonColor: '#667eea'
+                        });
+                        
+                        loginBtn.prop('disabled', false).html(originalText);
+                    }
+                });
             });
 
             // Auto-hide alerts after 5 seconds
             setTimeout(function() {
                 $('.alert').fadeOut('slow');
             }, 5000);
+            
+            // Prevent zoom on double tap (iOS)
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function (event) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
         });
     </script>
 </body>

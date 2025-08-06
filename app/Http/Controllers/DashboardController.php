@@ -53,11 +53,29 @@ class DashboardController extends Controller
             ->get();
         
         // Get monthly survey trends
-        $monthlyTrends = Survey::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+        $monthlyTrendsRaw = Survey::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
             ->whereYear('created_at', date('Y'))
             ->groupBy('month')
             ->orderBy('month')
             ->get();
+        
+        // Format monthly trends for chart
+        $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $monthlyTrends = [
+            'labels' => [],
+            'data' => []
+        ];
+        
+        // Initialize all months with 0 count
+        for ($i = 1; $i <= 12; $i++) {
+            $monthlyTrends['labels'][] = $monthNames[$i - 1];
+            $monthlyTrends['data'][] = 0;
+        }
+        
+        // Fill in actual data
+        foreach ($monthlyTrendsRaw as $trend) {
+            $monthlyTrends['data'][$trend->month - 1] = $trend->count;
+        }
         
         return view('dashboard.index', compact(
             'totalSurveys',

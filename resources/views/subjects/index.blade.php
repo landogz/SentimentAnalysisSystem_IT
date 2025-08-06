@@ -3,6 +3,7 @@
 @section('title', 'Subjects - Student Feedback System')
 
 @section('page-title', 'Subjects Management')
+@section('icon', 'book')
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -12,10 +13,10 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        <div class="card">
+        <div class="card card-outline card-primary">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-book mr-1"></i>
+                    <i class="fas fa-book mr-2"></i>
                     Subjects List
                 </h3>
                 <div class="card-tools">
@@ -25,16 +26,21 @@
                 </div>
             </div>
             <div class="card-body">
-                <!-- Search and Filter -->
+                <!-- Search and Filter Controls -->
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <input type="text" class="form-control" id="searchInput" placeholder="Search subjects...">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control search-box" id="searchInput" placeholder="Search subjects...">
+                        </div>
                     </div>
                     <div class="col-md-3">
                         <select class="form-control" id="teacherFilter">
                             <option value="">All Teachers</option>
                             @foreach($teachers as $teacher)
-                                <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                                <option value="{{ $teacher->name }}">{{ $teacher->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -46,20 +52,20 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <button type="button" class="btn btn-secondary btn-block" id="clearFilters">
-                            <i class="fas fa-times mr-1"></i>Clear
+                        <button type="button" class="btn btn-outline-secondary btn-block" id="clearFilters">
+                            <i class="fas fa-times"></i> Clear
                         </button>
                     </div>
                 </div>
 
                 <!-- Subjects Table -->
                 <div class="table-responsive">
-                    <table class="table table-striped" id="subjectsTable">
+                    <table class="table table-hover" id="subjectsTable">
                         <thead>
                             <tr>
-                                <th>Subject Code</th>
+                                <th>Code</th>
                                 <th>Name</th>
-                                <th>Teacher</th>
+                                <th>Teachers</th>
                                 <th>Description</th>
                                 <th>Rating</th>
                                 <th>Surveys</th>
@@ -97,7 +103,7 @@
                                 </td>
                                 <td>
                                     @if($subject->surveys_avg_rating)
-                                        <span class="rating-stars">
+                                        <div class="rating-stars">
                                             @for($i = 1; $i <= 5; $i++)
                                                 @if($i <= $subject->surveys_avg_rating)
                                                     <i class="fas fa-star"></i>
@@ -107,8 +113,8 @@
                                                     <i class="far fa-star"></i>
                                                 @endif
                                             @endfor
-                                        </span>
-                                        <span class="ml-1">{{ number_format($subject->surveys_avg_rating, 1) }}</span>
+                                        </div>
+                                        <small class="text-muted">{{ number_format($subject->surveys_avg_rating, 1) }}</small>
                                     @else
                                         <span class="text-muted">No ratings</span>
                                     @endif
@@ -125,13 +131,13 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-info" onclick="viewSubject({{ $subject->id }})">
+                                        <button type="button" class="btn btn-sm btn-info" onclick="viewSubject({{ $subject->id }})" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-warning" onclick="editSubject({{ $subject->id }})">
+                                        <button type="button" class="btn btn-sm btn-warning" onclick="editSubject({{ $subject->id }})" title="Edit Subject">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteSubject({{ $subject->id }})">
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteSubject({{ $subject->id }})" title="Delete Subject">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -139,7 +145,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="text-center">No subjects found.</td>
+                                <td colspan="8" class="text-center text-muted">No subjects found.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -157,23 +163,30 @@
 
 <!-- Add Subject Modal -->
 <div class="modal fade" id="addSubjectModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i class="fas fa-plus mr-1"></i>Add New Subject
+                    <i class="fas fa-plus mr-2"></i>Add New Subject
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="addSubjectForm">
+                @csrf
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="subject_code">Subject Code</label>
-                        <input type="text" class="form-control" id="subject_code" name="subject_code" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Subject Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="subject_code">Subject Code</label>
+                                <input type="text" class="form-control" id="subject_code" name="subject_code" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Subject Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="teacher_ids">Assigned Teachers</label>
@@ -222,11 +235,11 @@
 
 <!-- Edit Subject Modal -->
 <div class="modal fade" id="editSubjectModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i class="fas fa-edit mr-1"></i>Edit Subject
+                    <i class="fas fa-edit mr-2"></i>Edit Subject
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -234,13 +247,19 @@
                 @csrf
                 <input type="hidden" id="edit_subject_id" name="subject_id">
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="edit_subject_code">Subject Code</label>
-                        <input type="text" class="form-control" id="edit_subject_code" name="subject_code" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_name">Subject Name</label>
-                        <input type="text" class="form-control" id="edit_name" name="name" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="edit_subject_code">Subject Code</label>
+                                <input type="text" class="form-control" id="edit_subject_code" name="subject_code" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="edit_name">Subject Name</label>
+                                <input type="text" class="form-control" id="edit_name" name="name" required>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="edit_teacher_ids">Assigned Teachers</label>
@@ -366,9 +385,6 @@ $(document).ready(function() {
         
         // Validate that at least one teacher is selected
         const selectedTeachers = $('#editSubjectModal .teacher-checkbox:checked');
-        console.log('Selected teachers count:', selectedTeachers.length); // Debug log
-        console.log('Selected teachers:', selectedTeachers.map(function() { return this.value; }).get()); // Debug log
-        
         if (selectedTeachers.length === 0) {
             showError('Please select at least one teacher.');
             return;
@@ -383,16 +399,10 @@ $(document).ready(function() {
         
         const subjectId = $('#edit_subject_id').val();
         
-        const formData = $(this).serialize();
-        console.log('Sending form data:', formData); // Debug log
-        console.log('Form elements:', $(this).find('input, select, textarea').map(function() {
-            return { name: this.name, value: this.value, type: this.type };
-        }).get()); // Debug log
-        
         $.ajax({
             url: `/subjects/${subjectId}`,
             method: 'PUT',
-            data: formData,
+            data: $(this).serialize(),
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -407,14 +417,8 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr) {
-                console.log('Error response:', xhr.responseJSON); // Debug log
                 if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    const errors = xhr.responseJSON.errors;
-                    let errorMessage = 'Validation errors:\n';
-                    for (const field in errors) {
-                        errorMessage += `${field}: ${errors[field].join(', ')}\n`;
-                    }
-                    showError(errorMessage);
+                    showError('Please check the form and try again.');
                 } else {
                     showError('An error occurred while updating the subject.');
                 }

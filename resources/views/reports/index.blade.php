@@ -3,6 +3,7 @@
 @section('title', 'Reports - Student Feedback System')
 
 @section('page-title', 'Reports & Analytics')
+@section('icon', 'chart-bar')
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -13,10 +14,10 @@
 <div class="row">
     <!-- Filter Panel -->
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="card card-outline" style="border-color: var(--light-blue);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%); color: white;">
                 <h3 class="card-title">
-                    <i class="fas fa-filter mr-1"></i>
+                    <i class="fas fa-filter mr-2"></i>
                     Filter Options
                 </h3>
             </div>
@@ -60,7 +61,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>&nbsp;</label>
-                                <button type="submit" class="btn btn-primary btn-block">
+                                <button type="submit" class="btn btn-block" style="background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%); color: white; border: none;">
                                     <i class="fas fa-search mr-1"></i>Generate Report
                                 </button>
                             </div>
@@ -73,9 +74,9 @@
 
     <!-- Statistics Cards -->
     <div class="col-lg-3 col-6">
-        <div class="small-box bg-info">
+        <div class="small-box" style="background: linear-gradient(135deg, #8FCFA8 0%, #7bb894 100%); color: #494850;">
             <div class="inner">
-                <h3 id="totalSurveys">0</h3>
+                <h3 id="totalSurveys">{{ number_format($totalSurveys) }}</h3>
                 <p>Total Surveys</p>
             </div>
             <div class="icon">
@@ -85,9 +86,9 @@
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box bg-success">
+        <div class="small-box" style="background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%); color: #494850;">
             <div class="inner">
-                <h3 id="avgRating">0.0</h3>
+                <h3 id="avgRating">{{ number_format($averageRating, 1) }}</h3>
                 <p>Average Rating</p>
             </div>
             <div class="icon">
@@ -97,9 +98,9 @@
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box bg-warning">
+        <div class="small-box" style="background: linear-gradient(135deg, #F5B445 0%, #e4a23d 100%); color: #494850;">
             <div class="inner">
-                <h3 id="positiveSentiment">0</h3>
+                <h3 id="positiveSentiment">{{ $sentimentStats['positive'] }}</h3>
                 <p>Positive Feedback</p>
             </div>
             <div class="icon">
@@ -109,9 +110,9 @@
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box bg-danger">
+        <div class="small-box" style="background: linear-gradient(135deg, #F16E70 0%, #e55a5c 100%); color: #494850;">
             <div class="inner">
-                <h3 id="negativeSentiment">0</h3>
+                <h3 id="negativeSentiment">{{ $sentimentStats['negative'] }}</h3>
                 <p>Negative Feedback</p>
             </div>
             <div class="icon">
@@ -122,10 +123,10 @@
 
     <!-- Charts -->
     <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header">
+        <div class="card card-outline" style="border-color: var(--light-green);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%); color: white;">
                 <h3 class="card-title">
-                    <i class="fas fa-chart-pie mr-1"></i>
+                    <i class="fas fa-chart-pie mr-2"></i>
                     Sentiment Distribution
                 </h3>
             </div>
@@ -136,10 +137,10 @@
     </div>
 
     <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header">
+        <div class="card card-outline" style="border-color: var(--golden-orange);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--golden-orange) 0%, #e4a23d 100%); color: white;">
                 <h3 class="card-title">
-                    <i class="fas fa-chart-bar mr-1"></i>
+                    <i class="fas fa-chart-bar mr-2"></i>
                     Rating Distribution
                 </h3>
             </div>
@@ -151,16 +152,16 @@
 
     <!-- Top Performers -->
     <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header">
+        <div class="card card-outline" style="border-color: var(--light-green);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%); color: white;">
                 <h3 class="card-title">
-                    <i class="fas fa-trophy mr-1"></i>
+                    <i class="fas fa-trophy mr-2"></i>
                     Top Rated Teachers
                 </h3>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Teacher</th>
@@ -169,10 +170,42 @@
                                 <th>Surveys</th>
                             </tr>
                         </thead>
-                        <tbody id="topTeachersTable">
-                            <tr>
-                                <td colspan="4" class="text-center">No data available</td>
-                            </tr>
+                        <tbody>
+                            @forelse($topTeachers as $teacher)
+                                <tr>
+                                    <td>
+                                        <strong>{{ $teacher->name }}</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background-color: var(--light-blue); color: white;">{{ $teacher->department }}</span>
+                                    </td>
+                                    <td>
+                                        @if($teacher->surveys_avg_rating)
+                                            <div class="rating-stars">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= $teacher->surveys_avg_rating)
+                                                        <i class="fas fa-star"></i>
+                                                    @elseif($i - 0.5 <= $teacher->surveys_avg_rating)
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    @else
+                                                        <i class="far fa-star"></i>
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <small class="text-muted">{{ number_format($teacher->surveys_avg_rating, 1) }}</small>
+                                        @else
+                                            <span class="text-muted">No ratings</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background-color: var(--dark-gray); color: white;">{{ $teacher->surveys_count }}</span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No teachers with surveys yet</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -181,28 +214,73 @@
     </div>
 
     <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header">
+        <div class="card card-outline" style="border-color: var(--light-blue);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%); color: white;">
                 <h3 class="card-title">
-                    <i class="fas fa-book mr-1"></i>
+                    <i class="fas fa-book mr-2"></i>
                     Top Rated Subjects
                 </h3>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Subject</th>
-                                <th>Teacher</th>
+                                <th>Teachers</th>
                                 <th>Rating</th>
                                 <th>Surveys</th>
                             </tr>
                         </thead>
-                        <tbody id="topSubjectsTable">
-                            <tr>
-                                <td colspan="4" class="text-center">No data available</td>
-                            </tr>
+                        <tbody>
+                            @forelse($topSubjects as $subject)
+                                <tr>
+                                    <td>
+                                        <strong>{{ $subject->name }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ $subject->subject_code }}</small>
+                                    </td>
+                                    <td>
+                                        @if($subject->teachers->count() > 0)
+                                            @foreach($subject->teachers as $teacher)
+                                                <span class="badge" style="background-color: var(--light-blue); color: white;">
+                                                    {{ $teacher->name }}
+                                                    @if($teacher->pivot->is_primary)
+                                                        <i class="fas fa-star" style="color: var(--golden-orange);"></i>
+                                                    @endif
+                                                </span>
+                                            @endforeach
+                                        @else
+                                            <span class="text-muted">No teachers assigned</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($subject->surveys_avg_rating)
+                                            <div class="rating-stars">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= $subject->surveys_avg_rating)
+                                                        <i class="fas fa-star"></i>
+                                                    @elseif($i - 0.5 <= $subject->surveys_avg_rating)
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    @else
+                                                        <i class="far fa-star"></i>
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <small class="text-muted">{{ number_format($subject->surveys_avg_rating, 1) }}</small>
+                                        @else
+                                            <span class="text-muted">No ratings</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background-color: var(--dark-gray); color: white;">{{ $subject->surveys_count }}</span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No subjects with surveys yet</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -212,32 +290,32 @@
 
     <!-- Export Options -->
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="card card-outline" style="border-color: var(--dark-gray);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%); color: white;">
                 <h3 class="card-title">
-                    <i class="fas fa-download mr-1"></i>
+                    <i class="fas fa-download mr-2"></i>
                     Export Reports
                 </h3>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <button type="button" class="btn btn-success btn-block" onclick="exportReport('pdf')">
+                        <button type="button" class="btn btn-block" onclick="exportReport('pdf')" style="background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%); color: white; border: none;">
                             <i class="fas fa-file-pdf mr-1"></i>Export PDF
                         </button>
                     </div>
                     <div class="col-md-3">
-                        <button type="button" class="btn btn-info btn-block" onclick="exportReport('excel')">
+                        <button type="button" class="btn btn-block" onclick="exportReport('excel')" style="background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%); color: white; border: none;">
                             <i class="fas fa-file-excel mr-1"></i>Export Excel
                         </button>
                     </div>
                     <div class="col-md-3">
-                        <button type="button" class="btn btn-warning btn-block" onclick="exportReport('csv')">
+                        <button type="button" class="btn btn-block" onclick="exportReport('csv')" style="background: linear-gradient(135deg, var(--golden-orange) 0%, #e4a23d 100%); color: white; border: none;">
                             <i class="fas fa-file-csv mr-1"></i>Export CSV
                         </button>
                     </div>
                     <div class="col-md-3">
-                        <button type="button" class="btn btn-secondary btn-block" onclick="printReport()">
+                        <button type="button" class="btn btn-block" onclick="printReport()" style="background: linear-gradient(135deg, var(--coral-pink) 0%, #e55a5c 100%); color: white; border: none;">
                             <i class="fas fa-print mr-1"></i>Print Report
                         </button>
                     </div>
@@ -256,9 +334,6 @@ $(document).ready(function() {
     // Initialize charts
     initializeCharts();
     
-    // Load initial data
-    loadReportData();
-    
     // Form submission
     $('#reportFilterForm').submit(function(e) {
         e.preventDefault();
@@ -274,8 +349,12 @@ function initializeCharts() {
         data: {
             labels: ['Positive', 'Neutral', 'Negative'],
             datasets: [{
-                data: [0, 0, 0],
-                backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                data: [
+                    {{ $sentimentStats['positive'] }},
+                    {{ $sentimentStats['neutral'] }},
+                    {{ $sentimentStats['negative'] }}
+                ],
+                backgroundColor: ['#8FCFA8', '#F5B445', '#F16E70'] // Green, Yellow, Red
             }]
         },
         options: {
@@ -289,16 +368,41 @@ function initializeCharts() {
         }
     });
 
-    // Rating Chart
+    // Rating Chart - Initialize with data from controller
     const ratingCtx = document.getElementById('ratingChart').getContext('2d');
+    
+    // Prepare rating distribution data
+    const ratingData = [0, 0, 0, 0, 0]; // Initialize with zeros for all 5 ratings
+    @if(isset($ratingDistribution))
+        @foreach($ratingDistribution as $item)
+            @if($item->rating_group >= 1 && $item->rating_group <= 5)
+                ratingData[{{ $item->rating_group - 1 }}] = {{ $item->count }};
+            @endif
+        @endforeach
+    @endif
+    
     ratingChart = new Chart(ratingCtx, {
         type: 'bar',
         data: {
             labels: ['1★', '2★', '3★', '4★', '5★'],
             datasets: [{
-                label: 'Surveys',
-                data: [0, 0, 0, 0, 0],
-                backgroundColor: '#007bff'
+                label: 'Number of Surveys',
+                data: ratingData,
+                backgroundColor: [
+                    '#F16E70', // Coral Pink for 1 star
+                    '#F5B445', // Golden Orange for 2 stars
+                    '#98AAE7', // Light Blue for 3 stars
+                    '#8FCFA8', // Light Green for 4 stars
+                    '#494850'  // Dark Gray for 5 stars
+                ],
+                borderColor: [
+                    '#F16E70',
+                    '#F5B445',
+                    '#98AAE7',
+                    '#8FCFA8',
+                    '#494850'
+                ],
+                borderWidth: 1
             }]
         },
         options: {
@@ -311,6 +415,18 @@ function initializeCharts() {
                         stepSize: 1
                     }
                 }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y + ' surveys';
+                        }
+                    }
+                }
             }
         }
     });
@@ -319,7 +435,7 @@ function initializeCharts() {
 function loadReportData() {
     const formData = $('#reportFilterForm').serialize();
     
-    $.get('{{ route("dashboard.stats") }}', formData, function(data) {
+    $.get('{{ route("reports.filtered-stats") }}', formData, function(data) {
         // Update statistics cards
         $('#totalSurveys').text(data.total_surveys);
         $('#avgRating').text(data.average_rating);
@@ -336,98 +452,16 @@ function loadReportData() {
         
         // Load rating distribution
         loadRatingDistribution();
-        
-        // Load top performers
-        loadTopPerformers();
     });
 }
 
 function loadRatingDistribution() {
-    $.get('{{ route("dashboard.chart-data") }}', function(data) {
-        const ratingData = [0, 0, 0, 0, 0];
-        
-        data.rating.forEach(function(item) {
-            const rating = parseInt(item.rating_group);
-            if (rating >= 1 && rating <= 5) {
-                ratingData[rating - 1] = item.count;
-            }
-        });
-        
-        ratingChart.data.datasets[0].data = ratingData;
+    const formData = $('#reportFilterForm').serialize();
+    
+    $.get('{{ route("reports.rating-distribution") }}', formData, function(data) {
+        ratingChart.data.datasets[0].data = data;
         ratingChart.update();
     });
-}
-
-function loadTopPerformers() {
-    // Load top teachers
-    $.get('/teachers-ajax', function(teachers) {
-        const topTeachers = teachers.slice(0, 5);
-        let html = '';
-        
-        if (topTeachers.length > 0) {
-            topTeachers.forEach(function(teacher) {
-                html += `
-                    <tr>
-                        <td>${teacher.name}</td>
-                        <td>${teacher.department}</td>
-                        <td>
-                            <span class="rating-stars">
-                                ${generateStars(teacher.surveys_avg_rating || 0)}
-                            </span>
-                            <span class="ml-1">${(teacher.surveys_avg_rating || 0).toFixed(1)}</span>
-                        </td>
-                        <td><span class="badge badge-secondary">${teacher.surveys_count || 0}</span></td>
-                    </tr>
-                `;
-            });
-        } else {
-            html = '<tr><td colspan="4" class="text-center">No data available</td></tr>';
-        }
-        
-        $('#topTeachersTable').html(html);
-    });
-    
-    // Load top subjects
-    $.get('/subjects-ajax', function(subjects) {
-        const topSubjects = subjects.slice(0, 5);
-        let html = '';
-        
-        if (topSubjects.length > 0) {
-            topSubjects.forEach(function(subject) {
-                html += `
-                    <tr>
-                        <td>${subject.name}</td>
-                        <td>${subject.teacher ? subject.teacher.name : 'N/A'}</td>
-                        <td>
-                            <span class="rating-stars">
-                                ${generateStars(subject.surveys_avg_rating || 0)}
-                            </span>
-                            <span class="ml-1">${(subject.surveys_avg_rating || 0).toFixed(1)}</span>
-                        </td>
-                        <td><span class="badge badge-secondary">${subject.surveys_count || 0}</span></td>
-                    </tr>
-                `;
-            });
-        } else {
-            html = '<tr><td colspan="4" class="text-center">No data available</td></tr>';
-        }
-        
-        $('#topSubjectsTable').html(html);
-    });
-}
-
-function generateStars(rating) {
-    let stars = '';
-    for (let i = 1; i <= 5; i++) {
-        if (i <= rating) {
-            stars += '<i class="fas fa-star"></i>';
-        } else if (i - 0.5 <= rating) {
-            stars += '<i class="fas fa-star-half-alt"></i>';
-        } else {
-            stars += '<i class="far fa-star"></i>';
-        }
-    }
-    return stars;
 }
 
 function exportReport(format) {

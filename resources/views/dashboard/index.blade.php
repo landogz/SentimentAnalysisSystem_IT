@@ -9,10 +9,38 @@
 @endsection
 
 @section('content')
+<style>
+    .equal-height-cards {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .equal-height-cards .col-lg-4 {
+        display: flex;
+        flex-direction: column;
+    }
+    .equal-height-cards .card {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 400px;
+    }
+    .equal-height-cards .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .equal-height-cards .card-body .row:first-child {
+        flex: 1;
+    }
+    .equal-height-cards .card-body .row:last-child {
+        margin-top: auto;
+    }
+</style>
+
 <div class="row">
     <!-- Statistics Cards -->
     <div class="col-lg-3 col-6">
-        <div class="small-box bg-info">
+        <div class="small-box" style="background: linear-gradient(135deg, #8FCFA8 0%, #7bb894 100%); color: #494850;">
             <div class="inner">
                 <h3>{{ number_format($totalSurveys) }}</h3>
                 <p>Total Surveys</p>
@@ -20,14 +48,11 @@
             <div class="icon">
                 <i class="fas fa-clipboard-list"></i>
             </div>
-            <a href="#" class="small-box-footer">
-                More info <i class="fas fa-arrow-circle-right"></i>
-            </a>
         </div>
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box bg-success">
+        <div class="small-box" style="background: linear-gradient(135deg, #F16E70 0%, #e55a5c 100%); color: #494850;">
             <div class="inner">
                 <h3>{{ number_format($totalTeachers) }}</h3>
                 <p>Total Teachers</p>
@@ -35,14 +60,11 @@
             <div class="icon">
                 <i class="fas fa-chalkboard-teacher"></i>
             </div>
-            <a href="{{ route('teachers.index') }}" class="small-box-footer">
-                More info <i class="fas fa-arrow-circle-right"></i>
-            </a>
         </div>
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box bg-warning">
+        <div class="small-box" style="background: linear-gradient(135deg, #F5B445 0%, #e4a23d 100%); color: #494850;">
             <div class="inner">
                 <h3>{{ number_format($totalSubjects) }}</h3>
                 <p>Total Subjects</p>
@@ -50,14 +72,11 @@
             <div class="icon">
                 <i class="fas fa-book"></i>
             </div>
-            <a href="{{ route('subjects.index') }}" class="small-box-footer">
-                More info <i class="fas fa-arrow-circle-right"></i>
-            </a>
         </div>
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box bg-danger">
+        <div class="small-box" style="background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%); color: #494850;">
             <div class="inner">
                 <h3>{{ number_format($averageRating, 1) }}</h3>
                 <p>Average Rating</p>
@@ -65,50 +84,52 @@
             <div class="icon">
                 <i class="fas fa-star"></i>
             </div>
-            <a href="#" class="small-box-footer">
-                More info <i class="fas fa-arrow-circle-right"></i>
-            </a>
         </div>
     </div>
 </div>
 
-<div class="row">
+<div class="row equal-height-cards">
     <!-- Sentiment Statistics -->
     <div class="col-lg-4">
-        <div class="card">
+        <div class="card card-outline card-primary">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-chart-pie mr-1"></i>
+                    <i class="fas fa-chart-pie mr-2"></i>
                     Sentiment Analysis
                 </h3>
             </div>
             <div class="card-body">
                 <div class="row">
+                    <div class="col-12">
+                        <canvas id="sentimentPieChart" style="height: 200px;"></canvas>
+                    </div>
+                </div>
+                <div class="row mt-3">
                     <div class="col-4">
                         <div class="text-center">
-                            <div class="text-success">
+                            <div class="text-success mb-2">
                                 <i class="fas fa-thumbs-up fa-2x"></i>
                             </div>
-                            <h4>{{ $sentimentStats['positive'] }}</h4>
-                            <small>Positive</small>
+                            <h5 class="text-success">{{ $sentimentStats['positive'] }}</h5>
+                            <small class="text-muted">Positive</small>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="text-center">
-                            <div class="text-warning">
+                            <div class="text-warning mb-2">
                                 <i class="fas fa-minus-circle fa-2x"></i>
                             </div>
-                            <h4>{{ $sentimentStats['neutral'] }}</h4>
-                            <small>Neutral</small>
+                            <h5 class="text-warning">{{ $sentimentStats['neutral'] }}</h5>
+                            <small class="text-muted">Neutral</small>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="text-center">
-                            <div class="text-danger">
+                            <div class="text-danger mb-2">
                                 <i class="fas fa-thumbs-down fa-2x"></i>
                             </div>
-                            <h4>{{ $sentimentStats['negative'] }}</h4>
-                            <small>Negative</small>
+                            <h5 class="text-danger">{{ $sentimentStats['negative'] }}</h5>
+                            <small class="text-muted">Negative</small>
                         </div>
                     </div>
                 </div>
@@ -116,86 +137,82 @@
         </div>
     </div>
 
-    <!-- Top Rated Teachers -->
-    <div class="col-lg-8">
-        <div class="card">
+    <!-- Top Teachers -->
+    <div class="col-lg-4">
+        <div class="card card-outline card-success">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-trophy mr-1"></i>
+                    <i class="fas fa-trophy mr-2"></i>
                     Top Rated Teachers
                 </h3>
             </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Teacher</th>
-                                <th>Department</th>
-                                <th>Rating</th>
-                                <th>Surveys</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($topTeachers as $teacher)
-                            <tr>
-                                <td>{{ $teacher->name }}</td>
-                                <td>{{ $teacher->department }}</td>
-                                <td>
-                                    <span class="rating-stars">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            @if($i <= $teacher->surveys_avg_rating)
-                                                <i class="fas fa-star"></i>
-                                            @elseif($i - 0.5 <= $teacher->surveys_avg_rating)
-                                                <i class="fas fa-star-half-alt"></i>
-                                            @else
-                                                <i class="far fa-star"></i>
-                                            @endif
-                                        @endfor
-                                    </span>
-                                    <span class="ml-1">{{ number_format($teacher->surveys_avg_rating, 1) }}</span>
-                                </td>
-                                <td>{{ $teacher->surveys_count }}</td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="4" class="text-center">No teachers with surveys yet.</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Charts -->
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-chart-bar mr-1"></i>
-                    Monthly Survey Trends
-                </h3>
-            </div>
             <div class="card-body">
-                <canvas id="monthlyChart" style="height: 300px;"></canvas>
+                @if($topTeachers->count() > 0)
+                    @foreach($topTeachers as $teacher)
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="mb-0">{{ $teacher->name }}</h6>
+                                <small class="text-muted">{{ $teacher->department }}</small>
+                            </div>
+                            <div class="text-right">
+                                <div class="rating-stars">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $teacher->surveys_avg_rating)
+                                            <i class="fas fa-star"></i>
+                                        @elseif($i - 0.5 <= $teacher->surveys_avg_rating)
+                                            <i class="fas fa-star-half-alt"></i>
+                                        @else
+                                            <i class="far fa-star"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <small class="text-muted">{{ number_format($teacher->surveys_avg_rating, 1) }}</small>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-muted text-center">No data available</p>
+                @endif
             </div>
         </div>
     </div>
 
-    <div class="col-lg-6">
-        <div class="card">
+    <!-- Top Subjects -->
+    <div class="col-lg-4">
+        <div class="card card-outline card-warning">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-chart-pie mr-1"></i>
-                    Sentiment Distribution
+                    <i class="fas fa-medal mr-2"></i>
+                    Top Rated Subjects
                 </h3>
             </div>
             <div class="card-body">
-                <canvas id="sentimentChart" style="height: 300px;"></canvas>
+                @if($topSubjects->count() > 0)
+                    @foreach($topSubjects as $subject)
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="mb-0">{{ $subject->name }}</h6>
+                                <small class="text-muted">{{ $subject->subject_code }}</small>
+                            </div>
+                            <div class="text-right">
+                                <div class="rating-stars">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $subject->surveys_avg_rating)
+                                            <i class="fas fa-star"></i>
+                                        @elseif($i - 0.5 <= $subject->surveys_avg_rating)
+                                            <i class="fas fa-star-half-alt"></i>
+                                        @else
+                                            <i class="far fa-star"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <small class="text-muted">{{ number_format($subject->surveys_avg_rating, 1) }}</small>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-muted text-center">No data available</p>
+                @endif
             </div>
         </div>
     </div>
@@ -203,68 +220,89 @@
 
 <div class="row">
     <!-- Recent Surveys -->
-    <div class="col-12">
-        <div class="card">
+    <div class="col-lg-8">
+        <div class="card card-outline card-info">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-clock mr-1"></i>
+                    <i class="fas fa-clock mr-2"></i>
                     Recent Surveys
                 </h3>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Date</th>
                                 <th>Teacher</th>
                                 <th>Subject</th>
                                 <th>Rating</th>
                                 <th>Sentiment</th>
-                                <th>Feedback</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($recentSurveys as $survey)
-                            <tr>
-                                <td>{{ $survey->created_at->format('M d, Y') }}</td>
-                                <td>{{ $survey->teacher->name }}</td>
-                                <td>{{ $survey->subject->name }}</td>
-                                <td>
-                                    <span class="rating-stars">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            @if($i <= $survey->rating)
-                                                <i class="fas fa-star"></i>
-                                            @elseif($i - 0.5 <= $survey->rating)
-                                                <i class="fas fa-star-half-alt"></i>
-                                            @else
-                                                <i class="far fa-star"></i>
-                                            @endif
-                                        @endfor
-                                    </span>
-                                    <span class="ml-1">{{ $survey->rating }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge {{ $survey->sentiment_badge_class }}">
-                                        {{ $survey->sentiment_label }}
-                                    </span>
-                                </td>
-                                <td>
-                                    @if($survey->feedback_text)
-                                        <span class="text-muted">{{ Str::limit($survey->feedback_text, 50) }}</span>
-                                    @else
-                                        <span class="text-muted">No feedback</span>
-                                    @endif
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>
+                                        <strong>{{ $survey->teacher->name }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ $survey->teacher->department }}</small>
+                                    </td>
+                                    <td>
+                                        <strong>{{ $survey->subject->name }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ $survey->subject->subject_code }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="rating-stars">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                @if($i <= $survey->rating)
+                                                    <i class="fas fa-star"></i>
+                                                @elseif($i - 0.5 <= $survey->rating)
+                                                    <i class="fas fa-star-half-alt"></i>
+                                                @else
+                                                    <i class="far fa-star"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
+                                        <small class="text-muted">{{ number_format($survey->rating, 1) }}</small>
+                                    </td>
+                                    <td>
+                                        @if($survey->sentiment === 'positive')
+                                            <span class="badge badge-success">{{ ucfirst($survey->sentiment) }}</span>
+                                        @elseif($survey->sentiment === 'negative')
+                                            <span class="badge badge-danger">{{ ucfirst($survey->sentiment) }}</span>
+                                        @else
+                                            <span class="badge badge-warning">{{ ucfirst($survey->sentiment) }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ $survey->created_at->format('M d, Y') }}</small>
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td colspan="6" class="text-center">No surveys submitted yet.</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No recent surveys</td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Trends Chart -->
+    <div class="col-lg-4">
+        <div class="card card-outline card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    Monthly Trends
+                </h3>
+            </div>
+            <div class="card-body">
+                <canvas id="monthlyTrendsChart" style="height: 250px;"></canvas>
             </div>
         </div>
     </div>
@@ -274,53 +312,56 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Monthly Chart
-    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-    const monthlyData = @json($monthlyTrends);
-    
-    const monthlyChart = new Chart(monthlyCtx, {
+    // Monthly Trends Chart
+    const ctx = document.getElementById('monthlyTrendsChart').getContext('2d');
+    new Chart(ctx, {
         type: 'line',
         data: {
-            labels: monthlyData.map(item => {
-                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                return monthNames[item.month - 1];
-            }),
+            labels: @json($monthlyTrends['labels']),
             datasets: [{
                 label: 'Surveys',
-                data: monthlyData.map(item => item.count),
-                borderColor: '#007bff',
-                backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                tension: 0.1
+                data: @json($monthlyTrends['data']),
+                borderColor: '#98AAE7',
+                backgroundColor: 'rgba(152, 170, 231, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
+                    grid: {
+                        color: 'rgba(73, 72, 80, 0.1)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
                     }
                 }
             }
         }
     });
 
-    // Sentiment Chart
-    const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
-    const sentimentChart = new Chart(sentimentCtx, {
-        type: 'doughnut',
+    // Sentiment Pie Chart
+    const sentimentCtx = document.getElementById('sentimentPieChart').getContext('2d');
+    new Chart(sentimentCtx, {
+        type: 'pie',
         data: {
             labels: ['Positive', 'Neutral', 'Negative'],
             datasets: [{
-                data: [
-                    {{ $sentimentStats['positive'] }},
-                    {{ $sentimentStats['neutral'] }},
-                    {{ $sentimentStats['negative'] }}
-                ],
-                backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                data: [{{ $sentimentStats['positive'] }}, {{ $sentimentStats['neutral'] }}, {{ $sentimentStats['negative'] }}],
+                backgroundColor: ['#8FCFA8', '#F5B445', '#F16E70'], // Green, Yellow, Red
+                borderWidth: 0
             }]
         },
         options: {
