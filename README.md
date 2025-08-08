@@ -1,266 +1,292 @@
 # ESP-CIT Student Feedback & Sentiment Analysis System
 
-A modern, responsive web application for collecting and analyzing student feedback with advanced sentiment analysis capabilities.
+A modern, professional Laravel-based system for collecting and analyzing student feedback with sentiment analysis capabilities. Built with a beautiful, responsive design and comprehensive reporting features.
+
+## 🆕 Recent Updates & Features
+
+### **Latest Enhancements**
+- **Enhanced Authentication System**: Improved login, register, and password reset flows
+- **Advanced Survey Management**: Real-time form validation and AJAX submissions
+- **Comprehensive Reporting**: Multi-format export capabilities (PDF, Excel, CSV)
+- **Mobile-First Design**: Fully responsive interface optimized for all devices
+- **Session Management**: 30-minute timeout with SweetAlert notifications
+- **DataTables Integration**: Advanced table features with search, sort, and pagination
+
+### **Performance Improvements**
+- **AJAX-Powered Interface**: No page reloads for better user experience
+- **Optimized Database Queries**: Efficient data loading and caching
+- **Lazy Loading**: Progressive data loading for better performance
+- **Asset Optimization**: Minified CSS/JS for production deployment
 
 ## 🎨 Modern Design Features
 
-### **Color Scheme**
-- **Primary Colors**: Light Blue (#98AAE7), Light Green (#8FCFA8), Coral Pink (#F16E70), Golden Orange (#F5B445), Dark Gray (#494850)
-- **Professional Gradients**: Modern gradient backgrounds throughout the application
-- **Consistent Branding**: ESP-CIT branding with custom logo integration
+### **Professional Color Scheme**
+- **Dark Gray (#494850)**: Primary background and text
+- **Light Green (#8FCFA8)**: Success states and positive elements
+- **Coral Pink (#F16E70)**: Error states and negative elements
+- **Golden Orange (#F5B445)**: Warning states and neutral elements
+- **Light Blue (#98AAE7)**: Primary actions and highlights
 
-### **Responsive Design**
-- **Mobile-First**: Fully responsive design that works on all devices
-- **Touch-Friendly**: 44px minimum touch targets for mobile devices
-- **Smooth Animations**: Professional transitions and hover effects
-- **iOS/Android Compatible**: Optimized for all mobile platforms
+### **Enhanced User Interface**
+- **Google Fonts Integration**: Poppins font family for modern typography
+- **Gradient Backgrounds**: Professional gradient effects throughout
+- **Rounded Corners**: Modern 8-12px border radius on all components
+- **Smooth Animations**: CSS transitions and hover effects
+- **Professional Cards**: Enhanced card styling with shadows and hover effects
 
-## 🚀 Key Features
+## 📊 Dashboard & Analytics
 
-### **Dashboard Analytics**
-- **Statistics Cards**: Real-time metrics with modern gradient designs
-- **Sentiment Analysis**: Interactive pie charts for feedback analysis
-- **Top Performers**: Lists of highest-rated teachers and subjects
-- **Monthly Trends**: Visual charts showing feedback trends over time
-- **Equal Height Cards**: Professional card layouts with consistent heights
+### **Interactive Dashboard**
+- **Statistics Cards**: Real-time data with custom color coding
+- **Sentiment Analysis Pie Chart**: Interactive Chart.js visualization
+- **Equal Height Cards**: Responsive flexbox layout
+- **Top Teachers & Subjects**: Performance rankings with ratings
+- **Monthly Trends**: Dynamic chart showing survey trends over time
+- **Recent Activity**: Latest surveys with teacher and subject information
 
-### **Teacher Management**
-- **Teacher Profiles**: Detailed teacher information with ratings
-- **Subject Assignments**: Manage teacher-subject relationships
-- **Performance Analytics**: Individual teacher performance metrics
-- **Sentiment Analysis**: Teacher-specific feedback analysis with pie charts
+### **Advanced Reporting System**
+- **Multi-Format Export**: PDF, Excel, and CSV export capabilities
+- **Filtered Reports**: By teacher, subject, and date range
+- **Interactive Charts**: Sentiment distribution and rating analysis
+- **Real-time Statistics**: Dynamic data updates with AJAX
+- **Rating Distribution**: Visual breakdown of survey ratings
+- **Filtered Statistics**: Real-time stats based on selected filters
 
-### **Subject Management**
-- **Subject Catalog**: Comprehensive subject database
-- **Teacher Assignments**: Link teachers to specific subjects
-- **Rating Analytics**: Subject-specific performance metrics
-- **Feedback Analysis**: Detailed sentiment analysis per subject
+## 🔧 Technical Features
 
-### **User Management**
-- **User Roles**: Role-based access control system
-- **User Profiles**: Detailed user information management
-- **Activity Tracking**: Monitor user login and activity
-- **Permission Management**: Granular access control
+### **Export Functionality**
+- **CSV Export**: Fully functional with proper headers and data formatting
+- **PDF Export**: Ready for DomPDF implementation
+- **Excel Export**: Ready for PhpSpreadsheet implementation
+- **Filtered Data**: Respects all applied filters (teacher, subject, date)
+- **Statistics Included**: Summary statistics in all exports
+- **Custom Headers**: Professional export formatting with proper column names
 
-### **Reports & Analytics**
-- **Advanced Filtering**: Filter by teacher, subject, date range
-- **Interactive Charts**: Dynamic sentiment and rating distribution charts
-- **Export Options**: PDF, Excel, CSV export capabilities
-- **Real-time Data**: Live data updates and filtering
-
-### **Public Survey System**
-- **Student-Friendly Interface**: Clean, modern survey interface
-- **Dynamic Subject Loading**: Subjects load based on teacher selection
-- **Star Rating System**: Interactive 5-star rating system
-- **Mobile Optimized**: Perfect mobile experience for students
-- **ESP-CIT Branding**: Custom logo and branding integration
-
-## 🛠 Technical Features
-
-### **Frontend Technologies**
-- **Laravel Blade**: Server-side templating
-- **Bootstrap 5**: Responsive CSS framework
-- **jQuery**: AJAX functionality and interactions
-- **Chart.js**: Interactive data visualizations
-- **SweetAlert2**: Modern notification system
-- **Font Awesome**: Professional icon library
-
-### **Backend Technologies**
-- **Laravel 10**: Modern PHP framework
-- **MySQL**: Reliable database system
-- **Eloquent ORM**: Database management
-- **Sentiment Analysis**: AI-powered feedback analysis
-- **RESTful APIs**: Clean API architecture
-
-### **Mobile Optimizations**
-- **Touch Scrolling**: Smooth horizontal table scrolling
-- **Responsive Tables**: Mobile-friendly data tables
-- **Touch Targets**: 44px minimum touch areas
-- **iOS Zoom Prevention**: 16px font size prevents zoom
-- **Smooth Animations**: Professional mobile transitions
-
-## 📱 Mobile Features
-
-### **Responsive Navigation**
-- **Full-Screen Sidebar**: Mobile-optimized sidebar navigation
-- **Touch-Friendly Buttons**: Large, easy-to-tap buttons
-- **Smooth Transitions**: Professional mobile animations
-- **Overlay Background**: Dark overlay when sidebar is open
-
-### **Mobile-Optimized Tables**
-- **Horizontal Scrolling**: Smooth touch scrolling for wide tables
-- **Touch-Friendly Cells**: Larger cell padding for easy tapping
+### **Mobile-First Design**
+- **Responsive Layout**: Optimized for all screen sizes
+- **Touch-Friendly**: Enhanced touch targets for mobile devices
+- **Horizontal Scrolling**: Smooth table scrolling on mobile
+- **iOS Zoom Prevention**: Prevents unwanted zoom on form inputs
 - **Custom Scrollbars**: Styled scrollbars for better UX
-- **Performance Optimized**: Fast scrolling on all devices
+- **Mobile Sidebar**: Full-screen overlay for mobile navigation
 
-### **Form Optimizations**
-- **Touch-Friendly Inputs**: Large, easy-to-use form fields
-- **Prevent Zoom**: 16px font size prevents iOS zoom
-- **Better Spacing**: Optimized padding and margins
-- **Responsive Layouts**: Stacked layouts on mobile
+### **Session Management**
+- **30-Minute Timeout**: Automatic session expiration detection
+- **SweetAlert Notifications**: Professional session expiration alerts
+- **CSRF Protection**: Built-in Laravel CSRF token handling
+- **Graceful Error Handling**: User-friendly error messages
+- **Auto-Reset Timer**: Session timer resets on user activity
 
 ## 🎯 User Experience
 
-### **Modern Interface**
-- **Clean Design**: Minimalist, professional appearance
-- **Consistent Branding**: ESP-CIT logo and colors throughout
-- **Intuitive Navigation**: Easy-to-use menu system
-- **Professional Typography**: Poppins font family
+### **Professional Sidebar**
+- **Prominent Logo**: Large 150px logo at the top of sidebar
+- **ESP-CIT Branding**: Consistent branding throughout
+- **Clean Navigation**: Minimalist menu with hover effects
+- **Active State Indicators**: Clear visual feedback for current page
+- **Collapsible Design**: Smooth mobile sidebar functionality
 
-### **Interactive Elements**
-- **Hover Effects**: Subtle animations and transitions
-- **Loading States**: Professional loading indicators
-- **Success/Error Messages**: SweetAlert2 notifications
-- **Form Validation**: Real-time validation feedback
+### **Enhanced Navigation**
+- **Professional Navbar**: Gradient backgrounds and modern styling
+- **Collapsible Sidebar**: Smooth mobile sidebar functionality
+- **Breadcrumb Navigation**: Clear page hierarchy
+- **Quick Actions**: Public survey access from navbar
+- **Mobile Overlay**: Full-screen overlay for mobile navigation
 
-### **Accessibility**
-- **Keyboard Navigation**: Full keyboard support
-- **Screen Reader Friendly**: Proper ARIA labels
-- **High Contrast**: Good color contrast ratios
-- **Focus Indicators**: Clear focus states
+### **Form & Data Management**
+- **AJAX Submissions**: No page reloads for better UX
+- **SweetAlert Notifications**: Professional success/error messages
+- **DataTables Integration**: Advanced table features with search/sort
+- **Real-time Validation**: Client-side form validation
+- **Dynamic Dropdowns**: Teacher-subject relationship management
+- **Form Persistence**: Maintains form data during validation
 
-## 🚀 Installation
+## 📱 Mobile Optimizations
+
+### **Touch-Friendly Interface**
+- **Minimum Touch Targets**: 44px minimum for all interactive elements
+- **Smooth Scrolling**: `-webkit-overflow-scrolling: touch` for iOS
+- **Custom Scrollbars**: Styled scrollbars for better mobile UX
+- **Responsive Tables**: Horizontal scrolling with minimum widths
+- **Touch Gestures**: Proper touch event handling
+
+### **Mobile-Specific Features**
+- **Sidebar Overlay**: Full-screen overlay for mobile sidebar
+- **Touch Gestures**: Proper touch event handling
+- **Viewport Optimization**: Prevents zoom on form inputs
+- **Mobile-First CSS**: Progressive enhancement approach
+- **Body Scroll Prevention**: Prevents background scrolling when sidebar is open
+
+## 🚀 Installation & Setup
 
 ### **Prerequisites**
 - PHP 8.1 or higher
 - Composer
-- MySQL 5.7 or higher
-- Node.js (for asset compilation)
+- MySQL/MariaDB
+- Web server (Apache/Nginx)
 
-### **Setup Instructions**
+### **Installation Steps**
 
 1. **Clone the repository**
-```bash
-   git clone [repository-url]
+   ```bash
+   git clone <repository-url>
    cd SentimentAnalysisSystem
-```
+   ```
 
 2. **Install dependencies**
-```bash
-composer install
-npm install
-```
+   ```bash
+   composer install
+   ```
 
 3. **Environment setup**
-```bash
-cp .env.example .env
-php artisan key:generate
-```
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
 4. **Database configuration**
    ```bash
+   # Update .env with your database credentials
    php artisan migrate
    php artisan db:seed
    ```
 
-5. **Asset compilation**
+5. **Storage setup**
    ```bash
-   npm run dev
+   php artisan storage:link
    ```
 
-6. **Start the server**
+6. **Start the development server**
    ```bash
    php artisan serve
    ```
 
-## 📊 Features Overview
+### **Sample Data**
+Access `/add-sample-data` to populate the system with sample teachers, subjects, and surveys for testing.
 
-| Feature | Description | Mobile Support |
-|---------|-------------|----------------|
-| Dashboard | Real-time analytics and metrics | ✅ Fully Responsive |
-| Teacher Management | Complete teacher CRUD operations | ✅ Mobile Optimized |
-| Subject Management | Subject catalog and assignments | ✅ Touch-Friendly |
-| User Management | Role-based user system | ✅ Responsive Design |
-| Reports & Analytics | Advanced filtering and charts | ✅ Mobile Charts |
-| Public Survey | Student feedback collection | ✅ Mobile-First |
-| Sentiment Analysis | AI-powered feedback analysis | ✅ Mobile Charts |
+### **Production Deployment**
+```bash
+# Optimize for production
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+composer install --optimize-autoloader --no-dev
+```
+
+## 📋 System Requirements
+
+### **Backend**
+- Laravel 10.x
+- PHP 8.1+
+- MySQL 8.0+ or MariaDB 10.5+
+- Composer 2.0+
+
+### **Frontend**
+- Bootstrap 5.3
+- jQuery 3.6
+- Chart.js 4.x
+- SweetAlert2 11.x
+- Font Awesome 6.x
+- DataTables 1.13+
+
+### **Browser Support**
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+### **Dependencies**
+- **Laravel DomPDF**: For PDF export functionality
+- **Maatwebsite Excel**: For Excel export functionality
+- **Laravel Sanctum**: For API authentication
+- **Guzzle HTTP**: For HTTP client functionality
 
 ## 🎨 Design System
 
-### **Color Palette**
-- **Primary Blue**: #98AAE7 (Light Blue)
-- **Success Green**: #8FCFA8 (Light Green)
-- **Warning Orange**: #F5B445 (Golden Orange)
-- **Danger Pink**: #F16E70 (Coral Pink)
-- **Dark Gray**: #494850 (Dark Gray)
-
 ### **Typography**
-- **Primary Font**: Poppins (Modern, clean)
-- **Fallback Font**: Source Sans Pro
-- **Font Weights**: 400, 500, 600, 700
+- **Primary Font**: Poppins (Google Fonts)
+- **Fallback**: Source Sans Pro, sans-serif
+- **Font Weights**: 400 (Regular), 500 (Medium), 600 (Semi-bold), 700 (Bold)
 
-### **Components**
-- **Cards**: Rounded corners, subtle shadows
-- **Buttons**: Gradient backgrounds, hover effects
-- **Tables**: Responsive, touch-friendly
-- **Forms**: Clean inputs, proper spacing
-- **Modals**: Professional overlays
+### **Spacing System**
+- **Base Unit**: 8px
+- **Padding**: 15px, 20px, 25px
+- **Margins**: 8px, 15px, 20px, 50px
+- **Border Radius**: 6px, 8px, 12px
 
-## 🔧 Configuration
+### **Component Styling**
+- **Cards**: 12px border radius, subtle shadows
+- **Buttons**: 6px border radius, hover animations
+- **Forms**: Consistent styling with focus states
+- **Tables**: Rounded corners, hover effects
 
-### **Environment Variables**
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=sentiment_analysis
-DB_USERNAME=root
-DB_PASSWORD=
+## 🔒 Security Features
+
+- **CSRF Protection**: Laravel built-in CSRF tokens
+- **Session Management**: Secure session handling
+- **Input Validation**: Server-side validation
+- **SQL Injection Prevention**: Eloquent ORM protection
+- **XSS Protection**: Blade template escaping
+- **Authentication Middleware**: Secure route protection
+- **Password Hashing**: Bcrypt password encryption
+
+## 📈 Performance Optimizations
+
+- **Lazy Loading**: Efficient data loading with AJAX
+- **Caching**: Laravel cache implementation ready
+- **Image Optimization**: Compressed logo and images
+- **Minified Assets**: Production-ready asset compilation
+- **Database Indexing**: Optimized database queries
+- **Route Caching**: Optimized route loading
+- **Config Caching**: Optimized configuration loading
+
+## 🧪 Testing
+
+### **Test Coverage**
+- **Feature Tests**: Authentication, CRUD operations
+- **Unit Tests**: Model relationships and business logic
+- **Browser Tests**: User interface testing
+- **Database Tests**: Data integrity and migrations
+
+### **Running Tests**
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test suite
+php artisan test --testsuite=Feature
+php artisan test --testsuite=Unit
 ```
-
-### **Logo Configuration**
-- Place your logo at `public/images/logo.png`
-- Logo will be automatically used throughout the application
-- Supports PNG, JPG, SVG formats
-
-## 📱 Mobile Testing
-
-### **Tested Devices**
-- iPhone (iOS 14+)
-- Android (Chrome, Firefox)
-- iPad (Safari)
-- Samsung Galaxy (Chrome)
-- Google Pixel (Chrome)
-
-### **Browser Support**
-- Chrome (Mobile & Desktop)
-- Safari (iOS & macOS)
-- Firefox (Mobile & Desktop)
-- Edge (Windows)
-
-## 🚀 Performance
-
-### **Optimizations**
-- **Lazy Loading**: Images and components load on demand
-- **Minified Assets**: Compressed CSS and JavaScript
-- **Caching**: Laravel caching for better performance
-- **Mobile Optimized**: Fast loading on mobile networks
-
-### **Mobile Performance**
-- **Touch Scrolling**: 60fps smooth scrolling
-- **Fast Rendering**: Optimized for mobile GPUs
-- **Efficient Animations**: Hardware-accelerated transitions
-- **Minimal Network**: Optimized asset delivery
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test on mobile devices
+4. Test thoroughly
 5. Submit a pull request
+
+### **Development Guidelines**
+- Follow PSR-12 coding standards
+- Write tests for new features
+- Update documentation as needed
+- Use meaningful commit messages
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🆘 Support
 
-For support and questions:
-- Create an issue on GitHub
-- Contact the development team
-- Check the documentation
+For support and questions, please contact the development team or create an issue in the repository.
+
+### **Common Issues**
+- **Session Timeout**: System automatically logs out after 30 minutes of inactivity
+- **Export Issues**: Ensure proper file permissions for export functionality
+- **Mobile Display**: Use responsive design features for optimal mobile experience
 
 ---
 
-**ESP-CIT Student Feedback System** - Modern, responsive, and user-friendly feedback collection platform.
+**ESP-CIT Student Feedback & Sentiment Analysis System** - Empowering educational institutions with modern feedback collection and analysis tools.
+
+*Version 2.0 - Enhanced with advanced reporting, mobile optimization, and improved user experience.*
