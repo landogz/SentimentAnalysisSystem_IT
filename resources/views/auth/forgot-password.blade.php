@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>Forgot Password - Student Feedback System</title>
+    <title>Forgot Password - ESP-CIT Student Feedback System</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Font: Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -17,10 +17,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     
     <style>
+        :root {
+            --dark-gray: #494850;
+            --light-green: #8FCFA8;
+            --coral-pink: #F16E70;
+            --golden-orange: #F5B445;
+            --light-blue: #98AAE7;
+        }
+        
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
-            font-family: 'Source Sans Pro', sans-serif;
+            font-family: 'Poppins', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -28,7 +36,7 @@
         .forgot-container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(73, 72, 80, 0.15);
             margin: 1rem auto;
             max-width: 450px;
             overflow: hidden;
@@ -42,7 +50,7 @@
         }
         
         .forgot-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%);
             color: white;
             padding: 3rem 2rem;
             text-align: center;
@@ -72,12 +80,24 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
         
+        .logo-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo-section img {
+            height: 80px;
+            width: auto;
+            margin-bottom: 1rem;
+            filter: brightness(1.1) contrast(1.1);
+        }
+        
         .forgot-header h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
             position: relative;
             z-index: 1;
+            color: white;
         }
         
         @media (max-width: 768px) {
@@ -97,6 +117,7 @@
             opacity: 0.9;
             position: relative;
             z-index: 1;
+            color: white;
         }
         
         @media (max-width: 768px) {
@@ -139,8 +160,8 @@
         }
         
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.3rem rgba(102, 126, 234, 0.15);
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 0.3rem rgba(152, 170, 231, 0.15);
             background-color: white;
             transform: translateY(-2px);
         }
@@ -150,6 +171,7 @@
             border: 2px solid #e9ecef;
             border-right: none;
             border-radius: 12px 0 0 12px;
+            color: var(--dark-gray);
         }
         
         .form-control {
@@ -158,7 +180,7 @@
         }
         
         .btn-reset {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%);
             border: none;
             color: white;
             padding: 1.25rem 3rem;
@@ -166,7 +188,7 @@
             font-weight: 600;
             font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(152, 170, 231, 0.3);
             width: 100%;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
@@ -181,7 +203,7 @@
         
         .btn-reset:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(152, 170, 231, 0.4);
             color: white;
         }
         
@@ -198,22 +220,22 @@
         .alert {
             border-radius: 12px;
             border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(73, 72, 80, 0.1);
             margin-bottom: 1.5rem;
         }
         
         .alert-success {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%);
             color: #155724;
         }
         
         .alert-danger {
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            background: linear-gradient(135deg, var(--coral-pink) 0%, #e55a5c 100%);
             color: #721c24;
         }
         
         .error-feedback {
-            color: #dc3545;
+            color: var(--coral-pink);
             font-size: 0.875rem;
             margin-top: 0.5rem;
             font-weight: 500;
@@ -226,7 +248,7 @@
         
         .info-section i {
             font-size: 4rem;
-            color: #667eea;
+            color: var(--light-blue);
             margin-bottom: 1rem;
         }
         
@@ -237,7 +259,7 @@
         }
         
         .info-section p {
-            color: #6c757d;
+            color: var(--dark-gray);
             font-size: 1rem;
             line-height: 1.6;
         }
@@ -248,14 +270,14 @@
         }
         
         .links-section a {
-            color: #667eea;
+            color: var(--light-blue);
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
         }
         
         .links-section a:hover {
-            color: #5a6fd8;
+            color: #7a8cd6;
             text-decoration: underline;
         }
         
@@ -273,14 +295,14 @@
             transform: translateX(-50%);
             background: white;
             padding: 0 1rem;
-            color: #6c757d;
+            color: var(--dark-gray);
             font-size: 0.875rem;
         }
         
         .footer {
             text-align: center;
             padding: 2rem;
-            color: #6c757d;
+            color: var(--dark-gray);
             font-size: 0.9rem;
         }
         
@@ -292,7 +314,7 @@
         }
         
         .footer a {
-            color: #667eea;
+            color: var(--light-blue);
             text-decoration: none;
         }
         
@@ -328,7 +350,7 @@
         }
         
         /* Prevent zoom on double tap (iOS) */
-        @media (max-width: 768px) {
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
             select,
             textarea,
             input {
@@ -344,7 +366,7 @@
         /* Better focus indicators for accessibility */
         .form-control:focus,
         .btn:focus {
-            outline: 2px solid #667eea;
+            outline: 2px solid var(--light-blue);
             outline-offset: 2px;
         }
         
@@ -364,8 +386,11 @@
     <div class="container">
         <div class="forgot-container">
             <div class="forgot-header">
-                <h1><i class="fas fa-graduation-cap me-2"></i>Student Feedback System</h1>
-                <p>Reset Password</p>
+                <div class="logo-section">
+                    <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" class="logo">
+                </div>
+                <h1>ESP-CIT</h1>
+                <p>Student Feedback System</p>
             </div>
             
             <div class="forgot-body">
@@ -440,7 +465,7 @@
         </div>
         
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Student Feedback System. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} ESP-CIT. All rights reserved.</p>
         </div>
     </div>
 
@@ -474,7 +499,7 @@
                             icon: 'success',
                             title: 'Email Sent!',
                             text: 'If an account exists with that email, we have sent a password reset link.',
-                            confirmButtonColor: '#667eea'
+                            confirmButtonColor: '#98AAE7'
                         });
                         
                         resetBtn.prop('disabled', false).html(originalText);
@@ -491,7 +516,7 @@
                             icon: 'error',
                             title: 'Error',
                             text: errorMessage,
-                            confirmButtonColor: '#667eea'
+                            confirmButtonColor: '#F16E70'
                         });
                         
                         resetBtn.prop('disabled', false).html(originalText);

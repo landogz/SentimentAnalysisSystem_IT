@@ -127,11 +127,44 @@
             <div class="card-header" style="background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%); color: white;">
                 <h3 class="card-title">
                     <i class="fas fa-chart-pie mr-2"></i>
-                    Sentiment Distribution
+                    Sentiment Analysis
                 </h3>
             </div>
             <div class="card-body">
-                <canvas id="sentimentChart" style="height: 300px;"></canvas>
+                <div class="row">
+                    <div class="col-12">
+                        <canvas id="sentimentPieChart" style="height: 200px;"></canvas>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <div class="text-success mb-2">
+                                <i class="fas fa-thumbs-up fa-2x"></i>
+                            </div>
+                            <h5 class="text-success" id="positiveCount">{{ $sentimentStats['positive'] }}</h5>
+                            <small class="text-muted">Positive</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-center">
+                            <div class="text-warning mb-2">
+                                <i class="fas fa-minus-circle fa-2x"></i>
+                            </div>
+                            <h5 class="text-warning" id="neutralCount">{{ $sentimentStats['neutral'] }}</h5>
+                            <small class="text-muted">Neutral</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-center">
+                            <div class="text-danger mb-2">
+                                <i class="fas fa-thumbs-down fa-2x"></i>
+                            </div>
+                            <h5 class="text-danger" id="negativeCount">{{ $sentimentStats['negative'] }}</h5>
+                            <small class="text-muted">Negative</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -342,10 +375,10 @@ $(document).ready(function() {
 });
 
 function initializeCharts() {
-    // Sentiment Chart
-    const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+    // Sentiment Pie Chart
+    const sentimentCtx = document.getElementById('sentimentPieChart').getContext('2d');
     sentimentChart = new Chart(sentimentCtx, {
-        type: 'doughnut',
+        type: 'pie',
         data: {
             labels: ['Positive', 'Neutral', 'Negative'],
             datasets: [{
@@ -354,7 +387,8 @@ function initializeCharts() {
                     {{ $sentimentStats['neutral'] }},
                     {{ $sentimentStats['negative'] }}
                 ],
-                backgroundColor: ['#8FCFA8', '#F5B445', '#F16E70'] // Green, Yellow, Red
+                backgroundColor: ['#8FCFA8', '#F5B445', '#F16E70'], // Green, Yellow, Red
+                borderWidth: 0
             }]
         },
         options: {
@@ -442,13 +476,18 @@ function loadReportData() {
         $('#positiveSentiment').text(data.sentiment_stats.positive);
         $('#negativeSentiment').text(data.sentiment_stats.negative);
         
-        // Update sentiment chart
+        // Update sentiment pie chart
         sentimentChart.data.datasets[0].data = [
             data.sentiment_stats.positive,
             data.sentiment_stats.neutral,
             data.sentiment_stats.negative
         ];
         sentimentChart.update();
+        
+        // Update sentiment statistics display
+        $('#positiveCount').text(data.sentiment_stats.positive);
+        $('#neutralCount').text(data.sentiment_stats.neutral);
+        $('#negativeCount').text(data.sentiment_stats.negative);
         
         // Load rating distribution
         loadRatingDistribution();

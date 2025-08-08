@@ -119,7 +119,10 @@ class SubjectController extends Controller
      */
     public function show(string $id)
     {
-        $subject = Subject::with(['teachers', 'surveys'])
+        $subject = Subject::with(['teachers' => function($query) {
+                $query->withCount('surveys')
+                      ->withAvg('surveys', 'rating');
+            }, 'surveys'])
             ->withCount('surveys')
             ->withAvg('surveys', 'rating')
             ->findOrFail($id);

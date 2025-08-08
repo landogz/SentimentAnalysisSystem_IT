@@ -7,8 +7,8 @@
     
     <title>ESP-CIT - Student Feedback Survey</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Font: Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -17,10 +17,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     
     <style>
+        :root {
+            --dark-gray: #494850;
+            --light-green: #8FCFA8;
+            --coral-pink: #F16E70;
+            --golden-orange: #F5B445;
+            --light-blue: #98AAE7;
+        }
+        
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
-            font-family: 'Source Sans Pro', sans-serif;
+            font-family: 'Poppins', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -28,7 +36,7 @@
         .survey-container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(73, 72, 80, 0.15);
             margin: 1rem auto;
             max-width: 900px;
             overflow: hidden;
@@ -42,7 +50,7 @@
         }
         
         .survey-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%);
             color: white;
             padding: 3rem 2rem;
             text-align: center;
@@ -72,12 +80,24 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
         
+        .logo-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo-section img {
+            height: 80px;
+            width: auto;
+            margin-bottom: 1rem;
+            filter: brightness(1.1) contrast(1.1);
+        }
+        
         .survey-header h1 {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
             position: relative;
             z-index: 1;
+            color: white;
         }
         
         @media (max-width: 768px) {
@@ -97,6 +117,7 @@
             opacity: 0.9;
             position: relative;
             z-index: 1;
+            color: white;
         }
         
         @media (max-width: 768px) {
@@ -121,18 +142,11 @@
         
         .form-label {
             font-weight: 600;
-            color: #495057;
-            margin-bottom: 0.75rem;
-            font-size: 1.1rem;
+            color: var(--dark-gray);
+            margin-bottom: 0.5rem;
         }
         
-        @media (max-width: 768px) {
-            .form-label {
-                font-size: 1rem;
-            }
-        }
-        
-        .form-control, .form-select {
+        .form-control {
             border: 2px solid #e9ecef;
             border-radius: 12px;
             padding: 1rem;
@@ -145,98 +159,65 @@
         }
         
         @media (max-width: 768px) {
-            .form-control, .form-select {
+            .form-control {
                 padding: 0.875rem;
                 font-size: 16px; /* Prevents zoom on iOS */
             }
         }
         
-        .form-control:focus, .form-select:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.3rem rgba(102, 126, 234, 0.15);
+        .form-control:focus {
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 0.3rem rgba(152, 170, 231, 0.15);
             background-color: white;
             transform: translateY(-2px);
         }
         
-        .rating-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 15px;
+        .form-select {
             border: 2px solid #e9ecef;
-            flex-wrap: wrap;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
         }
         
-        @media (max-width: 768px) {
-            .rating-container {
-                flex-direction: column;
-                text-align: center;
-                gap: 0.75rem;
-                padding: 1rem;
-            }
+        .form-select:focus {
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 0.3rem rgba(152, 170, 231, 0.15);
+            background-color: white;
         }
         
-        .star-rating {
-            font-size: 2.5rem;
-            color: #ddd;
+        .rating-section {
+            margin: 2rem 0;
+        }
+        
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .star {
+            font-size: 2rem;
+            color: #e9ecef;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 0 0.25rem;
             -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
         }
         
-        @media (max-width: 768px) {
-            .star-rating {
-                font-size: 2rem;
-                margin: 0 0.15rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .star-rating {
-                font-size: 1.75rem;
-                margin: 0 0.1rem;
-            }
-        }
-        
-        .star-rating:hover {
-            color: #ffc107;
+        .star:hover,
+        .star.active {
+            color: var(--golden-orange);
             transform: scale(1.1);
         }
         
-        .star-rating.active {
-            color: #ffc107;
-            text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
-        }
-        
-        .star-rating:active {
-            transform: scale(0.95);
-        }
-        
-        .rating-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #495057;
-            background: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            min-width: 60px;
-            text-align: center;
-        }
-        
-        @media (max-width: 768px) {
-            .rating-value {
-                font-size: 1.25rem;
-                padding: 0.375rem 0.75rem;
-            }
+        .star.filled {
+            color: var(--golden-orange);
         }
         
         .btn-submit {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%);
             border: none;
             color: white;
             padding: 1.25rem 3rem;
@@ -244,9 +225,8 @@
             font-weight: 600;
             font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(152, 170, 231, 0.3);
             width: 100%;
-            max-width: 300px;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
@@ -255,13 +235,12 @@
             .btn-submit {
                 padding: 1rem 2rem;
                 font-size: 1rem;
-                max-width: 100%;
             }
         }
         
         .btn-submit:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(152, 170, 231, 0.4);
             color: white;
         }
         
@@ -275,69 +254,34 @@
             box-shadow: none;
         }
         
-        .form-section {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
-        }
-        
-        @media (max-width: 768px) {
-            .form-section {
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-        }
-        
-        .form-section h3 {
-            color: #495057;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e9ecef;
-            font-size: 1.25rem;
-        }
-        
-        @media (max-width: 768px) {
-            .form-section h3 {
-                font-size: 1.1rem;
-            }
-        }
-        
-        .loading-spinner {
-            display: none;
-            margin-left: 1rem;
-        }
-        
-        @media (max-width: 768px) {
-            .loading-spinner {
-                margin-left: 0.5rem;
-            }
-        }
-        
         .alert {
             border-radius: 12px;
             border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(73, 72, 80, 0.1);
             margin-bottom: 1.5rem;
         }
         
         .alert-success {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%);
             color: #155724;
         }
         
         .alert-danger {
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            background: linear-gradient(135deg, var(--coral-pink) 0%, #e55a5c 100%);
             color: #721c24;
+        }
+        
+        .error-feedback {
+            color: var(--coral-pink);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
         }
         
         .footer {
             text-align: center;
             padding: 2rem;
-            color: #6c757d;
+            color: var(--dark-gray);
             font-size: 0.9rem;
         }
         
@@ -349,7 +293,7 @@
         }
         
         .footer a {
-            color: #667eea;
+            color: var(--light-blue);
             text-decoration: none;
         }
         
@@ -364,20 +308,13 @@
                 padding-right: 0.5rem;
             }
             
-            .row {
-                margin-left: -0.5rem;
-                margin-right: -0.5rem;
-            }
-            
-            .col-md-6 {
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
-            }
-            
             /* Improve touch targets */
-            .form-check-input {
-                min-width: 20px;
-                min-height: 20px;
+            .star {
+                min-width: 44px;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             
             /* Better spacing for mobile */
@@ -410,9 +347,9 @@
         
         /* Better focus indicators for accessibility */
         .form-control:focus,
-        .form-select:focus,
-        .btn:focus {
-            outline: 2px solid #667eea;
+        .btn:focus,
+        .form-select:focus {
+            outline: 2px solid var(--light-blue);
             outline-offset: 2px;
         }
         
@@ -425,6 +362,29 @@
         .fa-spin {
             animation: spin 1s linear infinite;
         }
+        
+        /* Rating text styling */
+        .rating-text {
+            text-align: center;
+            color: var(--dark-gray);
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        
+        /* Form section styling */
+        .form-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e9ecef;
+        }
+        
+        @media (max-width: 768px) {
+            .form-section {
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 
@@ -432,112 +392,141 @@
     <div class="container">
         <div class="survey-container">
             <div class="survey-header">
-                <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                    <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" style="height: 80px; width: auto; margin-right: 20px; filter: brightness(1.1) contrast(1.1);">
-                    <h1 style="margin: 0; font-size: 3rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">ESP-CIT</h1>
+                <div class="logo-section">
+                    <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" class="logo">
                 </div>
-                <h2 style="font-size: 1.8rem; font-weight: 600; margin-bottom: 0.5rem;">Student Feedback Survey</h2>
-                <p>Help us improve by providing your valuable feedback</p>
+                <h1>ESP-CIT</h1>
+                <p>Student Feedback Survey</p>
             </div>
             
             <div class="survey-body">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="fas fa-check-circle mr-2"></i>
+                        <i class="fas fa-check-circle me-2"></i>
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
-                @if(session('error'))
+                @if($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
-                        {{ session('error') }}
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
-                <form id="surveyForm">
+                <form method="POST" action="{{ route('survey.store') }}" id="surveyForm">
                     @csrf
                     
                     <div class="form-section">
-                        <h3><i class="fas fa-user-tie mr-2"></i>Instructor & Subject Selection</h3>
+                        <h4 class="mb-3" style="color: var(--dark-gray);">
+                            <i class="fas fa-user me-2" style="color: var(--light-blue);"></i>
+                            Student Information
+                        </h4>
                         
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="teacher_id" class="form-label">Select Instructor</label>
-                                    <select class="form-select" id="teacher_id" name="teacher_id" required>
-                                        <option value="">Choose an instructor...</option>
+                                    <label for="student_name" class="form-label">Full Name (Optional)</label>
+                                    <input type="text" class="form-control @error('student_name') is-invalid @enderror" 
+                                           id="student_name" name="student_name" value="{{ old('student_name') }}" 
+                                           placeholder="Enter your full name (optional)">
+                                    @error('student_name')
+                                        <div class="error-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="student_email" class="form-label">Email Address (Optional)</label>
+                                    <input type="email" class="form-control @error('student_email') is-invalid @enderror" 
+                                           id="student_email" name="student_email" value="{{ old('student_email') }}" 
+                                           placeholder="Enter your email (optional)">
+                                    @error('student_email')
+                                        <div class="error-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="mb-3" style="color: var(--dark-gray);">
+                            <i class="fas fa-chalkboard-teacher me-2" style="color: var(--light-blue);"></i>
+                            Teacher & Subject Selection
+                        </h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="teacher_id" class="form-label">Select Teacher</label>
+                                    <select class="form-select @error('teacher_id') is-invalid @enderror" 
+                                            id="teacher_id" name="teacher_id" required>
+                                        <option value="">Choose a teacher...</option>
                                         @foreach($teachers as $teacher)
-                                            <option value="{{ $teacher->id }}">{{ $teacher->name }} ({{ $teacher->department }})</option>
+                                            <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                                                {{ $teacher->name }} - {{ $teacher->department }}
+                                            </option>
                                         @endforeach
                                     </select>
+                                    @error('teacher_id')
+                                        <div class="error-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="subject_id" class="form-label">Select Subject</label>
-                                    <select class="form-select" id="subject_id" name="subject_id" required>
+                                    <select class="form-select @error('subject_id') is-invalid @enderror" 
+                                            id="subject_id" name="subject_id" required disabled>
                                         <option value="">Choose a subject...</option>
                                     </select>
+                                    @error('subject_id')
+                                        <div class="error-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-section">
-                        <h3><i class="fas fa-star mr-2"></i>Rating & Feedback</h3>
+                        <h4 class="mb-3" style="color: var(--dark-gray);">
+                            <i class="fas fa-star me-2" style="color: var(--light-blue);"></i>
+                            Rating & Feedback
+                        </h4>
                         
-                        <div class="form-group">
-                            <label class="form-label">Rate your experience</label>
-                            <div class="rating-container">
-                                <div class="stars">
-                                    <i class="fas fa-star star-rating" data-rating="1"></i>
-                                    <i class="fas fa-star star-rating" data-rating="2"></i>
-                                    <i class="fas fa-star star-rating" data-rating="3"></i>
-                                    <i class="fas fa-star star-rating" data-rating="4"></i>
-                                    <i class="fas fa-star star-rating" data-rating="5"></i>
-                                </div>
-                                <div class="rating-value">0.0</div>
+                        <div class="rating-section">
+                            <label class="form-label">Rate your experience (1-5 stars)</label>
+                            <div class="rating-stars">
+                                <i class="fas fa-star star" data-rating="1"></i>
+                                <i class="fas fa-star star" data-rating="2"></i>
+                                <i class="fas fa-star star" data-rating="3"></i>
+                                <i class="fas fa-star star" data-rating="4"></i>
+                                <i class="fas fa-star star" data-rating="5"></i>
                             </div>
-                            <input type="hidden" id="rating" name="rating" value="0">
+                            <div class="rating-text" id="ratingText">Click on a star to rate</div>
+                            <input type="hidden" name="rating" id="rating" value="{{ old('rating') }}" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="feedback_text" class="form-label">Additional Feedback (Optional)</label>
-                            <textarea class="form-control" id="feedback_text" name="feedback_text" rows="4" 
-                                      placeholder="Share your thoughts about the instructor, teaching methods, course content, or any suggestions for improvement..."></textarea>
+                            <label for="feedback_text" class="form-label">Additional Feedback</label>
+                            <textarea class="form-control @error('feedback_text') is-invalid @enderror" 
+                                      id="feedback_text" name="feedback_text" rows="4" 
+                                      placeholder="Share your thoughts about the teacher and subject..." required>{{ old('feedback_text') }}</textarea>
+                            @error('feedback_text')
+                                <div class="error-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 
-                    <div class="form-section">
-                        <h3><i class="fas fa-user mr-2"></i>Student Information (Optional)</h3>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="student_name" class="form-label">Your Name</label>
-                                    <input type="text" class="form-control" id="student_name" name="student_name" 
-                                           placeholder="Enter your name (optional)">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="student_email" class="form-label">Your Email</label>
-                                    <input type="email" class="form-control" id="student_email" name="student_email" 
-                                           placeholder="Enter your email (optional)">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
+                    <div class="form-group">
                         <button type="submit" class="btn btn-submit" id="submitBtn">
-                            <i class="fas fa-paper-plane mr-2"></i>Submit Feedback
-                            <span class="loading-spinner">
-                                <i class="fas fa-spinner fa-spin"></i>
-                            </span>
+                            <i class="fas fa-paper-plane me-2"></i>Submit Feedback
                         </button>
                     </div>
                 </form>
@@ -546,7 +535,6 @@
         
         <div class="footer">
             <p>&copy; {{ date('Y') }} ESP-CIT. All rights reserved.</p>
-            <p><a href="{{ route('dashboard') }}">Admin Panel</a></p>
         </div>
     </div>
 
@@ -559,44 +547,57 @@
 
     <script>
         $(document).ready(function() {
-            let currentRating = 0;
+            let selectedRating = 0;
             
-            // Star rating functionality with touch support
-            $('.star-rating').on('click touchstart', function(e) {
-                e.preventDefault();
-                currentRating = $(this).data('rating');
-                $('#rating').val(currentRating);
-                highlightStars(currentRating);
-                updateRatingDisplay(currentRating);
-            });
-            
-            // Hover effects for desktop
-            if (window.innerWidth > 768) {
-                $('.star-rating').hover(
-                    function() {
-                        const rating = $(this).data('rating');
-                        highlightStars(rating);
-                    },
-                    function() {
-                        highlightStars(currentRating);
-                    }
-                );
-            }
-            
-            function highlightStars(rating) {
-                $('.star-rating').removeClass('active');
-                $('.star-rating').each(function(index) {
+            // Star rating functionality
+            $('.star').click(function() {
+                const rating = $(this).data('rating');
+                selectedRating = rating;
+                
+                // Update stars
+                $('.star').removeClass('filled active');
+                $('.star').each(function(index) {
                     if (index < rating) {
-                        $(this).addClass('active');
+                        $(this).addClass('filled active');
                     }
                 });
-            }
+                
+                // Update hidden input
+                $('#rating').val(rating);
+                
+                // Update rating text
+                const ratingTexts = {
+                    1: 'Poor - Needs significant improvement',
+                    2: 'Fair - Has room for improvement',
+                    3: 'Good - Satisfactory experience',
+                    4: 'Very Good - Above average experience',
+                    5: 'Excellent - Outstanding experience'
+                };
+                $('#ratingText').text(ratingTexts[rating]);
+            });
             
-            function updateRatingDisplay(rating) {
-                $('.rating-value').text(rating.toFixed(1));
-            }
+            // Hover effects for stars
+            $('.star').hover(
+                function() {
+                    const rating = $(this).data('rating');
+                    $('.star').removeClass('active');
+                    $('.star').each(function(index) {
+                        if (index < rating) {
+                            $(this).addClass('active');
+                        }
+                    });
+                },
+                function() {
+                    $('.star').removeClass('active');
+                    $('.star').each(function(index) {
+                        if (index < selectedRating) {
+                            $(this).addClass('active');
+                        }
+                    });
+                }
+            );
             
-            // Dynamic subject loading based on teacher selection
+            // Load subjects when teacher is selected
             $('#teacher_id').change(function() {
                 const teacherId = $(this).val();
                 const subjectSelect = $('#subject_id');
@@ -606,41 +607,35 @@
                         url: '{{ route("survey.subjects-by-teacher") }}',
                         method: 'GET',
                         data: { teacher_id: teacherId },
-                        success: function(subjects) {
-                            subjectSelect.html('<option value="">Choose a subject...</option>');
-                            subjects.forEach(function(subject) {
+                        success: function(response) {
+                            subjectSelect.empty().append('<option value="">Choose a subject...</option>');
+                            response.forEach(function(subject) {
                                 subjectSelect.append(`<option value="${subject.id}">${subject.name} (${subject.subject_code})</option>`);
                             });
+                            subjectSelect.prop('disabled', false);
                         },
                         error: function() {
-                            showError('Failed to load subjects for this teacher.');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to load subjects. Please try again.',
+                                confirmButtonColor: '#F16E70'
+                            });
                         }
                     });
                 } else {
-                    subjectSelect.html('<option value="">Choose a subject...</option>');
+                    subjectSelect.empty().append('<option value="">Choose a subject...</option>').prop('disabled', true);
                 }
             });
             
-            // Form submission with mobile-friendly feedback
+            // Form submission with AJAX
             $('#surveyForm').submit(function(e) {
                 e.preventDefault();
                 
-                if (currentRating === 0) {
-                    showError('Please provide a rating before submitting.');
-                    // Scroll to rating section on mobile
-                    if (window.innerWidth <= 768) {
-                        $('html, body').animate({
-                            scrollTop: $('.rating-container').offset().top - 100
-                        }, 500);
-                    }
-                    return;
-                }
-                
                 const submitBtn = $('#submitBtn');
-                const loadingSpinner = $('.loading-spinner');
+                const originalText = submitBtn.html();
                 
-                submitBtn.prop('disabled', true);
-                loadingSpinner.show();
+                submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Submitting...');
                 
                 $.ajax({
                     url: '{{ route("survey.store") }}',
@@ -650,53 +645,36 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Thank You!',
-                                text: response.message,
-                                confirmButtonText: 'Submit Another',
-                                showCancelButton: true,
-                                cancelButtonText: 'Close',
-                                allowOutsideClick: false
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.reload();
-                                }
-                            });
-                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thank You!',
+                            text: 'Your feedback has been submitted successfully.',
+                            confirmButtonColor: '#98AAE7'
+                        }).then(function() {
+                            window.location.reload();
+                        });
                     },
                     error: function(xhr) {
+                        let errorMessage = 'An error occurred while submitting your feedback.';
+                        
                         if (xhr.responseJSON && xhr.responseJSON.errors) {
-                            let errorMessage = 'Please check the following:\n';
-                            Object.values(xhr.responseJSON.errors).forEach(function(errors) {
-                                errors.forEach(function(error) {
-                                    errorMessage += '• ' + error + '\n';
-                                });
-                            });
-                            showError(errorMessage);
-                        } else {
-                            showError('An error occurred while submitting your feedback. Please try again.');
+                            const errors = xhr.responseJSON.errors;
+                            errorMessage = Object.values(errors).flat().join('\n');
                         }
-                    },
-                    complete: function() {
-                        submitBtn.prop('disabled', false);
-                        loadingSpinner.hide();
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Submission Failed',
+                            text: errorMessage,
+                            confirmButtonColor: '#F16E70'
+                        });
+                        
+                        submitBtn.prop('disabled', false).html(originalText);
                     }
                 });
             });
             
-            function showError(message) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: message,
-                    confirmButtonColor: '#667eea',
-                    allowOutsideClick: true
-                });
-            }
-            
-            // Auto-hide alerts on mobile
+            // Auto-hide alerts after 5 seconds
             setTimeout(function() {
                 $('.alert').fadeOut('slow');
             }, 5000);

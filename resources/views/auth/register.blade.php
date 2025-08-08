@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>Register - Student Feedback System</title>
+    <title>Register - ESP-CIT Student Feedback System</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Font: Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -17,10 +17,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     
     <style>
+        :root {
+            --dark-gray: #494850;
+            --light-green: #8FCFA8;
+            --coral-pink: #F16E70;
+            --golden-orange: #F5B445;
+            --light-blue: #98AAE7;
+        }
+        
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
-            font-family: 'Source Sans Pro', sans-serif;
+            font-family: 'Poppins', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -28,7 +36,7 @@
         .register-container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(73, 72, 80, 0.15);
             margin: 1rem auto;
             max-width: 500px;
             overflow: hidden;
@@ -42,7 +50,7 @@
         }
         
         .register-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%);
             color: white;
             padding: 3rem 2rem;
             text-align: center;
@@ -72,12 +80,24 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
         
+        .logo-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo-section img {
+            height: 80px;
+            width: auto;
+            margin-bottom: 1rem;
+            filter: brightness(1.1) contrast(1.1);
+        }
+        
         .register-header h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
             position: relative;
             z-index: 1;
+            color: white;
         }
         
         @media (max-width: 768px) {
@@ -97,6 +117,7 @@
             opacity: 0.9;
             position: relative;
             z-index: 1;
+            color: white;
         }
         
         @media (max-width: 768px) {
@@ -139,8 +160,8 @@
         }
         
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.3rem rgba(102, 126, 234, 0.15);
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 0.3rem rgba(152, 170, 231, 0.15);
             background-color: white;
             transform: translateY(-2px);
         }
@@ -150,6 +171,7 @@
             border: 2px solid #e9ecef;
             border-right: none;
             border-radius: 12px 0 0 12px;
+            color: var(--dark-gray);
         }
         
         .form-control {
@@ -158,7 +180,7 @@
         }
         
         .btn-register {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%);
             border: none;
             color: white;
             padding: 1.25rem 3rem;
@@ -166,7 +188,7 @@
             font-weight: 600;
             font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(152, 170, 231, 0.3);
             width: 100%;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
@@ -181,7 +203,7 @@
         
         .btn-register:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(152, 170, 231, 0.4);
             color: white;
         }
         
@@ -200,13 +222,13 @@
             border: 2px solid #e9ecef;
             border-left: none;
             border-radius: 0 12px 12px 0;
-            color: #6c757d;
+            color: var(--dark-gray);
             transition: all 0.3s ease;
         }
         
         .btn-toggle:hover {
             background: #e9ecef;
-            color: #495057;
+            color: var(--dark-gray);
         }
         
         .form-check {
@@ -219,17 +241,17 @@
         }
         
         .form-check-input:checked {
-            background-color: #667eea;
-            border-color: #667eea;
+            background-color: var(--light-blue);
+            border-color: var(--light-blue);
         }
         
         .form-check-label {
-            color: #495057;
+            color: var(--dark-gray);
             font-weight: 500;
         }
         
         .form-check-label a {
-            color: #667eea;
+            color: var(--light-blue);
             text-decoration: none;
         }
         
@@ -240,17 +262,17 @@
         .alert {
             border-radius: 12px;
             border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(73, 72, 80, 0.1);
             margin-bottom: 1.5rem;
         }
         
         .alert-danger {
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            background: linear-gradient(135deg, var(--coral-pink) 0%, #e55a5c 100%);
             color: #721c24;
         }
         
         .error-feedback {
-            color: #dc3545;
+            color: var(--coral-pink);
             font-size: 0.875rem;
             margin-top: 0.5rem;
             font-weight: 500;
@@ -262,9 +284,9 @@
             font-weight: 500;
         }
         
-        .strength-weak { color: #dc3545; }
-        .strength-medium { color: #ffc107; }
-        .strength-strong { color: #28a745; }
+        .strength-weak { color: var(--coral-pink); }
+        .strength-medium { color: var(--golden-orange); }
+        .strength-strong { color: var(--light-green); }
         
         .links-section {
             text-align: center;
@@ -272,14 +294,14 @@
         }
         
         .links-section a {
-            color: #667eea;
+            color: var(--light-blue);
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
         }
         
         .links-section a:hover {
-            color: #5a6fd8;
+            color: #7a8cd6;
             text-decoration: underline;
         }
         
@@ -297,14 +319,14 @@
             transform: translateX(-50%);
             background: white;
             padding: 0 1rem;
-            color: #6c757d;
+            color: var(--dark-gray);
             font-size: 0.875rem;
         }
         
         .footer {
             text-align: center;
             padding: 2rem;
-            color: #6c757d;
+            color: var(--dark-gray);
             font-size: 0.9rem;
         }
         
@@ -316,7 +338,7 @@
         }
         
         .footer a {
-            color: #667eea;
+            color: var(--light-blue);
             text-decoration: none;
         }
         
@@ -325,33 +347,6 @@
         }
         
         /* Mobile-specific improvements */
-        @media (max-width: 768px) {
-            .container {
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
-            }
-            
-            /* Improve touch targets */
-            .form-check-input {
-                min-width: 20px;
-                min-height: 20px;
-            }
-            
-            /* Better spacing for mobile */
-            .mb-3 {
-                margin-bottom: 1rem !important;
-            }
-            
-            /* Improve button touch area */
-            .btn {
-                min-height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-        
-        /* Prevent zoom on double tap (iOS) */
         @media (max-width: 768px) {
             .container {
                 padding-left: 0.5rem;
@@ -395,7 +390,7 @@
         /* Better focus indicators for accessibility */
         .form-control:focus,
         .btn:focus {
-            outline: 2px solid #667eea;
+            outline: 2px solid var(--light-blue);
             outline-offset: 2px;
         }
         
@@ -415,8 +410,11 @@
     <div class="container">
         <div class="register-container">
             <div class="register-header">
-                <h1><i class="fas fa-graduation-cap me-2"></i>Student Feedback System</h1>
-                <p>Create New Account</p>
+                <div class="logo-section">
+                    <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" class="logo">
+                </div>
+                <h1>ESP-CIT</h1>
+                <p>Student Feedback System</p>
             </div>
             
             <div class="register-body">
@@ -529,7 +527,7 @@
         </div>
         
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Student Feedback System. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} ESP-CIT. All rights reserved.</p>
         </div>
     </div>
 
