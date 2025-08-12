@@ -187,34 +187,7 @@
             background-color: white;
         }
         
-        .rating-section {
-            margin: 2rem 0;
-        }
-        
-        .rating-stars {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
-        
-        .star {
-            font-size: 2rem;
-            color: #e9ecef;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        .star:hover,
-        .star.active {
-            color: var(--golden-orange);
-            transform: scale(1.1);
-        }
-        
-        .star.filled {
-            color: var(--golden-orange);
-        }
+
         
         .btn-submit {
             background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%);
@@ -385,6 +358,61 @@
                 padding: 1.5rem;
             }
         }
+
+        /* Survey Questions Styling */
+        .btn-group .btn {
+            border-radius: 8px;
+            margin: 0 2px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .btn-group .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(152, 170, 231, 0.3);
+        }
+        
+        .btn-check:checked + .btn {
+            background-color: var(--light-blue);
+            border-color: var(--light-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(152, 170, 231, 0.3);
+        }
+        
+        .btn-check:checked + .btn:hover {
+            background-color: #7a8cd6;
+            border-color: #7a8cd6;
+        }
+        
+        .question-label {
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+        
+        .question-number {
+            color: var(--light-blue);
+            font-weight: 700;
+        }
+        
+        /* Mobile responsive for survey questions */
+        @media (max-width: 768px) {
+            .btn-group {
+                flex-wrap: wrap;
+            }
+            
+            .btn-group .btn {
+                flex: 1;
+                min-width: 60px;
+                margin: 2px;
+            }
+            
+            .col-md-6 {
+                margin-bottom: 2rem;
+            }
+        }
     </style>
 </head>
 
@@ -494,30 +522,71 @@
                         </div>
                     </div>
 
+
+
+                    <!-- Survey Questions Section -->
                     <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
-                            <i class="fas fa-star me-2" style="color: var(--light-blue);"></i>
-                            Rating & Feedback
+                            <i class="fas fa-question-circle me-2" style="color: var(--light-blue);"></i>
+                            Survey Questions
                         </h4>
                         
-                        <div class="rating-section">
-                            <label class="form-label">Rate your experience (1-5 stars)</label>
-                            <div class="rating-stars">
-                                <i class="fas fa-star star" data-rating="1"></i>
-                                <i class="fas fa-star star" data-rating="2"></i>
-                                <i class="fas fa-star star" data-rating="3"></i>
-                                <i class="fas fa-star star" data-rating="4"></i>
-                                <i class="fas fa-star star" data-rating="5"></i>
+                        <div class="row">
+                            <!-- Option Questions Column -->
+                            <div class="col-md-6">
+                                <h5 class="mb-3" style="color: var(--light-blue);">
+                                    <i class="fas fa-check-circle me-2"></i>Rating Questions (1-5 Scale)
+                                </h5>
+                                @foreach($optionQuestions as $index => $question)
+                                <div class="form-group mb-3">
+                                    <label class="question-label">
+                                        <span class="question-number">{{ $index + 1 }}.</span> {{ $question->question_text }}
+                                    </label>
+                                    <div class="btn-group w-100" role="group">
+                                        @for($i = 1; $i <= 5; $i++)
+                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                               id="q{{ $question->id }}_{{ $i }}" value="{{ $i }}" required>
+                                        <label class="btn btn-outline-primary" for="q{{ $question->id }}_{{ $i }}">
+                                            {{ $i }}
+                                        </label>
+                                        @endfor
+                                    </div>
+                                </div>
+                                @endforeach
                             </div>
-                            <div class="rating-text" id="ratingText">Click on a star to rate</div>
-                            <input type="hidden" name="rating" id="rating" value="{{ old('rating') }}" required>
+                            
+                            <!-- Comment Questions Column -->
+                            <div class="col-md-6">
+                                <h5 class="mb-3" style="color: var(--light-blue);">
+                                    <i class="fas fa-comment me-2"></i>Comment Questions
+                                </h5>
+                                @foreach($commentQuestions as $index => $question)
+                                <div class="form-group mb-3">
+                                    <label for="comment_{{ $question->id }}" class="question-label">
+                                        <span class="question-number">{{ $index + 1 }}.</span> {{ $question->question_text }}
+                                    </label>
+                                    <textarea class="form-control" 
+                                              id="comment_{{ $question->id }}" 
+                                              name="question_responses[{{ $question->id }}]" 
+                                              rows="3" 
+                                              placeholder="Please provide your response..."></textarea>
+                                </div>
+                                @endforeach
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="mb-3" style="color: var(--dark-gray);">
+                            <i class="fas fa-comments me-2" style="color: var(--light-blue);"></i>
+                            Additional Comments
+                        </h4>
                         
                         <div class="form-group">
-                            <label for="feedback_text" class="form-label">Additional Feedback</label>
+                            <label for="feedback_text" class="form-label">Any additional feedback or suggestions</label>
                             <textarea class="form-control @error('feedback_text') is-invalid @enderror" 
                                       id="feedback_text" name="feedback_text" rows="4" 
-                                      placeholder="Share your thoughts about the teacher and subject..." required>{{ old('feedback_text') }}</textarea>
+                                      placeholder="Share any additional thoughts or suggestions...">{{ old('feedback_text') }}</textarea>
                             @error('feedback_text')
                                 <div class="error-feedback">{{ $message }}</div>
                             @enderror
@@ -547,55 +616,6 @@
 
     <script>
         $(document).ready(function() {
-            let selectedRating = 0;
-            
-            // Star rating functionality
-            $('.star').click(function() {
-                const rating = $(this).data('rating');
-                selectedRating = rating;
-                
-                // Update stars
-                $('.star').removeClass('filled active');
-                $('.star').each(function(index) {
-                    if (index < rating) {
-                        $(this).addClass('filled active');
-                    }
-                });
-                
-                // Update hidden input
-                $('#rating').val(rating);
-                
-                // Update rating text
-                const ratingTexts = {
-                    1: 'Poor - Needs significant improvement',
-                    2: 'Fair - Has room for improvement',
-                    3: 'Good - Satisfactory experience',
-                    4: 'Very Good - Above average experience',
-                    5: 'Excellent - Outstanding experience'
-                };
-                $('#ratingText').text(ratingTexts[rating]);
-            });
-            
-            // Hover effects for stars
-            $('.star').hover(
-                function() {
-                    const rating = $(this).data('rating');
-                    $('.star').removeClass('active');
-                    $('.star').each(function(index) {
-                        if (index < rating) {
-                            $(this).addClass('active');
-                        }
-                    });
-                },
-                function() {
-                    $('.star').removeClass('active');
-                    $('.star').each(function(index) {
-                        if (index < selectedRating) {
-                            $(this).addClass('active');
-                        }
-                    });
-                }
-            );
             
             // Load subjects when teacher is selected
             $('#teacher_id').change(function() {

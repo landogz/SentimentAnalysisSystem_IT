@@ -6,6 +6,7 @@ use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\SurveyQuestionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\UserController;
@@ -68,6 +69,14 @@ Route::middleware('auth')->group(function () {
     // User management
     Route::resource('users', UserController::class);
     Route::get('/users-ajax', [UserController::class, 'getUsers'])->name('users.ajax');
+    
+    // Survey Questions management
+    Route::resource('survey-questions', SurveyQuestionController::class);
+    Route::post('/survey-questions/{surveyQuestion}/toggle-status', [SurveyQuestionController::class, 'toggleStatus'])->name('survey-questions.toggle-status');
+    Route::get('/survey-questions/active/list', [SurveyQuestionController::class, 'getActiveQuestions'])->name('survey-questions.active');
+    
+    // Survey responses
+    Route::get('/surveys/{survey}/responses', [SurveyController::class, 'getResponses'])->name('surveys.responses');
     
     // Reports
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');

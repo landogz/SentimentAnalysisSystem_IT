@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             TeacherSeeder::class,
             SubjectSeeder::class,
             SurveySeeder::class,
+            SurveyQuestionSeeder::class,
         ]);
     }
 }
