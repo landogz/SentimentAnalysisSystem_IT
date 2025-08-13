@@ -4,7 +4,16 @@ A modern, professional Laravel-based system for collecting and analyzing student
 
 ## 🆕 Recent Updates & Features
 
-### **Latest Enhancements**
+### **Latest Enhancements (v3.1)**
+- **Part-Specific Survey Analysis**: Comprehensive 3-part survey structure with detailed analysis
+- **Professional Tabbed Modal**: Enhanced survey responses viewer with tabbed interface
+- **Advanced Sentiment Scoring**: Part 3 comments converted to numerical scores (1-5 scale)
+- **Enhanced Survey Seeder**: Realistic part-specific data with sentiment-based responses
+- **Improved Survey Responses**: Professional modal with overview, part breakdown, and analysis
+- **Database-Driven Sentiment Words**: Enhanced negation support and multi-language analysis
+- **Smart Part 3 Calculation**: Sentiment analysis converted to meaningful numerical ratings
+
+### **Previous Features (v3.0)**
 - **Enhanced Sentiment Analysis**: Database-driven sentiment words with scoring system
 - **Multi-language Support**: English and Tagalog sentiment analysis
 - **Translation Integration**: Google Translate API for automatic language translation
@@ -20,6 +29,22 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Session Management**: 30-minute timeout with SweetAlert notifications
 - **DataTables Integration**: Advanced table features with search, sort, and pagination
 
+### **Part-Specific Survey Structure**
+- **Part 1: Instructor Evaluation**: 20 questions with 1-5 rating scale (Outstanding to Poor)
+- **Part 2: Difficulty Level**: 10 questions with 1-5 rating scale (Very Difficult to Very Not Difficult)
+- **Part 3: Open Comments**: 4 open-ended questions with sentiment analysis
+- **Professional Tabbed Interface**: Overview, Part 1, Part 2, Part 3 tabs with detailed analysis
+- **Sentiment Score Conversion**: Part 3 comments converted to 1-5 numerical scale
+- **Comprehensive Analysis**: Part-specific averages and overall sentiment analysis
+
+### **Enhanced Survey Responses Modal**
+- **Professional Design**: Modern tabbed interface with color-coded sections
+- **Overview Tab**: Summary cards with part-specific scores and sentiment analysis
+- **Part-Specific Tabs**: Detailed breakdown of each survey part
+- **Visual Analysis**: Color-coded cards with icons and scores
+- **Responsive Layout**: Works perfectly on desktop and mobile devices
+- **Interactive Elements**: Hover effects and smooth transitions
+
 ### **Sentiment Analysis Features**
 - **Database-Driven Words**: 209 pre-seeded sentiment words with scores
 - **Multi-language Support**: English (96 words) and Tagalog (113 words)
@@ -30,6 +55,7 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Statistics Dashboard**: Comprehensive word counts and distribution
 - **Filtering System**: Filter by type, language, and status
 - **CRUD Operations**: Complete Create, Read, Update, Delete functionality
+- **Negation Support**: Advanced negation handling for improved accuracy
 
 ### **Performance Improvements**
 - **AJAX-Powered Interface**: No page reloads for better user experience
@@ -47,6 +73,16 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Rating Calculation**: Converts sentiment scores to 1-5 star ratings
 - **Real-time Testing**: Built-in sentiment analysis testing tool
 - **Statistics Dashboard**: Comprehensive analytics and reporting
+- **Negation Handling**: Advanced negation word processing for improved accuracy
+
+### **Part 3 Comments Analysis**
+- **Sentiment Score Conversion**: Comments converted to 1-5 numerical scale
+- **Intensity-Based Scoring**: Stronger sentiments get higher/lower scores
+- **Positive Sentiment**: 4.5/5.0 (can reach 5.0 for very strong positive)
+- **Neutral Sentiment**: 3.0/5.0 (baseline neutral score)
+- **Negative Sentiment**: 1.5/5.0 (can reach 1.0 for very strong negative)
+- **Intensity Adjustment**: ±0.5 based on sentiment strength
+- **Consistent Scale**: All parts now use 1-5 rating scale for comparison
 
 ### **Sentiment Words Management**
 - **Complete CRUD Interface**: Full Create, Read, Update, Delete operations
@@ -55,12 +91,14 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Test Analysis Tool**: Built-in sentiment testing with custom text
 - **Floating Action Button**: Quick access to test analysis
 - **Responsive Design**: Mobile-optimized management interface
+- **Negation Pairs**: Support for opposite word relationships
 
 ### **Database Schema**
 ```sql
 CREATE TABLE sentiment_words (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     word VARCHAR(255) NOT NULL,
+    negation VARCHAR(255) NULL,
     type ENUM('positive', 'negative', 'neutral') NOT NULL,
     score DECIMAL(3,1) DEFAULT 1.0,
     language VARCHAR(10) DEFAULT 'en',
@@ -68,7 +106,8 @@ CREATE TABLE sentiment_words (
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     INDEX idx_word_language (word, language),
-    INDEX idx_type_language (type, language)
+    INDEX idx_type_language (type, language),
+    INDEX idx_negation (negation)
 );
 ```
 
@@ -84,6 +123,7 @@ CREATE TABLE sentiment_words (
 The system comes pre-loaded with:
 - **English Words (96)**: excellent (3.0), great (2.5), terrible (-3.0), etc.
 - **Tagalog Words (113)**: maganda (2.0), mahusay (2.5), masama (-2.0), etc.
+- **Negation Pairs**: beautiful → ugly, good → bad, excellent → terrible
 
 ## 🎨 Modern Design Features
 
@@ -100,6 +140,7 @@ The system comes pre-loaded with:
 - **Rounded Corners**: Modern 8-12px border radius on all components
 - **Smooth Animations**: CSS transitions and hover effects
 - **Professional Cards**: Enhanced card styling with shadows and hover effects
+- **Tabbed Interfaces**: Professional tab navigation with smooth transitions
 
 ## 📊 Dashboard & Analytics
 
@@ -115,19 +156,30 @@ The system comes pre-loaded with:
 
 ### **Dynamic CRUD System**
 - **Question Types**: Support for option questions (1-5 scale) and comment questions (text input)
+- **Part Categorization**: Questions organized into Part 1, Part 2, Part 3
 - **Order Management**: Flexible question ordering with drag-and-drop capability
 - **Active/Inactive Toggle**: Easy activation/deactivation of questions
 - **AJAX Operations**: Smooth create, read, update, delete operations without page reloads
 - **SweetAlert Notifications**: Professional success/error messages
 - **Responsive Design**: Mobile-friendly interface for question management
 
-### **Survey Responses Viewer**
-- **Clickable Survey Rows**: Interactive survey tables on teacher and subject detail pages
-- **Detailed Response Modal**: Comprehensive view of all survey responses
-- **Two-Column Layout**: Organized display of rating questions and comment responses
-- **Survey Information**: Complete survey metadata (teacher, subject, rating, sentiment, date)
-- **Star Rating Display**: Visual representation of individual question ratings
-- **Additional Feedback**: Separate section for extra comments and suggestions
+### **Enhanced Survey Responses Viewer**
+- **Professional Tabbed Modal**: Modern interface with overview and part-specific tabs
+- **Overview Tab**: Summary cards showing part-specific scores and sentiment analysis
+- **Part 1 Tab**: Instructor evaluation responses with star ratings
+- **Part 2 Tab**: Difficulty level responses with visual indicators
+- **Part 3 Tab**: Open comments with sentiment analysis results
+- **Color-Coded Sections**: Blue (Part 1), Info (Part 2), Green (Part 3)
+- **Interactive Elements**: Hover effects and smooth transitions
+- **Responsive Design**: Works perfectly on all device sizes
+
+### **Part-Specific Analysis**
+- **Part 1 Analysis**: Instructor evaluation average (1-5 scale)
+- **Part 2 Analysis**: Difficulty level average (1-5 scale)
+- **Part 3 Analysis**: Sentiment score conversion (1-5 scale)
+- **Overall Analysis**: Combined rating with sentiment breakdown
+- **Visual Indicators**: Color-coded cards with icons and scores
+- **Detailed Breakdown**: Individual question responses with ratings
 
 ### **Smart Rating Calculation**
 - **Automatic Algorithm**: Calculates overall rating from multiple data sources
@@ -136,6 +188,7 @@ The system comes pre-loaded with:
 - **Sentiment Conversion**: Positive (4.5), Neutral (3.0), Negative (1.5) ratings
 - **Range Validation**: Ensures final rating stays within 1.0-5.0 range
 - **Precision Control**: Rounds to 1 decimal place for consistency
+- **Part-Specific Averages**: Individual averages for each survey part
 
 ### **Advanced Reporting System**
 - **Multi-Format Export**: PDF, Excel, and CSV export capabilities
@@ -243,8 +296,10 @@ The system comes pre-loaded with:
    # Update .env with your database credentials
    php artisan migrate
    php artisan db:seed
-   # Seed survey questions (optional)
+   # Seed survey questions with part structure
    php artisan db:seed --class=SurveyQuestionSeeder
+   # Seed sample surveys with part-specific data
+   php artisan db:seed --class=SurveySeeder
    ```
 
 5. **Storage setup**
@@ -321,6 +376,7 @@ composer install --optimize-autoloader --no-dev
 - **Buttons**: 6px border radius, hover animations
 - **Forms**: Consistent styling with focus states
 - **Tables**: Rounded corners, hover effects
+- **Tabs**: Professional tab navigation with smooth transitions
 
 ## 🔒 Security Features
 
@@ -387,9 +443,10 @@ For support and questions, please contact the development team or create an issu
 - **Export Issues**: Ensure proper file permissions for export functionality
 - **Mobile Display**: Use responsive design features for optimal mobile experience
 - **Translation Issues**: Ensure Google Translate API key is configured for translation features
+- **Part 3 Analysis**: Sentiment analysis requires sentiment words to be seeded in database
 
 ---
 
 **ESP-CIT Student Feedback & Sentiment Analysis System** - Empowering educational institutions with modern feedback collection and analysis tools.
 
-*Version 3.0 - Enhanced with advanced sentiment analysis, multi-language support, comprehensive CRUD management, dynamic survey questions, survey responses viewer, and smart rating calculation.*
+*Version 3.1 - Enhanced with part-specific survey analysis, professional tabbed modal interface, advanced sentiment scoring, and comprehensive survey responses viewer.*

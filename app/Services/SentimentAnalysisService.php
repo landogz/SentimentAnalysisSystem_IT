@@ -91,15 +91,34 @@ class SentimentAnalysisService
         // Get words from database if available
         $dbWords = $this->getWordsWithScores($language);
         
-        foreach ($words as $word) {
+        // Get negation pairs
+        $negationPairs = SentimentWord::getNegationPairs($language);
+        
+        // Common negation words
+        $negationWords = ['not', 'no', 'never', 'none', 'neither', 'nor', 'nobody', 'nothing', 'nowhere', 'hardly', 'barely', 'scarcely', 'rarely', 'seldom'];
+        
+        for ($i = 0; $i < count($words); $i++) {
+            $word = $words[$i];
             $cleanWord = preg_replace('/[^a-zA-Z]/', '', $word);
             
             if (empty($cleanWord)) continue;
 
-            // Check database words first
+            // Check if this word is a negation word
+            $isNegation = in_array($cleanWord, $negationWords);
+            
+            // Check if next word exists and is a sentiment word
+            $nextWord = null;
+            $nextCleanWord = null;
+            if ($i + 1 < count($words)) {
+                $nextWord = $words[$i + 1];
+                $nextCleanWord = preg_replace('/[^a-zA-Z]/', '', $nextWord);
+            }
+
             $wordScore = 0;
             $wordType = null;
+            $isNegated = false;
 
+            // Check if current word is a sentiment word
             if (isset($dbWords['positive'][$cleanWord])) {
                 $wordScore = $dbWords['positive'][$cleanWord];
                 $wordType = 'positive';
@@ -129,12 +148,68 @@ class SentimentAnalysisService
                 }
             }
 
+            // Handle negation
+            if ($isNegation && $nextCleanWord && !empty($nextCleanWord)) {
+                // Check if next word is a sentiment word
+                $nextWordScore = 0;
+                $nextWordType = null;
+                
+                if (isset($dbWords['positive'][$nextCleanWord])) {
+                    $nextWordScore = $dbWords['positive'][$nextCleanWord];
+                    $nextWordType = 'positive';
+                } elseif (isset($dbWords['negative'][$nextCleanWord])) {
+                    $nextWordScore = $dbWords['negative'][$nextCleanWord];
+                    $nextWordType = 'negative';
+                } elseif (isset($dbWords['neutral'][$nextCleanWord])) {
+                    $nextWordScore = $dbWords['neutral'][$nextCleanWord];
+                    $nextWordType = 'neutral';
+                } else {
+                    // Fallback to hardcoded words
+                    if (in_array($nextCleanWord, $this->positiveWords)) {
+                        $nextWordScore = 2.0;
+                        $nextWordType = 'positive';
+                    } elseif (in_array($nextCleanWord, $this->negativeWords)) {
+                        $nextWordScore = -2.0;
+                        $nextWordType = 'negative';
+                    } elseif (in_array($nextCleanWord, $this->neutralWords)) {
+                        $nextWordScore = 0.5;
+                        $nextWordType = 'neutral';
+                    }
+                }
+
+                if ($nextWordScore != 0) {
+                    // Negate the score
+                    $negatedScore = -$nextWordScore;
+                    $score += $negatedScore;
+                    
+                    // Update scores based on negated type
+                    if ($nextWordType === 'positive') {
+                        $negativeScore += abs($negatedScore);
+                    } elseif ($nextWordType === 'negative') {
+                        $positiveScore += abs($negatedScore);
+                    }
+                    
+                    $matchedWords[] = [
+                        'word' => $cleanWord . ' ' . $nextCleanWord,
+                        'score' => $negatedScore,
+                        'type' => $nextWordType === 'positive' ? 'negative' : ($nextWordType === 'negative' ? 'positive' : 'neutral'),
+                        'original_type' => $nextWordType,
+                        'negated' => true
+                    ];
+                    
+                    // Skip the next word since we've already processed it
+                    $i++;
+                    continue;
+                }
+            }
+
             if ($wordScore != 0) {
                 $score += $wordScore;
                 $matchedWords[] = [
                     'word' => $cleanWord,
                     'score' => $wordScore,
-                    'type' => $wordType
+                    'type' => $wordType,
+                    'negated' => false
                 ];
             }
         }

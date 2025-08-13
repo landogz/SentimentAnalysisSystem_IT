@@ -13,145 +13,254 @@ class SentimentWordSeeder extends Seeder
      */
     public function run(): void
     {
-        // English positive words with scores
+        // Clear existing sentiment words
+        SentimentWord::query()->delete();
+        $this->command->info('Cleared existing sentiment words...');
+
+        // English positive words with scores and negations
         $englishPositiveWords = [
-            'excellent' => 3.0, 'great' => 2.5, 'amazing' => 3.0, 'outstanding' => 3.0,
-            'fantastic' => 2.5, 'wonderful' => 2.5, 'brilliant' => 3.0, 'superb' => 3.0,
-            'perfect' => 3.0, 'awesome' => 2.5, 'incredible' => 3.0, 'terrific' => 2.5,
-            'helpful' => 2.0, 'knowledgeable' => 2.0, 'patient' => 1.5, 'clear' => 1.5,
-            'organized' => 1.5, 'engaging' => 2.0, 'inspiring' => 2.5, 'motivating' => 2.0,
-            'professional' => 2.0, 'dedicated' => 2.0, 'caring' => 2.0, 'supportive' => 2.0,
-            'enthusiastic' => 2.0, 'passionate' => 2.0, 'creative' => 2.0, 'innovative' => 2.0,
-            'effective' => 2.0, 'efficient' => 1.5, 'thorough' => 1.5, 'detailed' => 1.5,
-            'comprehensive' => 2.0, 'well-prepared' => 2.0, 'punctual' => 1.5, 'reliable' => 2.0,
-            'love' => 3.0, 'happy' => 2.0, 'satisfied' => 2.0, 'good' => 1.5
+            'excellent' => ['score' => 3.0, 'negation' => 'terrible'],
+            'great' => ['score' => 2.5, 'negation' => 'awful'],
+            'amazing' => ['score' => 3.0, 'negation' => 'disappointing'],
+            'outstanding' => ['score' => 3.0, 'negation' => 'poor'],
+            'fantastic' => ['score' => 2.5, 'negation' => 'terrible'],
+            'wonderful' => ['score' => 2.5, 'negation' => 'horrible'],
+            'brilliant' => ['score' => 3.0, 'negation' => 'stupid'],
+            'superb' => ['score' => 3.0, 'negation' => 'inferior'],
+            'perfect' => ['score' => 3.0, 'negation' => 'imperfect'],
+            'awesome' => ['score' => 2.5, 'negation' => 'awful'],
+            'incredible' => ['score' => 3.0, 'negation' => 'ordinary'],
+            'terrific' => ['score' => 2.5, 'negation' => 'terrible'],
+            'helpful' => ['score' => 2.0, 'negation' => 'unhelpful'],
+            'knowledgeable' => ['score' => 2.0, 'negation' => 'ignorant'],
+            'patient' => ['score' => 1.5, 'negation' => 'impatient'],
+            'clear' => ['score' => 1.5, 'negation' => 'unclear'],
+            'organized' => ['score' => 1.5, 'negation' => 'disorganized'],
+            'engaging' => ['score' => 2.0, 'negation' => 'boring'],
+            'inspiring' => ['score' => 2.5, 'negation' => 'discouraging'],
+            'motivating' => ['score' => 2.0, 'negation' => 'demotivating'],
+            'professional' => ['score' => 2.0, 'negation' => 'unprofessional'],
+            'dedicated' => ['score' => 2.0, 'negation' => 'lazy'],
+            'caring' => ['score' => 2.0, 'negation' => 'uncaring'],
+            'supportive' => ['score' => 2.0, 'negation' => 'unsupportive'],
+            'enthusiastic' => ['score' => 2.0, 'negation' => 'unenthusiastic'],
+            'passionate' => ['score' => 2.0, 'negation' => 'apathetic'],
+            'creative' => ['score' => 2.0, 'negation' => 'uncreative'],
+            'innovative' => ['score' => 2.0, 'negation' => 'conventional'],
+            'effective' => ['score' => 2.0, 'negation' => 'ineffective'],
+            'efficient' => ['score' => 1.5, 'negation' => 'inefficient'],
+            'thorough' => ['score' => 1.5, 'negation' => 'superficial'],
+            'detailed' => ['score' => 1.5, 'negation' => 'vague'],
+            'comprehensive' => ['score' => 2.0, 'negation' => 'incomplete'],
+            'well-prepared' => ['score' => 2.0, 'negation' => 'unprepared'],
+            'punctual' => ['score' => 1.5, 'negation' => 'late'],
+            'reliable' => ['score' => 2.0, 'negation' => 'unreliable'],
+            'love' => ['score' => 3.0, 'negation' => 'hate'],
+            'happy' => ['score' => 2.0, 'negation' => 'sad'],
+            'satisfied' => ['score' => 2.0, 'negation' => 'dissatisfied'],
+            'good' => ['score' => 1.5, 'negation' => 'bad'],
+            'beautiful' => ['score' => 3.0, 'negation' => 'ugly'],
+            'smart' => ['score' => 2.0, 'negation' => 'stupid'],
         ];
 
-        // English negative words with scores
+        // English negative words with scores and negations
         $englishNegativeWords = [
-            'poor' => -2.0, 'terrible' => -3.0, 'awful' => -3.0, 'horrible' => -3.0,
-            'bad' => -2.0, 'worst' => -3.0, 'disappointing' => -2.5, 'confusing' => -2.0,
-            'unclear' => -2.0, 'disorganized' => -2.0, 'boring' => -2.0, 'monotone' => -1.5,
-            'unprepared' => -2.0, 'late' => -1.5, 'unreliable' => -2.0, 'unprofessional' => -2.5,
-            'rude' => -2.5, 'impatient' => -2.0, 'unhelpful' => -2.0, 'ineffective' => -2.0,
-            'waste' => -2.5, 'useless' => -2.5, 'difficult' => -1.5, 'complicated' => -1.5,
-            'overwhelming' => -2.0, 'stressful' => -2.0, 'frustrating' => -2.0, 'annoying' => -2.0,
-            'irritating' => -2.0, 'unfair' => -2.5, 'biased' => -2.5, 'incompetent' => -3.0,
-            'unqualified' => -3.0, 'lazy' => -2.5, 'careless' => -2.0, 'negligent' => -3.0,
-            'hate' => -3.0, 'slow' => -1.5
+            'poor' => ['score' => -2.0, 'negation' => 'excellent'],
+            'terrible' => ['score' => -3.0, 'negation' => 'excellent'],
+            'awful' => ['score' => -3.0, 'negation' => 'great'],
+            'horrible' => ['score' => -3.0, 'negation' => 'wonderful'],
+            'bad' => ['score' => -2.0, 'negation' => 'good'],
+            'worst' => ['score' => -3.0, 'negation' => 'best'],
+            'disappointing' => ['score' => -2.5, 'negation' => 'amazing'],
+            'confusing' => ['score' => -2.0, 'negation' => 'clear'],
+            'unclear' => ['score' => -2.0, 'negation' => 'clear'],
+            'disorganized' => ['score' => -2.0, 'negation' => 'organized'],
+            'boring' => ['score' => -2.0, 'negation' => 'engaging'],
+            'monotone' => ['score' => -1.5, 'negation' => 'engaging'],
+            'unprepared' => ['score' => -2.0, 'negation' => 'well-prepared'],
+            'late' => ['score' => -1.5, 'negation' => 'punctual'],
+            'unreliable' => ['score' => -2.0, 'negation' => 'reliable'],
+            'unprofessional' => ['score' => -2.5, 'negation' => 'professional'],
+            'rude' => ['score' => -2.5, 'negation' => 'polite'],
+            'impatient' => ['score' => -2.0, 'negation' => 'patient'],
+            'unhelpful' => ['score' => -2.0, 'negation' => 'helpful'],
+            'ineffective' => ['score' => -2.0, 'negation' => 'effective'],
+            'waste' => ['score' => -2.5, 'negation' => 'valuable'],
+            'useless' => ['score' => -2.5, 'negation' => 'useful'],
+            'difficult' => ['score' => -1.5, 'negation' => 'easy'],
+            'complicated' => ['score' => -1.5, 'negation' => 'simple'],
+            'overwhelming' => ['score' => -2.0, 'negation' => 'manageable'],
+            'stressful' => ['score' => -2.0, 'negation' => 'relaxing'],
+            'frustrating' => ['score' => -2.0, 'negation' => 'satisfying'],
+            'annoying' => ['score' => -2.0, 'negation' => 'pleasant'],
+            'irritating' => ['score' => -2.0, 'negation' => 'soothing'],
+            'unfair' => ['score' => -2.5, 'negation' => 'fair'],
+            'biased' => ['score' => -2.5, 'negation' => 'unbiased'],
+            'incompetent' => ['score' => -3.0, 'negation' => 'competent'],
+            'unqualified' => ['score' => -3.0, 'negation' => 'qualified'],
+            'lazy' => ['score' => -2.5, 'negation' => 'dedicated'],
+            'careless' => ['score' => -2.0, 'negation' => 'careful'],
+            'negligent' => ['score' => -3.0, 'negation' => 'diligent'],
+            'hate' => ['score' => -3.0, 'negation' => 'love'],
+            'slow' => ['score' => -1.5, 'negation' => 'fast'],
+            'ugly' => ['score' => -3.0, 'negation' => 'beautiful'],
+            'stupid' => ['score' => -2.0, 'negation' => 'smart'],
+            'sad' => ['score' => -2.5, 'negation' => 'happy'],
         ];
 
         // English neutral words with scores
         $englishNeutralWords = [
-            'okay' => 0.5, 'fine' => 0.5, 'average' => 0.0, 'normal' => 0.0,
-            'standard' => 0.0, 'regular' => 0.0, 'usual' => 0.0, 'adequate' => 0.5,
-            'satisfactory' => 0.5, 'acceptable' => 0.5, 'reasonable' => 0.5, 'moderate' => 0.0,
-            'decent' => 0.5, 'fair' => 0.5, 'balanced' => 0.0, 'neutral' => 0.0,
-            'indifferent' => 0.0, 'mixed' => 0.0
+            'okay' => ['score' => 0.5, 'negation' => null],
+            'fine' => ['score' => 0.5, 'negation' => null],
+            'average' => ['score' => 0.0, 'negation' => null],
+            'normal' => ['score' => 0.0, 'negation' => null],
+            'standard' => ['score' => 0.0, 'negation' => null],
+            'regular' => ['score' => 0.0, 'negation' => null],
+            'usual' => ['score' => 0.0, 'negation' => null],
+            'adequate' => ['score' => 0.5, 'negation' => null],
+            'satisfactory' => ['score' => 0.5, 'negation' => null],
+            'acceptable' => ['score' => 0.5, 'negation' => null],
+            'reasonable' => ['score' => 0.5, 'negation' => null],
+            'moderate' => ['score' => 0.0, 'negation' => null],
+            'decent' => ['score' => 0.5, 'negation' => null],
+            'fair' => ['score' => 0.5, 'negation' => null],
+            'balanced' => ['score' => 0.0, 'negation' => null],
+            'neutral' => ['score' => 0.0, 'negation' => null],
+            'indifferent' => ['score' => 0.0, 'negation' => null],
+            'mixed' => ['score' => 0.0, 'negation' => null],
         ];
 
-        // Tagalog positive words with scores
+        // Tagalog positive words with scores and negations
         $tagalogPositiveWords = [
-            'maganda' => 2.0, 'mahusay' => 2.5, 'napakaganda' => 3.0, 'napakahusay' => 3.0,
-            'excellent' => 3.0, 'great' => 2.5, 'amazing' => 3.0, 'outstanding' => 3.0,
-            'fantastic' => 2.5, 'wonderful' => 2.5, 'brilliant' => 3.0, 'superb' => 3.0,
-            'perfect' => 3.0, 'awesome' => 2.5, 'incredible' => 3.0, 'terrific' => 2.5,
-            'helpful' => 2.0, 'knowledgeable' => 2.0, 'patient' => 1.5, 'clear' => 1.5,
-            'organized' => 1.5, 'engaging' => 2.0, 'inspiring' => 2.5, 'motivating' => 2.0,
-            'professional' => 2.0, 'dedicated' => 2.0, 'caring' => 2.0, 'supportive' => 2.0,
-            'enthusiastic' => 2.0, 'passionate' => 2.0, 'creative' => 2.0, 'innovative' => 2.0,
-            'effective' => 2.0, 'efficient' => 1.5, 'thorough' => 1.5, 'detailed' => 1.5,
-            'comprehensive' => 2.0, 'well-prepared' => 2.0, 'punctual' => 1.5, 'reliable' => 2.0,
-            'love' => 3.0, 'happy' => 2.0, 'satisfied' => 2.0, 'good' => 1.5,
-            'gusto' => 2.0, 'mahal' => 2.5, 'masaya' => 2.0, 'kontento' => 2.0
+            'maganda' => ['score' => 2.0, 'negation' => 'pangit'],
+            'mahusay' => ['score' => 2.5, 'negation' => 'hindi-mahusay'],
+            'napakaganda' => ['score' => 3.0, 'negation' => 'napakapangit'],
+            'napakahusay' => ['score' => 3.0, 'negation' => 'napakasama'],
+            'mabuti' => ['score' => 2.0, 'negation' => 'masama'],
+            'masaya' => ['score' => 2.0, 'negation' => 'malungkot'],
+            'matalino' => ['score' => 2.0, 'negation' => 'bobo'],
+            'magaling' => ['score' => 2.5, 'negation' => 'hindi-magaling'],
+            'gusto' => ['score' => 2.0, 'negation' => 'ayaw'],
+            'mahal' => ['score' => 2.5, 'negation' => 'hindi-mahal'],
+            'kontento' => ['score' => 2.0, 'negation' => 'hindi-kontento'],
         ];
 
-        // Tagalog negative words with scores
+        // Tagalog negative words with scores and negations
         $tagalogNegativeWords = [
-            'masama' => -2.0, 'pangit' => -2.0, 'napakasama' => -3.0, 'napakapangit' => -3.0,
-            'poor' => -2.0, 'terrible' => -3.0, 'awful' => -3.0, 'horrible' => -3.0,
-            'bad' => -2.0, 'worst' => -3.0, 'disappointing' => -2.5, 'confusing' => -2.0,
-            'unclear' => -2.0, 'disorganized' => -2.0, 'boring' => -2.0, 'monotone' => -1.5,
-            'unprepared' => -2.0, 'late' => -1.5, 'unreliable' => -2.0, 'unprofessional' => -2.5,
-            'rude' => -2.5, 'impatient' => -2.0, 'unhelpful' => -2.0, 'ineffective' => -2.0,
-            'waste' => -2.5, 'useless' => -2.5, 'difficult' => -1.5, 'complicated' => -1.5,
-            'overwhelming' => -2.0, 'stressful' => -2.0, 'frustrating' => -2.0, 'annoying' => -2.0,
-            'irritating' => -2.0, 'unfair' => -2.5, 'biased' => -2.5, 'incompetent' => -3.0,
-            'unqualified' => -3.0, 'lazy' => -2.5, 'careless' => -2.0, 'negligent' => -3.0,
-            'hate' => -3.0, 'slow' => -1.5, 'mabagal' => -1.5, 'ayaw' => -2.0, 'hindi' => -1.0
+            'masama' => ['score' => -2.0, 'negation' => 'mabuti'],
+            'pangit' => ['score' => -2.0, 'negation' => 'maganda'],
+            'napakasama' => ['score' => -3.0, 'negation' => 'napakahusay'],
+            'napakapangit' => ['score' => -3.0, 'negation' => 'napakaganda'],
+            'malungkot' => ['score' => -2.0, 'negation' => 'masaya'],
+            'bobo' => ['score' => -2.0, 'negation' => 'matalino'],
+            'hindi-magaling' => ['score' => -2.5, 'negation' => 'magaling'],
+            'hindi-mahusay' => ['score' => -2.5, 'negation' => 'mahusay'],
+            'mabagal' => ['score' => -1.5, 'negation' => 'mabilis'],
+            'ayaw' => ['score' => -2.0, 'negation' => 'gusto'],
+            'hindi' => ['score' => -1.0, 'negation' => 'oo'],
+            'hindi-mahal' => ['score' => -2.5, 'negation' => 'mahal'],
+            'hindi-kontento' => ['score' => -2.0, 'negation' => 'kontento'],
         ];
 
         // Tagalog neutral words with scores
         $tagalogNeutralWords = [
-            'okay' => 0.5, 'fine' => 0.5, 'average' => 0.0, 'normal' => 0.0,
-            'standard' => 0.0, 'regular' => 0.0, 'usual' => 0.0, 'adequate' => 0.5,
-            'satisfactory' => 0.5, 'acceptable' => 0.5, 'reasonable' => 0.5, 'moderate' => 0.0,
-            'decent' => 0.5, 'fair' => 0.5, 'balanced' => 0.0, 'neutral' => 0.0,
-            'indifferent' => 0.0, 'mixed' => 0.0, 'sige' => 0.5, 'pwede' => 0.5
+            'sige' => ['score' => 0.5, 'negation' => null],
+            'pwede' => ['score' => 0.5, 'negation' => null],
+            'okay' => ['score' => 0.5, 'negation' => null],
+            'fine' => ['score' => 0.5, 'negation' => null],
+            'average' => ['score' => 0.0, 'negation' => null],
+            'normal' => ['score' => 0.0, 'negation' => null],
+            'standard' => ['score' => 0.0, 'negation' => null],
+            'regular' => ['score' => 0.0, 'negation' => null],
+            'usual' => ['score' => 0.0, 'negation' => null],
+            'adequate' => ['score' => 0.5, 'negation' => null],
+            'satisfactory' => ['score' => 0.5, 'negation' => null],
+            'acceptable' => ['score' => 0.5, 'negation' => null],
+            'reasonable' => ['score' => 0.5, 'negation' => null],
+            'moderate' => ['score' => 0.0, 'negation' => null],
+            'decent' => ['score' => 0.5, 'negation' => null],
+            'fair' => ['score' => 0.5, 'negation' => null],
+            'balanced' => ['score' => 0.0, 'negation' => null],
+            'neutral' => ['score' => 0.0, 'negation' => null],
+            'indifferent' => ['score' => 0.0, 'negation' => null],
+            'mixed' => ['score' => 0.0, 'negation' => null],
         ];
 
         // Insert English words
-        foreach ($englishPositiveWords as $word => $score) {
+        foreach ($englishPositiveWords as $word => $data) {
             SentimentWord::create([
                 'word' => $word,
+                'negation' => $data['negation'],
                 'type' => 'positive',
-                'score' => $score,
+                'score' => $data['score'],
                 'language' => 'en',
                 'is_active' => true
             ]);
         }
 
-        foreach ($englishNegativeWords as $word => $score) {
+        foreach ($englishNegativeWords as $word => $data) {
             SentimentWord::create([
                 'word' => $word,
+                'negation' => $data['negation'],
                 'type' => 'negative',
-                'score' => $score,
+                'score' => $data['score'],
                 'language' => 'en',
                 'is_active' => true
             ]);
         }
 
-        foreach ($englishNeutralWords as $word => $score) {
+        foreach ($englishNeutralWords as $word => $data) {
             SentimentWord::create([
                 'word' => $word,
+                'negation' => $data['negation'],
                 'type' => 'neutral',
-                'score' => $score,
+                'score' => $data['score'],
                 'language' => 'en',
                 'is_active' => true
             ]);
         }
 
         // Insert Tagalog words
-        foreach ($tagalogPositiveWords as $word => $score) {
+        foreach ($tagalogPositiveWords as $word => $data) {
             SentimentWord::create([
                 'word' => $word,
+                'negation' => $data['negation'],
                 'type' => 'positive',
-                'score' => $score,
+                'score' => $data['score'],
                 'language' => 'tl',
                 'is_active' => true
             ]);
         }
 
-        foreach ($tagalogNegativeWords as $word => $score) {
+        foreach ($tagalogNegativeWords as $word => $data) {
             SentimentWord::create([
                 'word' => $word,
+                'negation' => $data['negation'],
                 'type' => 'negative',
-                'score' => $score,
+                'score' => $data['score'],
                 'language' => 'tl',
                 'is_active' => true
             ]);
         }
 
-        foreach ($tagalogNeutralWords as $word => $score) {
+        foreach ($tagalogNeutralWords as $word => $data) {
             SentimentWord::create([
                 'word' => $word,
+                'negation' => $data['negation'],
                 'type' => 'neutral',
-                'score' => $score,
+                'score' => $data['score'],
                 'language' => 'tl',
                 'is_active' => true
             ]);
         }
 
-        $this->command->info('Sentiment words seeded successfully!');
+        $totalWords = count($englishPositiveWords) + count($englishNegativeWords) + count($englishNeutralWords) +
+                     count($tagalogPositiveWords) + count($tagalogNegativeWords) + count($tagalogNeutralWords);
+
+        $this->command->info("Sentiment words seeded successfully!");
+        $this->command->info("Total words added: $totalWords");
+        $this->command->info("English words: " . (count($englishPositiveWords) + count($englishNegativeWords) + count($englishNeutralWords)));
+        $this->command->info("Tagalog words: " . (count($tagalogPositiveWords) + count($tagalogNegativeWords) + count($tagalogNeutralWords)));
+        $this->command->info("Words with negation pairs: " . (count($englishPositiveWords) + count($englishNegativeWords) + count($tagalogPositiveWords) + count($tagalogNegativeWords)));
     }
 } 

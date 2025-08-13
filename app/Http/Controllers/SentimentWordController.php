@@ -66,6 +66,7 @@ class SentimentWordController extends Controller
     {
         $request->validate([
             'word' => 'required|string|max:255',
+            'negation' => 'nullable|string|max:255',
             'type' => 'required|in:positive,negative,neutral',
             'score' => 'required|numeric|between:-5,5',
             'language' => 'required|string|max:10'
@@ -74,6 +75,7 @@ class SentimentWordController extends Controller
         try {
             $word = SentimentWord::create([
                 'word' => strtolower($request->word),
+                'negation' => $request->negation ? strtolower($request->negation) : null,
                 'type' => $request->type,
                 'score' => $request->score,
                 'language' => $request->language,
@@ -117,6 +119,7 @@ class SentimentWordController extends Controller
     {
         $request->validate([
             'word' => 'sometimes|string|max:255',
+            'negation' => 'nullable|string|max:255',
             'type' => 'sometimes|in:positive,negative,neutral',
             'score' => 'sometimes|numeric|between:-5,5',
             'language' => 'sometimes|string|max:10',
@@ -124,7 +127,12 @@ class SentimentWordController extends Controller
         ]);
 
         try {
-            $sentimentWord->update($request->only(['word', 'type', 'score', 'language', 'is_active']));
+            $data = $request->only(['word', 'type', 'score', 'language', 'is_active']);
+            if ($request->has('negation')) {
+                $data['negation'] = $request->negation ? strtolower($request->negation) : null;
+            }
+            
+            $sentimentWord->update($data);
             
             if ($request->expectsJson()) {
                 return response()->json([

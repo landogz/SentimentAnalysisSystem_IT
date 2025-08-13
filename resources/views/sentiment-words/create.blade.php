@@ -37,6 +37,21 @@
                         
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="negation" class="form-label">Negation (Opposite Word)</label>
+                                <input type="text" class="form-control @error('negation') is-invalid @enderror" 
+                                       id="negation" name="negation" value="{{ old('negation') }}" 
+                                       placeholder="Enter opposite word (optional)">
+                                <small class="form-text text-muted">e.g., "beautiful" → "ugly", "good" → "bad"</small>
+                                @error('negation')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
                                 <select class="form-select @error('type') is-invalid @enderror" 
                                         id="type" name="type" required>
@@ -56,9 +71,7 @@
                                 @enderror
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="row">
+                        
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="score" class="form-label">Score <span class="text-danger">*</span></label>
@@ -71,7 +84,9 @@
                                 @enderror
                             </div>
                         </div>
-                        
+                    </div>
+                    
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="language" class="form-label">Language <span class="text-danger">*</span></label>
@@ -144,7 +159,26 @@
                     <li><i class="fas fa-check text-success"></i> Choose appropriate scores</li>
                     <li><i class="fas fa-check text-success"></i> Select correct language</li>
                     <li><i class="fas fa-check text-success"></i> Consider word context</li>
+                    <li><i class="fas fa-check text-success"></i> Add negation pairs for better analysis</li>
                 </ul>
+                
+                <hr>
+                
+                <h6>Negation Examples</h6>
+                <div class="small">
+                    <strong>Word Pairs:</strong><br>
+                    • Beautiful → Ugly<br>
+                    • Good → Bad<br>
+                    • Excellent → Terrible<br>
+                    • Happy → Sad<br>
+                    • Smart → Stupid<br><br>
+                    
+                    <strong>How it works:</strong><br>
+                    • "Not beautiful" = Negative<br>
+                    • "Not ugly" = Positive<br>
+                    • "Not good" = Negative<br>
+                    • "Not bad" = Positive
+                </div>
                 
                 <hr>
                 
@@ -176,6 +210,11 @@
 $(document).ready(function() {
     // Auto-lowercase the word input
     $('#word').on('input', function() {
+        $(this).val($(this).val().toLowerCase());
+    });
+    
+    // Auto-lowercase the negation input
+    $('#negation').on('input', function() {
         $(this).val($(this).val().toLowerCase());
     });
     

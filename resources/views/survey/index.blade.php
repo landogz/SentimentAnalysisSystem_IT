@@ -365,6 +365,21 @@
             margin: 0 2px;
             transition: all 0.3s ease;
             font-weight: 500;
+            padding: 0.75rem 0.5rem;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        .btn-group .btn small {
+            font-size: 0.7rem;
+            font-weight: 400;
+            margin-top: 2px;
+            opacity: 0.8;
         }
         
         .btn-group .btn:hover {
@@ -383,6 +398,37 @@
         .btn-check:checked + .btn:hover {
             background-color: #7a8cd6;
             border-color: #7a8cd6;
+        }
+        
+        .btn-check:checked + .btn small {
+            opacity: 1;
+        }
+        
+        /* Part-specific styling */
+        .part-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--light-blue);
+        }
+        
+        .part-section.part2 {
+            border-left-color: var(--golden-orange);
+        }
+        
+        .part-section.part3 {
+            border-left-color: var(--light-blue);
+        }
+        
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: rgba(152, 170, 231, 0.1);
+            border-radius: 6px;
         }
         
         .question-label {
@@ -407,10 +453,159 @@
                 flex: 1;
                 min-width: 60px;
                 margin: 2px;
+                padding: 0.5rem 0.25rem;
+                min-height: 50px;
+                font-size: 0.8rem;
+            }
+            
+            .btn-group .btn small {
+                font-size: 0.6rem;
             }
             
             .col-md-6 {
                 margin-bottom: 2rem;
+            }
+            
+            .part-section {
+                padding: 1rem;
+            }
+        }
+
+        /* Tab Navigation Styling */
+        .survey-tab {
+            display: none;
+        }
+        
+        .survey-tab.active {
+            display: block;
+        }
+        
+        .nav-buttons {
+            display: none; /* Hidden by default */
+        }
+        
+        .tab-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .tab-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tab-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dee2e6;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .tab-dot:hover {
+            transform: scale(1.1);
+            background: #adb5bd;
+        }
+        
+        .tab-dot.active {
+            background: var(--light-blue);
+            transform: scale(1.2);
+        }
+        
+        .tab-dot.completed {
+            background: var(--light-green);
+        }
+        
+        .tab-dot.completed:hover {
+            background: #7bb894;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            border-top: 1px solid #e9ecef;
+            margin-top: 2rem;
+        }
+        
+        .btn-nav {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .btn-prev {
+            background: #f8f9fa;
+            color: var(--dark-gray);
+            border-color: #dee2e6;
+        }
+        
+        .btn-prev:hover {
+            background: #e9ecef;
+            color: var(--dark-gray);
+            transform: translateY(-2px);
+        }
+        
+        .btn-next {
+            background: var(--light-blue);
+            color: white;
+            border-color: var(--light-blue);
+        }
+        
+        .btn-next:hover {
+            background: #7a8cd6;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(152, 170, 231, 0.3);
+        }
+        
+        .btn-submit-final {
+            background: var(--light-green);
+            color: white;
+            border-color: var(--light-green);
+        }
+        
+        .btn-submit-final:hover {
+            background: #7bb894;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(143, 207, 168, 0.3);
+        }
+        
+        .btn-nav:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* Mobile responsive for tabs */
+        @media (max-width: 768px) {
+            .tab-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .btn-nav {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -528,42 +723,175 @@
                     <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
                             <i class="fas fa-question-circle me-2" style="color: var(--light-blue);"></i>
-                            Survey Questions
+                            Faculty Evaluation Survey
                         </h4>
                         
-                        <div class="row">
-                            <!-- Option Questions Column -->
-                            <div class="col-md-6">
-                                <h5 class="mb-3" style="color: var(--light-blue);">
-                                    <i class="fas fa-check-circle me-2"></i>Rating Questions (1-5 Scale)
+                        <!-- Tab Navigation -->
+                        <div class="tab-navigation">
+                            <div class="tab-indicator">
+                                <span class="me-2">Progress:</span>
+                                <div class="tab-dot active" data-tab="1"></div>
+                                <div class="tab-dot" data-tab="2"></div>
+                                <div class="tab-dot" data-tab="3"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tab 1: Part 1 - Instructor Evaluation -->
+                        <div class="survey-tab active" id="tab1">
+                            @if(isset($questionsByPart['part1']))
+                            <div class="part-section">
+                                <h5 class="mb-3" style="color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 0.5rem;">
+                                    <i class="fas fa-star me-2"></i>Part 1: Instructor Evaluation
                                 </h5>
-                                @foreach($optionQuestions as $index => $question)
+                                <div class="alert alert-info mb-3">
+                                    <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Very Satisfactory) | 3 (Satisfactory) | 2 (Fair) | 1 (Poor)
+                                </div>
+                                
+                                @php
+                                    $part1Questions = $questionsByPart['part1'];
+                                    $sections = [
+                                        'A. Commitment' => $part1Questions->where('order_number', '<=', 5),
+                                        'B. Knowledge of Subject' => $part1Questions->where('order_number', '>', 5)->where('order_number', '<=', 10),
+                                        'C. Teaching for Independent Learning' => $part1Questions->where('order_number', '>', 10)->where('order_number', '<=', 15),
+                                        'D. Management of Learning' => $part1Questions->where('order_number', '>', 15)->where('order_number', '<=', 20)
+                                    ];
+                                @endphp
+                                
+                                @foreach($sections as $sectionName => $sectionQuestions)
+                                <div class="mb-4">
+                                    <div class="section-subtitle">{{ $sectionName }}</div>
+                                    @foreach($sectionQuestions as $question)
+                                    <div class="form-group mb-3">
+                                        <label class="question-label">
+                                            <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
+                                        </label>
+                                        <div class="btn-group w-100" role="group">
+                                            <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                                   id="q{{ $question->id }}_5" value="5" required>
+                                            <label class="btn btn-outline-primary" for="q{{ $question->id }}_5">
+                                                5<br><small>Outstanding</small>
+                                            </label>
+                                            
+                                            <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                                   id="q{{ $question->id }}_4" value="4" required>
+                                            <label class="btn btn-outline-primary" for="q{{ $question->id }}_4">
+                                                4<br><small>Very Satisfactory</small>
+                                            </label>
+                                            
+                                            <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                                   id="q{{ $question->id }}_3" value="3" required>
+                                            <label class="btn btn-outline-primary" for="q{{ $question->id }}_3">
+                                                3<br><small>Satisfactory</small>
+                                            </label>
+                                            
+                                            <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                                   id="q{{ $question->id }}_2" value="2" required>
+                                            <label class="btn btn-outline-primary" for="q{{ $question->id }}_2">
+                                                2<br><small>Fair</small>
+                                            </label>
+                                            
+                                            <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                                   id="q{{ $question->id }}_1" value="1" required>
+                                            <label class="btn btn-outline-primary" for="q{{ $question->id }}_1">
+                                                1<br><small>Poor</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                @endforeach
+                            </div>
+                            
+                            <!-- Navigation buttons for Tab 1 -->
+                            <div class="nav-buttons mt-4">
+                                <button type="button" class="btn btn-nav btn-prev" id="btnPrev" disabled>
+                                    <i class="fas fa-arrow-left me-2"></i>Previous
+                                </button>
+                                <button type="button" class="btn btn-nav btn-next" id="btnNext">
+                                    Next<i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                        @endif
+                        
+                        <!-- Tab 2: Part 2 - Difficulty Level -->
+                        <div class="survey-tab" id="tab2">
+                            @if(isset($questionsByPart['part2']))
+                            <div class="part-section part2">
+                                <h5 class="mb-3" style="color: var(--golden-orange); border-bottom: 2px solid var(--golden-orange); padding-bottom: 0.5rem;">
+                                    <i class="fas fa-chart-line me-2"></i>Part 2: Difficulty Level
+                                </h5>
+                                <div class="alert alert-warning mb-3">
+                                    <strong>Rating Scale:</strong> 5 (Very Difficult) | 4 (Difficult) | 3 (Slightly Difficult) | 2 (Not Difficult) | 1 (Very Not Difficult)
+                                </div>
+                                
+                                @foreach($questionsByPart['part2'] as $question)
                                 <div class="form-group mb-3">
                                     <label class="question-label">
-                                        <span class="question-number">{{ $index + 1 }}.</span> {{ $question->question_text }}
+                                        <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
                                     </label>
                                     <div class="btn-group w-100" role="group">
-                                        @for($i = 1; $i <= 5; $i++)
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                               id="q{{ $question->id }}_{{ $i }}" value="{{ $i }}" required>
-                                        <label class="btn btn-outline-primary" for="q{{ $question->id }}_{{ $i }}">
-                                            {{ $i }}
+                                               id="q{{ $question->id }}_5" value="5" required>
+                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_5">
+                                            5<br><small>Very Difficult</small>
                                         </label>
-                                        @endfor
+                                        
+                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                               id="q{{ $question->id }}_4" value="4" required>
+                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_4">
+                                            4<br><small>Difficult</small>
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                               id="q{{ $question->id }}_3" value="3" required>
+                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_3">
+                                            3<br><small>Slightly Difficult</small>
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                               id="q{{ $question->id }}_2" value="2" required>
+                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_2">
+                                            2<br><small>Not Difficult</small>
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                               id="q{{ $question->id }}_1" value="1" required>
+                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_1">
+                                            1<br><small>Very Not Difficult</small>
+                                        </label>
                                     </div>
                                 </div>
                                 @endforeach
                             </div>
                             
-                            <!-- Comment Questions Column -->
-                            <div class="col-md-6">
-                                <h5 class="mb-3" style="color: var(--light-blue);">
-                                    <i class="fas fa-comment me-2"></i>Comment Questions
+                            <!-- Navigation buttons for Tab 2 -->
+                            <div class="nav-buttons mt-4">
+                                <button type="button" class="btn btn-nav btn-prev" id="btnPrev2">
+                                    <i class="fas fa-arrow-left me-2"></i>Previous
+                                </button>
+                                <button type="button" class="btn btn-nav btn-next" id="btnNext2">
+                                    Next<i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                        @endif
+                        
+                        <!-- Tab 3: Part 3 - Open Comments -->
+                        <div class="survey-tab" id="tab3">
+                            @if(isset($questionsByPart['part3']))
+                            <div class="part-section part3">
+                                <h5 class="mb-3" style="color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 0.5rem;">
+                                    <i class="fas fa-comments me-2"></i>Part 3: Open Comments
                                 </h5>
-                                @foreach($commentQuestions as $index => $question)
+                                <div class="alert alert-info mb-3">
+                                    <strong>Instructions:</strong> Please provide detailed responses to the following questions.
+                                </div>
+                                
+                                @foreach($questionsByPart['part3'] as $question)
                                 <div class="form-group mb-3">
                                     <label for="comment_{{ $question->id }}" class="question-label">
-                                        <span class="question-number">{{ $index + 1 }}.</span> {{ $question->question_text }}
+                                        <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
                                     </label>
                                     <textarea class="form-control" 
                                               id="comment_{{ $question->id }}" 
@@ -573,7 +901,18 @@
                                 </div>
                                 @endforeach
                             </div>
+                            
+                            <!-- Navigation buttons for Tab 3 -->
+                            <div class="nav-buttons mt-4">
+                                <button type="button" class="btn btn-nav btn-prev" id="btnPrev3">
+                                    <i class="fas fa-arrow-left me-2"></i>Previous
+                                </button>
+                                <button type="button" class="btn btn-nav btn-submit-final" id="btnSubmit">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Survey
+                                </button>
+                            </div>
                         </div>
+                        @endif
                     </div>
 
                     <div class="form-section">
@@ -593,11 +932,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-submit" id="submitBtn">
-                            <i class="fas fa-paper-plane me-2"></i>Submit Feedback
-                        </button>
-                    </div>
                 </form>
             </div>
         </div>
@@ -616,6 +950,134 @@
 
     <script>
         $(document).ready(function() {
+            let currentTab = 1;
+            const totalTabs = 3;
+            
+            // Tab Navigation Functions
+            function showTab(tabNumber) {
+                // Hide all tabs
+                $('.survey-tab').removeClass('active');
+                // Show current tab
+                $(`#tab${tabNumber}`).addClass('active');
+                
+                // Update tab dots
+                $('.tab-dot').removeClass('active');
+                $(`.tab-dot[data-tab="${tabNumber}"]`).addClass('active');
+                
+                // Update navigation buttons
+                updateNavigationButtons();
+            }
+            
+            function updateNavigationButtons() {
+                // Hide all navigation button sets
+                $('.nav-buttons').hide();
+                
+                // Show navigation buttons for current tab
+                $(`#tab${currentTab} .nav-buttons`).show();
+                
+                // Update previous buttons
+                $('.btn-prev').prop('disabled', currentTab === 1);
+            }
+            
+            function validateCurrentTab() {
+                const currentTabElement = $(`#tab${currentTab}`);
+                let isValid = true;
+                
+                // Check required radio buttons
+                currentTabElement.find('input[type="radio"]:required').each(function() {
+                    const name = $(this).attr('name');
+                    if (!$(`input[name="${name}"]:checked`).length) {
+                        isValid = false;
+                        return false; // break loop
+                    }
+                });
+                
+                // Check required textareas
+                currentTabElement.find('textarea[required]').each(function() {
+                    if (!$(this).val().trim()) {
+                        isValid = false;
+                        return false; // break loop
+                    }
+                });
+                
+                return isValid;
+            }
+            
+            // Navigation button handlers
+            $('.btn-next').click(function() {
+                if (validateCurrentTab()) {
+                    // Mark current tab as completed
+                    $(`.tab-dot[data-tab="${currentTab}"]`).addClass('completed');
+                    
+                    // Move to next tab
+                    currentTab++;
+                    showTab(currentTab);
+                    
+                    // Scroll to top of new tab
+                    $('html, body').animate({
+                        scrollTop: $('.survey-tab.active').offset().top - 100
+                    }, 500);
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Please Complete All Questions',
+                        text: 'Please answer all required questions in this section before proceeding.',
+                        confirmButtonColor: '#F5B445'
+                    });
+                }
+            });
+            
+            $('.btn-prev').click(function() {
+                currentTab--;
+                showTab(currentTab);
+                
+                // Scroll to top of new tab
+                $('html, body').animate({
+                    scrollTop: $('.survey-tab.active').offset().top - 100
+                }, 500);
+            });
+            
+            // Tab dot click handlers
+            $('.tab-dot').click(function() {
+                const tabNumber = parseInt($(this).data('tab'));
+                if (tabNumber < currentTab || validateCurrentTab()) {
+                    currentTab = tabNumber;
+                    showTab(currentTab);
+                    
+                    // Scroll to top of new tab
+                    $('html, body').animate({
+                        scrollTop: $('.survey-tab.active').offset().top - 100
+                    }, 500);
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Please Complete Current Section',
+                        text: 'Please complete all questions in the current section before jumping to another section.',
+                        confirmButtonColor: '#F5B445'
+                    });
+                }
+            });
+            
+            // Submit button handler
+            $('#btnSubmit').click(function() {
+                if (validateCurrentTab()) {
+                    // Mark current tab as completed
+                    $(`.tab-dot[data-tab="${currentTab}"]`).addClass('completed');
+                    
+                    // Submit the form
+                    $('#surveyForm').submit();
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Please Complete All Questions',
+                        text: 'Please answer all required questions before submitting the survey.',
+                        confirmButtonColor: '#F5B445'
+                    });
+                }
+            });
+            
+            // Initialize
+            updateNavigationButtons();
             
             // Load subjects when teacher is selected
             $('#teacher_id').change(function() {
@@ -652,7 +1114,7 @@
             $('#surveyForm').submit(function(e) {
                 e.preventDefault();
                 
-                const submitBtn = $('#submitBtn');
+                const submitBtn = $('#btnSubmit');
                 const originalText = submitBtn.html();
                 
                 submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Submitting...');

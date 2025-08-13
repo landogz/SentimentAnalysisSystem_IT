@@ -13,6 +13,7 @@ class SurveyQuestion extends Model
     protected $fillable = [
         'question_text',
         'question_type',
+        'part',
         'order_number',
         'is_active'
     ];
@@ -54,11 +55,45 @@ class SurveyQuestion extends Model
     }
 
     /**
+     * Scope for specific part
+     */
+    public function scopePart($query, $part)
+    {
+        return $query->where('part', $part);
+    }
+
+    /**
      * Get the question type label
      */
     public function getQuestionTypeLabelAttribute(): string
     {
         return ucfirst($this->question_type);
+    }
+
+    /**
+     * Get the part label
+     */
+    public function getPartLabelAttribute(): string
+    {
+        return match($this->part) {
+            'part1' => 'Part 1 - Instructor Evaluation',
+            'part2' => 'Part 2 - Difficulty Level',
+            'part3' => 'Part 3 - Open Comments',
+            default => 'Unknown Part'
+        };
+    }
+
+    /**
+     * Get the part badge class
+     */
+    public function getPartBadgeClassAttribute(): string
+    {
+        return match($this->part) {
+            'part1' => 'badge-primary',
+            'part2' => 'badge-warning',
+            'part3' => 'badge-info',
+            default => 'badge-secondary'
+        };
     }
 
     /**

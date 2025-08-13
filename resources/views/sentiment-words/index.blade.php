@@ -124,6 +124,7 @@
                         <thead>
                             <tr>
                                 <th>Word</th>
+                                <th>Negation</th>
                                 <th>Type</th>
                                 <th>Score</th>
                                 <th>Language</th>
@@ -137,6 +138,13 @@
                                 <tr>
                                     <td>
                                         <strong>{{ $word->word }}</strong>
+                                    </td>
+                                    <td>
+                                        @if($word->negation)
+                                            <span class="badge bg-secondary">{{ $word->negation }}</span>
+                                        @else
+                                            <span class="text-muted">—</span>
+                                        @endif
                                     </td>
                                     <td>
                                         <span class="badge bg-{{ $word->type == 'positive' ? 'success' : ($word->type == 'negative' ? 'danger' : 'warning') }}">
@@ -178,7 +186,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center">
+                                    <td colspan="8" class="text-center">
                                         <div class="py-4">
                                             <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
                                             <h5 class="text-muted">No sentiment words found</h5>

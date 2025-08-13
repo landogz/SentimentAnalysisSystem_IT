@@ -11,6 +11,7 @@ class SentimentWord extends Model
 
     protected $fillable = [
         'word',
+        'negation',
         'type',
         'score',
         'language',
@@ -87,5 +88,75 @@ class SentimentWord extends Model
                         return $words->pluck('score', 'word')->toArray();
                     })
                     ->toArray();
+    }
+
+    /**
+     * Scope for words with negation
+     */
+    public function scopeWithNegation($query)
+    {
+        return $query->whereNotNull('negation');
+    }
+
+    /**
+     * Scope for words without negation
+     */
+    public function scopeWithoutNegation($query)
+    {
+        return $query->whereNull('negation');
+    }
+
+    /**
+     * Get negation word for this sentiment word
+     */
+    public function getNegationWord()
+    {
+        if ($this->negation) {
+            return static::where('word', $this->negation)
+                        ->where('language', $this->language)
+                        ->where('is_active', true)
+                        ->first();
+        }
+        return null;
+    }
+
+    /**
+     * Get all negation pairs for a language
+     */
+    public static function getNegationPairs($language = 'en')
+    {
+        return static::where('language', $language)
+                    ->where('is_active', true)
+                    ->whereNotNull('negation')
+                    ->get()
+                    ->mapWithKeys(function ($word) {
+                        return [$word->word => $word->negation];
+                    })
+                    ->toArray();
+    }
+
+    /**
+     * Check if a word has a negation
+     */
+    public static function hasNegation($word, $language = 'en')
+    {
+        return static::where('word', $word)
+                    ->where('language', $language)
+                    ->where('is_active', true)
+                    ->whereNotNull('negation')
+                    ->exists();
+    }
+
+    /**
+     * Get the negation of a word
+     */
+    public static function getNegation($word, $language = 'en')
+    {
+        $sentimentWord = static::where('word', $word)
+                              ->where('language', $language)
+                              ->where('is_active', true)
+                              ->first();
+        
+        return $sentimentWord ? $sentimentWord->negation : null;
     }
 } 

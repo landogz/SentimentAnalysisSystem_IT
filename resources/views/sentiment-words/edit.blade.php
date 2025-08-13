@@ -38,6 +38,21 @@
                         
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="negation" class="form-label">Negation (Opposite Word)</label>
+                                <input type="text" class="form-control @error('negation') is-invalid @enderror" 
+                                       id="negation" name="negation" value="{{ old('negation', $sentimentWord->negation) }}" 
+                                       placeholder="Enter opposite word (optional)">
+                                <small class="form-text text-muted">e.g., "beautiful" → "ugly", "good" → "bad"</small>
+                                @error('negation')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
                                 <select class="form-select @error('type') is-invalid @enderror" 
                                         id="type" name="type" required>
@@ -56,9 +71,7 @@
                                 @enderror
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="row">
+                        
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="score" class="form-label">Score <span class="text-danger">*</span></label>
@@ -71,7 +84,9 @@
                                 @enderror
                             </div>
                         </div>
-                        
+                    </div>
+                    
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="language" class="form-label">Language <span class="text-danger">*</span></label>

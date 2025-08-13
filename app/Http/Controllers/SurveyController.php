@@ -27,10 +27,16 @@ class SurveyController extends Controller
     {
         $teachers = Teacher::active()->get();
         $subjects = Subject::active()->with('teachers')->get();
-        $optionQuestions = SurveyQuestion::active()->optionType()->orderBy('order_number')->get();
-        $commentQuestions = SurveyQuestion::active()->commentType()->orderBy('order_number')->get();
         
-        return view('survey.index', compact('teachers', 'subjects', 'optionQuestions', 'commentQuestions'));
+        // Load questions organized by parts
+        $questions = SurveyQuestion::active()->orderBy('part')->orderBy('order_number')->get();
+        $questionsByPart = $questions->groupBy('part');
+        
+        // For backward compatibility, also provide the old format
+        $optionQuestions = $questions->where('question_type', 'option');
+        $commentQuestions = $questions->where('question_type', 'comment');
+        
+        return view('survey.index', compact('teachers', 'subjects', 'questionsByPart', 'optionQuestions', 'commentQuestions'));
     }
 
     /**
@@ -278,10 +284,65 @@ class SurveyController extends Controller
     {
         $responses = $survey->responses()->with('question')->get();
         
-        // Group responses by question type
-        $optionResponses = $responses->where('question.question_type', 'option');
-        $commentResponses = $responses->where('question.question_type', 'comment');
+        // Group responses by part
+        $part1Responses = $responses->where('question.part', 'part1');
+        $part2Responses = $responses->where('question.part', 'part2');
+        $part3Responses = $responses->where('question.part', 'part3');
         
-        return view('surveys.responses', compact('survey', 'optionResponses', 'commentResponses'));
+        // Calculate part-specific averages
+        $part1Average = $part1Responses->count() > 0 ? $part1Responses->avg('answer') : 0;
+        $part2Average = $part2Responses->count() > 0 ? $part2Responses->avg('answer') : 0;
+        
+        // Analyze Part 3 sentiment and calculate score
+        $part3Sentiment = 'neutral';
+        $part3Score = 0;
+        $part3Comments = $part3Responses->pluck('answer')->filter()->join(' ');
+        
+        if (!empty($part3Comments)) {
+            $sentimentService = new \App\Services\SentimentAnalysisService();
+            $analysis = $sentimentService->analyzeSentimentWithScore($part3Comments);
+            $part3Sentiment = $analysis['sentiment'];
+            
+            // Convert sentiment to numerical score (1-5 scale)
+            switch ($part3Sentiment) {
+                case 'positive':
+                    $part3Score = 4.5; // High positive score
+                    break;
+                case 'negative':
+                    $part3Score = 1.5; // Low negative score
+                    break;
+                case 'neutral':
+                default:
+                    $part3Score = 3.0; // Neutral score
+                    break;
+            }
+            
+            // Adjust score based on sentiment intensity
+            if (isset($analysis['score'])) {
+                $sentimentIntensity = abs($analysis['score']);
+                if ($sentimentIntensity > 5) {
+                    // Very strong sentiment
+                    if ($part3Sentiment === 'positive') {
+                        $part3Score = min(5.0, $part3Score + 0.5);
+                    } elseif ($part3Sentiment === 'negative') {
+                        $part3Score = max(1.0, $part3Score - 0.5);
+                    }
+                } elseif ($sentimentIntensity < 2) {
+                    // Weak sentiment
+                    $part3Score = 3.0; // Move towards neutral
+                }
+            }
+        }
+        
+        return view('surveys.responses', compact(
+            'survey', 
+            'part1Responses', 
+            'part2Responses', 
+            'part3Responses',
+            'part1Average',
+            'part2Average',
+            'part3Sentiment',
+            'part3Score'
+        ));
     }
 }

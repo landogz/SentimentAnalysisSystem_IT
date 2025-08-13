@@ -13,8 +13,12 @@ class SurveyQuestionController extends Controller
      */
     public function index()
     {
-        $questions = SurveyQuestion::orderBy('order_number')->get();
-        return view('survey-questions.index', compact('questions'));
+        $questions = SurveyQuestion::orderBy('part')->orderBy('order_number')->get();
+        
+        // Group questions by part
+        $questionsByPart = $questions->groupBy('part');
+        
+        return view('survey-questions.index', compact('questions', 'questionsByPart'));
     }
 
     /**
@@ -33,6 +37,7 @@ class SurveyQuestionController extends Controller
         $validator = Validator::make($request->all(), [
             'question_text' => 'required|string|max:1000',
             'question_type' => 'required|in:option,comment',
+            'part' => 'required|in:part1,part2,part3',
             'order_number' => 'required|integer|min:1',
             'is_active' => 'boolean'
         ]);
@@ -48,6 +53,7 @@ class SurveyQuestionController extends Controller
             $question = SurveyQuestion::create([
                 'question_text' => $request->question_text,
                 'question_type' => $request->question_type,
+                'part' => $request->part,
                 'order_number' => $request->order_number,
                 'is_active' => $request->boolean('is_active')
             ]);
@@ -87,14 +93,41 @@ class SurveyQuestionController extends Controller
      */
     public function update(Request $request, SurveyQuestion $surveyQuestion)
     {
+        // Debug: Log incoming request data
+        \Log::info('Survey Question Update Request:', [
+            'all_data' => $request->all(),
+            'question_id' => $surveyQuestion->id,
+            'method' => $request->method(),
+            'headers' => $request->headers->all(),
+            'content_type' => $request->header('Content-Type'),
+            'accept' => $request->header('Accept')
+        ]);
+        
+        // Also log individual fields
+        \Log::info('Individual fields:', [
+            'question_text' => $request->input('question_text'),
+            'question_type' => $request->input('question_type'),
+            'part' => $request->input('part'),
+            'order_number' => $request->input('order_number'),
+            'is_active' => $request->input('is_active'),
+            '_method' => $request->input('_method'),
+            '_token' => $request->input('_token')
+        ]);
+        
         $validator = Validator::make($request->all(), [
             'question_text' => 'required|string|max:1000',
             'question_type' => 'required|in:option,comment',
+            'part' => 'required|in:part1,part2,part3',
             'order_number' => 'required|integer|min:1',
             'is_active' => 'boolean'
         ]);
 
         if ($validator->fails()) {
+            \Log::warning('Survey Question Validation Failed:', [
+                'errors' => $validator->errors()->toArray(),
+                'data' => $request->all()
+            ]);
+            
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
@@ -105,6 +138,7 @@ class SurveyQuestionController extends Controller
             $surveyQuestion->update([
                 'question_text' => $request->question_text,
                 'question_type' => $request->question_type,
+                'part' => $request->part,
                 'order_number' => $request->order_number,
                 'is_active' => $request->boolean('is_active')
             ]);
@@ -116,9 +150,12 @@ class SurveyQuestionController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('Survey Question Update Error: ' . $e->getMessage());
+            \Log::error('Request Data: ' . json_encode($request->all()));
+            
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred while updating the question.'
+                'message' => 'An error occurred while updating the question: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -173,12 +210,16 @@ class SurveyQuestionController extends Controller
      */
     public function getActiveQuestions()
     {
-        $optionQuestions = SurveyQuestion::active()->optionType()->orderBy('order_number')->get();
-        $commentQuestions = SurveyQuestion::active()->commentType()->orderBy('order_number')->get();
-
+        $questions = SurveyQuestion::active()->orderBy('part')->orderBy('order_number')->get();
+        
+        // Group by part
+        $questionsByPart = $questions->groupBy('part');
+        
         return response()->json([
-            'option_questions' => $optionQuestions,
-            'comment_questions' => $commentQuestions
+            'questions_by_part' => $questionsByPart,
+            'part1_questions' => $questions->where('part', 'part1'),
+            'part2_questions' => $questions->where('part', 'part2'),
+            'part3_questions' => $questions->where('part', 'part3')
         ]);
     }
 }
