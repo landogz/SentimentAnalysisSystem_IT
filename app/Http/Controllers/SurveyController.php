@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Survey;
 use App\Models\Teacher;
 use App\Models\Subject;
+use App\Models\SurveyQuestion;
+use App\Models\SurveyResponse;
 use App\Services\SentimentAnalysisService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -25,8 +27,10 @@ class SurveyController extends Controller
     {
         $teachers = Teacher::active()->get();
         $subjects = Subject::active()->with('teachers')->get();
+        $optionQuestions = SurveyQuestion::active()->optionType()->orderBy('order_number')->get();
+        $commentQuestions = SurveyQuestion::active()->commentType()->orderBy('order_number')->get();
         
-        return view('survey.index', compact('teachers', 'subjects'));
+        return view('survey.index', compact('teachers', 'subjects', 'optionQuestions', 'commentQuestions'));
     }
 
     /**
@@ -37,12 +41,16 @@ class SurveyController extends Controller
         $validator = Validator::make($request->all(), [
             'teacher_id' => 'required|exists:teachers,id',
             'subject_id' => 'required|exists:subjects,id',
-            'rating' => 'required|numeric|min:1.0|max:5.0',
             'feedback_text' => 'nullable|string|max:1000',
             'student_name' => 'nullable|string|max:255',
             'student_email' => 'nullable|email|max:255',
-            'survey_responses' => 'nullable|array'
+            'question_responses' => 'nullable|array'
         ]);
+
+        // Debug: Log validation errors if any
+        if ($validator->fails()) {
+            \Log::error('Survey validation failed:', $validator->errors()->toArray());
+        }
 
         if ($validator->fails()) {
             return response()->json([
@@ -52,35 +60,142 @@ class SurveyController extends Controller
         }
 
         try {
-            // Analyze sentiment from feedback text
-            $sentiment = 'neutral';
-            if ($request->filled('feedback_text')) {
-                $sentiment = $this->sentimentService->analyzeSentiment($request->feedback_text);
-            }
-
-            // Create survey
-            $survey = Survey::create([
+            // Debug: Log the incoming request data
+            \Log::info('Survey submission data:', [
                 'teacher_id' => $request->teacher_id,
                 'subject_id' => $request->subject_id,
-                'rating' => $request->rating,
-                'sentiment' => $sentiment,
-                'feedback_text' => $request->feedback_text,
-                'survey_responses' => $request->survey_responses,
-                'student_name' => $request->student_name,
-                'student_email' => $request->student_email,
-                'ip_address' => $request->ip()
+                'question_responses' => $request->question_responses,
+                'feedback_text' => $request->feedback_text
             ]);
+
+            $totalRating = 0;
+            $ratingCount = 0;
+            $allTextResponses = '';
+            $questionResponses = [];
+
+            // Process question responses and calculate rating
+            if ($request->has('question_responses')) {
+                foreach ($request->question_responses as $questionId => $answer) {
+                    if (!empty($answer)) {
+                        // Store responses for later creation
+                        $questionResponses[] = [
+                            'survey_question_id' => $questionId,
+                            'answer' => $answer
+                        ];
+
+                        // Get question type to process rating
+                        $question = SurveyQuestion::find($questionId);
+                        if ($question) {
+                            if ($question->question_type === 'option') {
+                                // Option questions contribute directly to rating
+                                $totalRating += (int)$answer;
+                                $ratingCount++;
+                            } else {
+                                // Comment questions - add to text for sentiment analysis
+                                $allTextResponses .= ' ' . $answer;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Add additional feedback text to sentiment analysis
+            if ($request->filled('feedback_text')) {
+                $allTextResponses .= ' ' . $request->feedback_text;
+            }
+
+            // Calculate average rating from option questions
+            $averageRating = $ratingCount > 0 ? $totalRating / $ratingCount : 0;
+
+            // Analyze sentiment from all text responses
+            $sentiment = 'neutral';
+            $sentimentRating = 3.0; // Default neutral rating
+
+            if (!empty(trim($allTextResponses))) {
+                try {
+                    $sentiment = $this->sentimentService->analyzeSentiment($allTextResponses);
+                } catch (\Exception $e) {
+                    // Fallback to neutral if sentiment analysis fails
+                    $sentiment = 'neutral';
+                    \Log::warning('Sentiment analysis failed: ' . $e->getMessage());
+                }
+                
+                // Convert sentiment to numerical rating
+                switch ($sentiment) {
+                    case 'positive':
+                        $sentimentRating = 4.5;
+                        break;
+                    case 'negative':
+                        $sentimentRating = 1.5;
+                        break;
+                    case 'neutral':
+                    default:
+                        $sentimentRating = 3.0;
+                        break;
+                }
+            }
+
+            // Calculate final rating: 70% from option questions, 30% from sentiment
+            $finalRating = 0;
+            if ($ratingCount > 0) {
+                $finalRating = ($averageRating * 0.7) + ($sentimentRating * 0.3);
+            } else {
+                $finalRating = $sentimentRating;
+            }
+
+            // Ensure rating is within 1.0 to 5.0 range
+            $finalRating = max(1.0, min(5.0, round($finalRating, 1)));
+
+            // Use database transaction to ensure data consistency
+            try {
+                $survey = \DB::transaction(function() use ($request, $finalRating, $sentiment, $questionResponses) {
+                    // Create survey
+                    $survey = Survey::create([
+                        'teacher_id' => $request->teacher_id,
+                        'subject_id' => $request->subject_id,
+                        'rating' => $finalRating,
+                        'sentiment' => $sentiment,
+                        'feedback_text' => $request->feedback_text,
+                        'student_name' => $request->student_name,
+                        'student_email' => $request->student_email,
+                        'ip_address' => $request->ip()
+                    ]);
+
+                    // Create survey responses
+                    foreach ($questionResponses as $response) {
+                        SurveyResponse::create([
+                            'survey_id' => $survey->id,
+                            'survey_question_id' => $response['survey_question_id'],
+                            'answer' => $response['answer']
+                        ]);
+                    }
+
+                    return $survey;
+                });
+            } catch (\Exception $e) {
+                \Log::error('Database transaction failed: ' . $e->getMessage());
+                throw $e;
+            }
 
             return response()->json([
                 'success' => true,
                 'message' => 'Survey submitted successfully! Thank you for your feedback.',
-                'survey_id' => $survey->id
+                'survey_id' => $survey->id,
+                'calculated_rating' => $finalRating
             ]);
 
         } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Survey submission error: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred while submitting the survey. Please try again.'
+                'message' => 'An error occurred while submitting the survey. Please try again.',
+                'debug' => config('app.debug') ? $e->getMessage() : null
             ], 500);
         }
     }
@@ -154,5 +269,19 @@ class SurveyController extends Controller
         return response()->json([
             'valid' => true
         ]);
+    }
+
+    /**
+     * Get survey responses for a specific survey
+     */
+    public function getResponses(Survey $survey)
+    {
+        $responses = $survey->responses()->with('question')->get();
+        
+        // Group responses by question type
+        $optionResponses = $responses->where('question.question_type', 'option');
+        $commentResponses = $responses->where('question.question_type', 'comment');
+        
+        return view('surveys.responses', compact('survey', 'optionResponses', 'commentResponses'));
     }
 }

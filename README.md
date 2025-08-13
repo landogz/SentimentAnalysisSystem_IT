@@ -12,6 +12,9 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Real-time Analysis Testing**: Built-in sentiment analysis testing tool
 - **Enhanced Authentication System**: Improved login, register, and password reset flows
 - **Advanced Survey Management**: Real-time form validation and AJAX submissions
+- **Dynamic Survey Questions CRUD**: Complete management system for survey questions with option and comment types
+- **Survey Responses Viewer**: Clickable survey rows with detailed response modal on teacher and subject pages
+- **Automatic Rating Calculation**: Smart rating calculation based on option questions (70%) and sentiment analysis (30%)
 - **Comprehensive Reporting**: Multi-format export capabilities (PDF, Excel, CSV)
 - **Mobile-First Design**: Fully responsive interface optimized for all devices
 - **Session Management**: 30-minute timeout with SweetAlert notifications
@@ -107,6 +110,32 @@ The system comes pre-loaded with:
 - **Top Teachers & Subjects**: Performance rankings with ratings
 - **Monthly Trends**: Dynamic chart showing survey trends over time
 - **Recent Activity**: Latest surveys with teacher and subject information
+
+## 📝 Survey Questions Management
+
+### **Dynamic CRUD System**
+- **Question Types**: Support for option questions (1-5 scale) and comment questions (text input)
+- **Order Management**: Flexible question ordering with drag-and-drop capability
+- **Active/Inactive Toggle**: Easy activation/deactivation of questions
+- **AJAX Operations**: Smooth create, read, update, delete operations without page reloads
+- **SweetAlert Notifications**: Professional success/error messages
+- **Responsive Design**: Mobile-friendly interface for question management
+
+### **Survey Responses Viewer**
+- **Clickable Survey Rows**: Interactive survey tables on teacher and subject detail pages
+- **Detailed Response Modal**: Comprehensive view of all survey responses
+- **Two-Column Layout**: Organized display of rating questions and comment responses
+- **Survey Information**: Complete survey metadata (teacher, subject, rating, sentiment, date)
+- **Star Rating Display**: Visual representation of individual question ratings
+- **Additional Feedback**: Separate section for extra comments and suggestions
+
+### **Smart Rating Calculation**
+- **Automatic Algorithm**: Calculates overall rating from multiple data sources
+- **Option Questions Weight**: 70% weight from 1-5 scale question responses
+- **Sentiment Analysis Weight**: 30% weight from text sentiment analysis
+- **Sentiment Conversion**: Positive (4.5), Neutral (3.0), Negative (1.5) ratings
+- **Range Validation**: Ensures final rating stays within 1.0-5.0 range
+- **Precision Control**: Rounds to 1 decimal place for consistency
 
 ### **Advanced Reporting System**
 - **Multi-Format Export**: PDF, Excel, and CSV export capabilities
@@ -214,6 +243,8 @@ The system comes pre-loaded with:
    # Update .env with your database credentials
    php artisan migrate
    php artisan db:seed
+   # Seed survey questions (optional)
+   php artisan db:seed --class=SurveyQuestionSeeder
    ```
 
 5. **Storage setup**
@@ -361,4 +392,4 @@ For support and questions, please contact the development team or create an issu
 
 **ESP-CIT Student Feedback & Sentiment Analysis System** - Empowering educational institutions with modern feedback collection and analysis tools.
 
-*Version 3.0 - Enhanced with advanced sentiment analysis, multi-language support, and comprehensive CRUD management.*
+*Version 3.0 - Enhanced with advanced sentiment analysis, multi-language support, comprehensive CRUD management, dynamic survey questions, survey responses viewer, and smart rating calculation.*

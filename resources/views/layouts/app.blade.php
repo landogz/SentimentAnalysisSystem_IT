@@ -7,6 +7,10 @@
     
     <title>@yield('title', 'Student Feedback System')</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
@@ -904,7 +908,7 @@
                 <div class="text-center" style="padding: 25px 15px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
                     <a href="{{ route('dashboard') }}" style="text-decoration: none; display: block;">
                         <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" style="height: 150px; width: auto; margin-bottom: 10px; filter: brightness(1.1) contrast(1.1);">
-                        <div style="color: white; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.4rem; margin-top: 5px;">ESP-CIT</div>
+                        <div style="color: white; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.4rem; margin-top: 5px;">PRMSU CCIT</div>
                     </a>
                 </div>
                 
@@ -933,6 +937,12 @@
                             <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
                                 <i class="nav-icon fas fa-users" style="color: white; margin-right: 12px;"></i>
                                 <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Users</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('survey-questions.index') }}" class="nav-link {{ request()->routeIs('survey-questions.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-question-circle" style="color: white; margin-right: 12px;"></i>
+                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Survey Questions</p>
                             </a>
                         </li>
                         <li class="nav-item">

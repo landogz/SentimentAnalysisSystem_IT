@@ -184,7 +184,7 @@
     </div>
 
     <!-- Top Performers -->
-    <div class="col-lg-6">
+    <!-- <div class="col-lg-6">
         <div class="card card-outline" style="border-color: var(--light-green);">
             <div class="card-header" style="background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%); color: white;">
                 <h3 class="card-title">
@@ -319,7 +319,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Export Options -->
     <div class="col-12">

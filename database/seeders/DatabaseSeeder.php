@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             SubjectSeeder::class,
             SentimentWordSeeder::class,
             SurveySeeder::class,
+            SurveyQuestionSeeder::class,
         ]);
     }
 }

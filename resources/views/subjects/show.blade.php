@@ -264,7 +264,7 @@
                         </thead>
                         <tbody>
                             @forelse($subject->surveys->take(10) as $survey)
-                            <tr>
+                            <tr class="survey-row" data-survey-id="{{ $survey->id }}" style="cursor: pointer;">
                                 <td>{{ $survey->created_at->format('M d, Y') }}</td>
                                 <td>{{ $survey->student_name ?? 'Anonymous' }}</td>
                                 <td>
@@ -306,6 +306,33 @@
         </div>
     </div>
 </div>
+
+<!-- Survey Responses Modal -->
+<div class="modal fade" id="surveyResponsesModal" tabindex="-1" aria-labelledby="surveyResponsesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="surveyResponsesModalLabel">
+                    <i class="fas fa-clipboard-list me-2"></i>Survey Responses
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="surveyResponsesContent">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading survey responses...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -337,6 +364,42 @@ $(document).ready(function() {
             }
         }
     });
+
+    // Survey row click handler
+    $('.survey-row').click(function() {
+        const surveyId = $(this).data('survey-id');
+        const modal = $('#surveyResponsesModal');
+        
+        // Show modal with loading state
+        modal.modal('show');
+        
+        // Load survey responses via AJAX
+        $.ajax({
+            url: `/surveys/${surveyId}/responses`,
+            method: 'GET',
+            success: function(response) {
+                $('#surveyResponsesContent').html(response);
+            },
+            error: function(xhr) {
+                $('#surveyResponsesContent').html(`
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        Failed to load survey responses. Please try again.
+                    </div>
+                `);
+            }
+        });
+    });
+
+    // Hover effect for survey rows
+    $('.survey-row').hover(
+        function() {
+            $(this).addClass('table-hover');
+        },
+        function() {
+            $(this).removeClass('table-hover');
+        }
+    );
 });
 </script>
 @endpush 
