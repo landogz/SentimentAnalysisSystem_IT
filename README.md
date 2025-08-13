@@ -1,10 +1,15 @@
 # ESP-CIT Student Feedback & Sentiment Analysis System
 
-A modern, professional Laravel-based system for collecting and analyzing student feedback with sentiment analysis capabilities. Built with a beautiful, responsive design and comprehensive reporting features.
+A modern, professional Laravel-based system for collecting and analyzing student feedback with advanced sentiment analysis capabilities. Built with a beautiful, responsive design and comprehensive reporting features.
 
 ## 🆕 Recent Updates & Features
 
 ### **Latest Enhancements**
+- **Enhanced Sentiment Analysis**: Database-driven sentiment words with scoring system
+- **Multi-language Support**: English and Tagalog sentiment analysis
+- **Translation Integration**: Google Translate API for automatic language translation
+- **Advanced CRUD Management**: Complete sentiment words management interface
+- **Real-time Analysis Testing**: Built-in sentiment analysis testing tool
 - **Enhanced Authentication System**: Improved login, register, and password reset flows
 - **Advanced Survey Management**: Real-time form validation and AJAX submissions
 - **Comprehensive Reporting**: Multi-format export capabilities (PDF, Excel, CSV)
@@ -12,11 +17,70 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Session Management**: 30-minute timeout with SweetAlert notifications
 - **DataTables Integration**: Advanced table features with search, sort, and pagination
 
+### **Sentiment Analysis Features**
+- **Database-Driven Words**: 209 pre-seeded sentiment words with scores
+- **Multi-language Support**: English (96 words) and Tagalog (113 words)
+- **Advanced Scoring**: -5.0 to 5.0 scoring system with detailed breakdown
+- **Rating Calculation**: Automatic 1-5 star rating conversion
+- **Translation Support**: Automatic Tagalog to English translation
+- **Real-time Testing**: Built-in analysis testing with custom text
+- **Statistics Dashboard**: Comprehensive word counts and distribution
+- **Filtering System**: Filter by type, language, and status
+- **CRUD Operations**: Complete Create, Read, Update, Delete functionality
+
 ### **Performance Improvements**
 - **AJAX-Powered Interface**: No page reloads for better user experience
 - **Optimized Database Queries**: Efficient data loading and caching
 - **Lazy Loading**: Progressive data loading for better performance
 - **Asset Optimization**: Minified CSS/JS for production deployment
+
+## 🧠 Sentiment Analysis System
+
+### **Advanced Sentiment Analysis**
+- **Database-Driven Words**: Flexible sentiment word management with scores
+- **Multi-language Support**: English and Tagalog sentiment analysis
+- **Translation Integration**: Google Translate API for automatic translation
+- **Advanced Scoring**: Weighted scoring system with detailed breakdown
+- **Rating Calculation**: Converts sentiment scores to 1-5 star ratings
+- **Real-time Testing**: Built-in sentiment analysis testing tool
+- **Statistics Dashboard**: Comprehensive analytics and reporting
+
+### **Sentiment Words Management**
+- **Complete CRUD Interface**: Full Create, Read, Update, Delete operations
+- **Filtering System**: Filter by type (positive/negative/neutral), language, status
+- **Statistics Dashboard**: Real-time word counts and distribution
+- **Test Analysis Tool**: Built-in sentiment testing with custom text
+- **Floating Action Button**: Quick access to test analysis
+- **Responsive Design**: Mobile-optimized management interface
+
+### **Database Schema**
+```sql
+CREATE TABLE sentiment_words (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    word VARCHAR(255) NOT NULL,
+    type ENUM('positive', 'negative', 'neutral') NOT NULL,
+    score DECIMAL(3,1) DEFAULT 1.0,
+    language VARCHAR(10) DEFAULT 'en',
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    INDEX idx_word_language (word, language),
+    INDEX idx_type_language (type, language)
+);
+```
+
+### **API Endpoints**
+- `GET /sentiment-words` - List words with filters
+- `POST /sentiment-words` - Add new word
+- `PUT /sentiment-words/{id}` - Update word
+- `DELETE /sentiment-words/{id}` - Delete word
+- `POST /sentiment-words/test-analysis` - Test analysis
+- `GET /sentiment-words/statistics` - Get statistics
+
+### **Sample Data**
+The system comes pre-loaded with:
+- **English Words (96)**: excellent (3.0), great (2.5), terrible (-3.0), etc.
+- **Tagalog Words (113)**: maganda (2.0), mahusay (2.5), masama (-2.0), etc.
 
 ## 🎨 Modern Design Features
 
@@ -85,6 +149,7 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Clean Navigation**: Minimalist menu with hover effects
 - **Active State Indicators**: Clear visual feedback for current page
 - **Collapsible Design**: Smooth mobile sidebar functionality
+- **Sentiment Words Menu**: Easy access to sentiment analysis management
 
 ### **Enhanced Navigation**
 - **Professional Navbar**: Gradient backgrounds and modern styling
@@ -163,6 +228,12 @@ A modern, professional Laravel-based system for collecting and analyzing student
 
 ### **Sample Data**
 Access `/add-sample-data` to populate the system with sample teachers, subjects, and surveys for testing.
+
+### **Google Translate API Setup**
+For translation features, add to your `.env` file:
+```env
+GOOGLE_TRANSLATE_API_KEY=your_api_key_here
+```
 
 ### **Production Deployment**
 ```bash
@@ -284,9 +355,10 @@ For support and questions, please contact the development team or create an issu
 - **Session Timeout**: System automatically logs out after 30 minutes of inactivity
 - **Export Issues**: Ensure proper file permissions for export functionality
 - **Mobile Display**: Use responsive design features for optimal mobile experience
+- **Translation Issues**: Ensure Google Translate API key is configured for translation features
 
 ---
 
 **ESP-CIT Student Feedback & Sentiment Analysis System** - Empowering educational institutions with modern feedback collection and analysis tools.
 
-*Version 2.0 - Enhanced with advanced reporting, mobile optimization, and improved user experience.*
+*Version 3.0 - Enhanced with advanced sentiment analysis, multi-language support, and comprehensive CRUD management.*

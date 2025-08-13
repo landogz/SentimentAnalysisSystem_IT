@@ -9,6 +9,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SentimentWordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/subjects-ajax', [ReportsController::class, 'getSubjectsAjax'])->name('reports.subjects-ajax');
     Route::get('/reports/rating-distribution', [ReportsController::class, 'getRatingDistribution'])->name('reports.rating-distribution');
     Route::get('/reports/filtered-stats', [ReportsController::class, 'getFilteredStats'])->name('reports.filtered-stats');
+    
+    // Sentiment Words Management
+    Route::prefix('sentiment-words')->name('sentiment-words.')->group(function () {
+        Route::get('/', [SentimentWordController::class, 'index'])->name('index');
+        Route::get('/create', [SentimentWordController::class, 'create'])->name('create');
+        Route::post('/', [SentimentWordController::class, 'store'])->name('store');
+        Route::get('/{sentimentWord}', [SentimentWordController::class, 'show'])->name('show');
+        Route::get('/{sentimentWord}/edit', [SentimentWordController::class, 'edit'])->name('edit');
+        Route::put('/{sentimentWord}', [SentimentWordController::class, 'update'])->name('update');
+        Route::delete('/{sentimentWord}', [SentimentWordController::class, 'destroy'])->name('destroy');
+        Route::post('/test-analysis', [SentimentWordController::class, 'testAnalysis'])->name('test-analysis');
+        Route::get('/statistics', [SentimentWordController::class, 'statistics'])->name('statistics');
+        Route::get('/api/list', [SentimentWordController::class, 'apiIndex'])->name('api.index');
+    });
 });
 
 // Fallback route
@@ -123,6 +138,28 @@ Route::get('/add-sample-data', function() {
     }
     
     return 'Sample data added successfully!';
+});
+
+// Test sentiment analysis route
+Route::get('/test-sentiment', function() {
+    $sentimentService = app(\App\Services\SentimentAnalysisService::class);
+    
+    // Test English text
+    $englishText = "I love this teacher, they are excellent and very helpful!";
+    $englishResult = $sentimentService->analyzeSentimentWithScore($englishText, 'en');
+    
+    // Test Tagalog text
+    $tagalogText = "Gusto ko ang serbisyo, pero mabagal ang delivery.";
+    $tagalogResult = $sentimentService->analyzeSentimentWithScore($tagalogText, 'tl');
+    
+    // Test with translation
+    $translationResult = $sentimentService->analyzeSentimentWithTranslation($tagalogText, 'tl', 'en');
+    
+    return response()->json([
+        'english_analysis' => $englishResult,
+        'tagalog_analysis' => $tagalogResult,
+        'translation_analysis' => $translationResult
+    ]);
 });
 
 require __DIR__.'/auth.php';

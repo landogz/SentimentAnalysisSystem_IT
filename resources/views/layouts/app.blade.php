@@ -57,6 +57,7 @@
         /* Enhanced Pagination Styling */
         .pagination {
             margin-bottom: 0;
+            flex-wrap: wrap;
         }
         .page-link {
             color: var(--light-blue);
@@ -64,12 +65,17 @@
             padding: 0.5rem 0.75rem;
             font-size: 0.875rem;
             transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
         }
         .page-link:hover {
             color: var(--dark-gray);
             background-color: #e9ecef;
             border-color: #dee2e6;
             transform: translateY(-1px);
+            text-decoration: none;
         }
         .page-item.active .page-link {
             background-color: var(--light-blue);
@@ -80,10 +86,14 @@
             color: #6c757d;
             background-color: #fff;
             border-color: #dee2e6;
+            cursor: not-allowed;
         }
         .pagination-info {
             font-size: 0.875rem;
             color: #6c757d;
+        }
+        .page-item {
+            margin: 0 0.125rem;
         }
 
         /* Enhanced Table Styling */
@@ -543,10 +553,16 @@
             .pagination {
                 justify-content: center !important;
                 flex-wrap: wrap !important;
+                gap: 0.25rem !important;
             }
             .page-link {
                 padding: 0.5rem 0.75rem !important;
                 font-size: 0.9rem !important;
+                min-width: 2.5rem !important;
+                justify-content: center !important;
+            }
+            .page-item {
+                margin: 0 !important;
             }
             
             /* Alerts Mobile */
@@ -923,6 +939,12 @@
                             <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
                                 <i class="nav-icon fas fa-chart-bar" style="color: white; margin-right: 12px;"></i>
                                 <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Reports</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('sentiment-words.index') }}" class="nav-link {{ request()->routeIs('sentiment-words.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-brain" style="color: white; margin-right: 12px;"></i>
+                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Sentiment Words</p>
                             </a>
                         </li>
                         
