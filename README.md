@@ -4,7 +4,15 @@ A modern, professional Laravel-based system for collecting and analyzing student
 
 ## 🆕 Recent Updates & Features
 
-### **Latest Enhancements (v3.1)**
+### **Latest Enhancements (v3.2)**
+- **Enhanced Button Visibility**: Improved color-coded buttons for better user experience
+- **CCIT-Specific Part 2 Questions**: Updated to 5 targeted CCIT difficulty assessment questions
+- **Performance-Based Color Scheme**: Part 1 buttons use performance gradient (Green to Red)
+- **Difficulty-Based Color Scheme**: Part 2 buttons use difficulty gradient (Red to Green)
+- **Enhanced Accessibility**: Better contrast and visual feedback for all rating buttons
+- **Updated Survey Seeder**: Compatible with new Part 2 structure and question count
+
+### **Previous Enhancements (v3.1)**
 - **Part-Specific Survey Analysis**: Comprehensive 3-part survey structure with detailed analysis
 - **Professional Tabbed Modal**: Enhanced survey responses viewer with tabbed interface
 - **Advanced Sentiment Scoring**: Part 3 comments converted to numerical scores (1-5 scale)
@@ -31,7 +39,7 @@ A modern, professional Laravel-based system for collecting and analyzing student
 
 ### **Part-Specific Survey Structure**
 - **Part 1: Instructor Evaluation**: 20 questions with 1-5 rating scale (Outstanding to Poor)
-- **Part 2: Difficulty Level**: 10 questions with 1-5 rating scale (Very Difficult to Very Not Difficult)
+- **Part 2: Difficulty Level**: 5 CCIT-specific questions with 1-5 rating scale (Very Difficult to Very Not Difficult)
 - **Part 3: Open Comments**: 4 open-ended questions with sentiment analysis
 - **Professional Tabbed Interface**: Overview, Part 1, Part 2, Part 3 tabs with detailed analysis
 - **Sentiment Score Conversion**: Part 3 comments converted to 1-5 numerical scale
@@ -44,6 +52,24 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Visual Analysis**: Color-coded cards with icons and scores
 - **Responsive Layout**: Works perfectly on desktop and mobile devices
 - **Interactive Elements**: Hover effects and smooth transitions
+
+### **Enhanced Button Styling & Visibility**
+- **Part 1 Color Scheme**: Performance-based gradient (Green → Light Blue → Gray → Orange → Red)
+  - 5 (Outstanding): Green - represents excellent performance
+  - 4 (Very Satisfactory): Light Blue - represents very good performance
+  - 3 (Satisfactory): Gray - represents acceptable performance
+  - 2 (Fair): Orange - represents below average performance
+  - 1 (Poor): Red - represents poor performance
+- **Part 2 Color Scheme**: Difficulty-based gradient (Red → Orange → Gray → Light Blue → Green)
+  - 5 (Very Difficult): Red - represents highest difficulty
+  - 4 (Difficult): Orange - represents high difficulty
+  - 3 (Slightly Difficult): Gray - represents medium difficulty
+  - 2 (Not Difficult): Light Blue - represents low difficulty
+  - 1 (Very Not Difficult): Green - represents lowest difficulty
+- **Enhanced Visibility**: Thicker borders (2px), bolder text (600 weight), improved contrast
+- **Interactive States**: Hover effects with solid color fills and smooth transitions
+- **Selected States**: Clear visual feedback with solid colors and white text
+- **Accessibility**: Better color contrast for users with visual impairments
 
 ### **Sentiment Analysis Features**
 - **Database-Driven Words**: 209 pre-seeded sentiment words with scores
@@ -175,7 +201,10 @@ The system comes pre-loaded with:
 
 ### **Part-Specific Analysis**
 - **Part 1 Analysis**: Instructor evaluation average (1-5 scale)
-- **Part 2 Analysis**: Difficulty level average (1-5 scale)
+- **Part 2 Analysis**: CCIT difficulty level average (1-5 scale)
+  - **CCIT-Specific Questions**: 5 targeted questions about CCIT subject difficulty
+  - **Question Topics**: Understanding concepts, assignments/projects, quizzes/exams, practical activities, lesson pace
+  - **Difficulty Assessment**: Comprehensive evaluation of CCIT learning experience
 - **Part 3 Analysis**: Sentiment score conversion (1-5 scale)
 - **Overall Analysis**: Combined rating with sentiment breakdown
 - **Visual Indicators**: Color-coded cards with icons and scores

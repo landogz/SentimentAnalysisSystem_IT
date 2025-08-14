@@ -170,73 +170,38 @@ class SurveyQuestionSeeder extends Seeder
         // Part 2: Difficulty Level (Very Difficult, Difficult, Slightly Difficult, Not Difficult, Very Not Difficult)
         $part2Questions = [
             [
-                'question_text' => 'How difficult is the course content and materials?',
+                'question_text' => 'How would you rate the difficulty of understanding the concepts taught in the CCIT subject?',
                 'question_type' => 'option',
                 'part' => 'part2',
                 'order_number' => 1,
                 'is_active' => true
             ],
             [
-                'question_text' => 'How challenging are the assignments and projects?',
+                'question_text' => 'How would you rate the difficulty of completing CCIT assignments and projects?',
                 'question_type' => 'option',
                 'part' => 'part2',
                 'order_number' => 2,
                 'is_active' => true
             ],
             [
-                'question_text' => 'How difficult are the examinations and assessments?',
+                'question_text' => 'How would you rate the difficulty of preparing for CCIT quizzes and exams?',
                 'question_type' => 'option',
                 'part' => 'part2',
                 'order_number' => 3,
                 'is_active' => true
             ],
             [
-                'question_text' => 'How challenging is the course workload and pace?',
+                'question_text' => 'How would you rate the difficulty of applying CCIT concepts in practical activities or exercises?',
                 'question_type' => 'option',
                 'part' => 'part2',
                 'order_number' => 4,
                 'is_active' => true
             ],
             [
-                'question_text' => 'How difficult are the practical exercises and laboratory work?',
+                'question_text' => 'How would you rate the difficulty of keeping up with the pace of lessons in CCIT?',
                 'question_type' => 'option',
                 'part' => 'part2',
                 'order_number' => 5,
-                'is_active' => true
-            ],
-            [
-                'question_text' => 'How challenging is the course compared to your expectations?',
-                'question_type' => 'option',
-                'part' => 'part2',
-                'order_number' => 6,
-                'is_active' => true
-            ],
-            [
-                'question_text' => 'How difficult is it to understand the course objectives and requirements?',
-                'question_type' => 'option',
-                'part' => 'part2',
-                'order_number' => 7,
-                'is_active' => true
-            ],
-            [
-                'question_text' => 'How challenging is the course in relation to your academic background?',
-                'question_type' => 'option',
-                'part' => 'part2',
-                'order_number' => 8,
-                'is_active' => true
-            ],
-            [
-                'question_text' => 'How difficult is it to apply theoretical concepts to practical situations?',
-                'question_type' => 'option',
-                'part' => 'part2',
-                'order_number' => 9,
-                'is_active' => true
-            ],
-            [
-                'question_text' => 'Overall, how would you rate the difficulty level of this course?',
-                'question_type' => 'option',
-                'part' => 'part2',
-                'order_number' => 10,
                 'is_active' => true
             ]
         ];
@@ -288,7 +253,7 @@ class SurveyQuestionSeeder extends Seeder
 
         $this->command->info('Survey questions seeded successfully with 3 parts structure!');
         $this->command->info('Part 1: Instructor Evaluation (20 questions) - Sections A, B, C, D');
-        $this->command->info('Part 2: Difficulty Level (10 questions)');
+        $this->command->info('Part 2: Difficulty Level (5 questions)');
         $this->command->info('Part 3: Open Comments (4 questions)');
     }
 }

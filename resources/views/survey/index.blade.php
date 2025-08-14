@@ -404,6 +404,190 @@
             opacity: 1;
         }
         
+        /* Part 2 specific button styling for better visibility */
+        .part2 .btn-group .btn {
+            border-width: 2px;
+            font-weight: 600;
+        }
+        
+        .part2 .btn-outline-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .part2 .btn-outline-danger:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+        
+        .part2 .btn-outline-warning {
+            color: #fd7e14;
+            border-color: #fd7e14;
+        }
+        
+        .part2 .btn-outline-warning:hover {
+            background-color: #fd7e14;
+            border-color: #fd7e14;
+            color: white;
+        }
+        
+        .part2 .btn-outline-secondary {
+            color: #6c757d;
+            border-color: #6c757d;
+        }
+        
+        .part2 .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        
+        .part2 .btn-outline-info {
+            color: #0dcaf0;
+            border-color: #0dcaf0;
+        }
+        
+        .part2 .btn-outline-info:hover {
+            background-color: #0dcaf0;
+            border-color: #0dcaf0;
+            color: white;
+        }
+        
+        .part2 .btn-outline-success {
+            color: #198754;
+            border-color: #198754;
+        }
+        
+        .part2 .btn-outline-success:hover {
+            background-color: #198754;
+            border-color: #198754;
+            color: white;
+        }
+        
+        /* Selected state for Part 2 buttons */
+        .part2 .btn-check:checked + .btn-outline-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+        
+        .part2 .btn-check:checked + .btn-outline-warning {
+            background-color: #fd7e14;
+            border-color: #fd7e14;
+            color: white;
+        }
+        
+        .part2 .btn-check:checked + .btn-outline-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        
+        .part2 .btn-check:checked + .btn-outline-info {
+            background-color: #0dcaf0;
+            border-color: #0dcaf0;
+            color: white;
+        }
+        
+        .part2 .btn-check:checked + .btn-outline-success {
+            background-color: #198754;
+            border-color: #198754;
+            color: white;
+        }
+        
+        /* Part 1 specific button styling for better visibility */
+        .part-section:not(.part2) .btn-group .btn {
+            border-width: 2px;
+            font-weight: 600;
+        }
+        
+        .part-section:not(.part2) .btn-outline-success {
+            color: #198754;
+            border-color: #198754;
+        }
+        
+        .part-section:not(.part2) .btn-outline-success:hover {
+            background-color: #198754;
+            border-color: #198754;
+            color: white;
+        }
+        
+        .part-section:not(.part2) .btn-outline-info {
+            color: #0dcaf0;
+            border-color: #0dcaf0;
+        }
+        
+        .part-section:not(.part2) .btn-outline-info:hover {
+            background-color: #0dcaf0;
+            border-color: #0dcaf0;
+            color: white;
+        }
+        
+        .part-section:not(.part2) .btn-outline-secondary {
+            color: #6c757d;
+            border-color: #6c757d;
+        }
+        
+        .part-section:not(.part2) .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        
+        .part-section:not(.part2) .btn-outline-warning {
+            color: #fd7e14;
+            border-color: #fd7e14;
+        }
+        
+        .part-section:not(.part2) .btn-outline-warning:hover {
+            background-color: #fd7e14;
+            border-color: #fd7e14;
+            color: white;
+        }
+        
+        .part-section:not(.part2) .btn-outline-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .part-section:not(.part2) .btn-outline-danger:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+        
+        /* Selected state for Part 1 buttons */
+        .part-section:not(.part2) .btn-check:checked + .btn-outline-success {
+            background-color: #198754;
+            border-color: #198754;
+            color: white;
+        }
+        
+        .part-section:not(.part2) .btn-check:checked + .btn-outline-info {
+            background-color: #0dcaf0;
+            border-color: #0dcaf0;
+            color: white;
+        }
+        
+        .part-section:not(.part2) .btn-check:checked + .btn-outline-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        
+        .part-section:not(.part2) .btn-check:checked + .btn-outline-warning {
+            background-color: #fd7e14;
+            border-color: #fd7e14;
+            color: white;
+        }
+        
+        .part-section:not(.part2) .btn-check:checked + .btn-outline-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+        
         /* Part-specific styling */
         .part-section {
             background: #f8f9fa;
@@ -768,31 +952,31 @@
                                         <div class="btn-group w-100" role="group">
                                             <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                    id="q{{ $question->id }}_5" value="5" required>
-                                            <label class="btn btn-outline-primary" for="q{{ $question->id }}_5">
+                                            <label class="btn btn-outline-success" for="q{{ $question->id }}_5">
                                                 5<br><small>Outstanding</small>
                                             </label>
                                             
                                             <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                    id="q{{ $question->id }}_4" value="4" required>
-                                            <label class="btn btn-outline-primary" for="q{{ $question->id }}_4">
+                                            <label class="btn btn-outline-info" for="q{{ $question->id }}_4">
                                                 4<br><small>Very Satisfactory</small>
                                             </label>
                                             
                                             <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                    id="q{{ $question->id }}_3" value="3" required>
-                                            <label class="btn btn-outline-primary" for="q{{ $question->id }}_3">
+                                            <label class="btn btn-outline-secondary" for="q{{ $question->id }}_3">
                                                 3<br><small>Satisfactory</small>
                                             </label>
                                             
                                             <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                    id="q{{ $question->id }}_2" value="2" required>
-                                            <label class="btn btn-outline-primary" for="q{{ $question->id }}_2">
+                                            <label class="btn btn-outline-warning" for="q{{ $question->id }}_2">
                                                 2<br><small>Fair</small>
                                             </label>
                                             
                                             <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                    id="q{{ $question->id }}_1" value="1" required>
-                                            <label class="btn btn-outline-primary" for="q{{ $question->id }}_1">
+                                            <label class="btn btn-outline-danger" for="q{{ $question->id }}_1">
                                                 1<br><small>Poor</small>
                                             </label>
                                         </div>
@@ -833,7 +1017,7 @@
                                     <div class="btn-group w-100" role="group">
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                id="q{{ $question->id }}_5" value="5" required>
-                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_5">
+                                        <label class="btn btn-outline-danger" for="q{{ $question->id }}_5">
                                             5<br><small>Very Difficult</small>
                                         </label>
                                         
@@ -845,19 +1029,19 @@
                                         
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                id="q{{ $question->id }}_3" value="3" required>
-                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_3">
+                                        <label class="btn btn-outline-secondary" for="q{{ $question->id }}_3">
                                             3<br><small>Slightly Difficult</small>
                                         </label>
                                         
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                id="q{{ $question->id }}_2" value="2" required>
-                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_2">
+                                        <label class="btn btn-outline-info" for="q{{ $question->id }}_2">
                                             2<br><small>Not Difficult</small>
                                         </label>
                                         
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                id="q{{ $question->id }}_1" value="1" required>
-                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_1">
+                                        <label class="btn btn-outline-success" for="q{{ $question->id }}_1">
                                             1<br><small>Very Not Difficult</small>
                                         </label>
                                     </div>
