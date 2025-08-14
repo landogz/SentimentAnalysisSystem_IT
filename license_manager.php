@@ -3,8 +3,8 @@ session_start();
 
 // Configuration
 $jsonFile = 'licenses.json';
-$adminUsername = 'admin';
-$adminPassword = 'adminlandogz';
+$adminUsername = '';
+$adminPassword = '';
 
 // Initialize JSON file if it doesn't exist
 if (!file_exists($jsonFile)) {
