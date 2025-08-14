@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SentimentWordController;
+use App\Http\Controllers\LicenseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,13 @@ use App\Http\Controllers\SentimentWordController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+// License routes (no middleware to allow access when license is invalid)
+Route::prefix('license')->name('license.')->group(function () {
+    Route::get('/', [LicenseController::class, 'index'])->name('index');
+    Route::post('/', [LicenseController::class, 'store'])->name('store');
+    Route::post('/test', [LicenseController::class, 'test'])->name('test');
+});
 
 // Public routes
 Route::get('/', function () {
@@ -43,8 +51,8 @@ Route::middleware('guest')->group(function () {
     })->name('password.request');
 });
 
-// Public survey routes (no authentication required)
-Route::prefix('survey')->name('survey.')->group(function () {
+// Public survey routes (license required)
+Route::prefix('survey')->name('survey.')->middleware('license')->group(function () {
     Route::get('/', [SurveyController::class, 'index'])->name('index');
     Route::post('/store', [SurveyController::class, 'store'])->name('store');
     Route::get('/results', [SurveyController::class, 'results'])->name('results');
@@ -53,7 +61,7 @@ Route::prefix('survey')->name('survey.')->group(function () {
 });
 
 // Authentication routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'license'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/stats', [DashboardController::class, 'getStats'])->name('dashboard.stats');
