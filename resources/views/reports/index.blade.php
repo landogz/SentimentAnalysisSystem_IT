@@ -322,7 +322,7 @@
     </div> -->
 
     <!-- Export Options -->
-    <div class="col-12">
+    <!-- <div class="col-12">
         <div class="card card-outline" style="border-color: var(--dark-gray);">
             <div class="card-header" style="background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%); color: white;">
                 <h3 class="card-title">
@@ -355,7 +355,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 @endsection
 

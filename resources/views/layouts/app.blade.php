@@ -1019,7 +1019,7 @@
         <!-- Footer -->
         <footer class="main-footer">
             <div class="float-right d-none d-sm-inline">
-                <span class="text-muted">ESP-CIT</span>
+                <span class="text-muted">PRMSU CCIT</span>
             </div>
             <strong>Copyright &copy; {{ date('Y') }}</strong> All rights reserved.
         </footer>
