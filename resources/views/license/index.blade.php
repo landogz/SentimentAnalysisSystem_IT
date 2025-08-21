@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>License Activation - ESP-CIT Sentiment Analysis System</title>
+    <title>License Activation - PRMSU CCIT Sentiment Analysis System</title>
 
     <!-- Google Font: Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
@@ -330,7 +330,7 @@
     <div class="license-container">
         <div class="license-header">
             <div class="logo-section">
-                <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" class="logo">
+                <img src="{{ asset('images/logo_company.png') }}" alt="PRMSU CCIT" class="logo">
             </div>
             <h1>License Activation</h1>
             <p>Enter your license key to activate the system</p>
@@ -426,8 +426,7 @@
         
         @if($isExpired)
         <div class="license-footer">
-            <p><i class="fas fa-shield-alt me-2"></i>ESP-CIT Sentiment Analysis System</p>
-            <p>Powered by Landogz Web Solutions</p>
+            <p><i class="fas fa-shield-alt me-2"></i>Powered by Landogz Web Solutions</p>
             
             <!-- Contact System Developer -->
             <div class="contact-developer mt-3">
@@ -446,8 +445,7 @@
         </div>
         @else
         <div class="license-footer">
-            <p><i class="fas fa-shield-alt me-2"></i>ESP-CIT Sentiment Analysis System</p>
-            <p>Powered by Landogz Web Solutions</p>
+            <p><i class="fas fa-shield-alt me-2"></i>Powered by Landogz Web Solutions</p>
         </div>
         @endif
     </div>

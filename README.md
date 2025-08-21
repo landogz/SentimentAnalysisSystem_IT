@@ -1,4 +1,4 @@
-# ESP-CIT Student Feedback & Sentiment Analysis System
+# PRMSU CCIT Student Feedback & Sentiment Analysis System
 
 A modern, professional Laravel-based system for collecting and analyzing student feedback with advanced sentiment analysis capabilities. Built with a beautiful, responsive design and comprehensive reporting features.
 
@@ -256,7 +256,7 @@ The system comes pre-loaded with:
 
 ### **Professional Sidebar**
 - **Prominent Logo**: Large 150px logo at the top of sidebar
-- **ESP-CIT Branding**: Consistent branding throughout
+- **PRMSU CCIT Branding**: Consistent branding throughout
 - **Clean Navigation**: Minimalist menu with hover effects
 - **Active State Indicators**: Clear visual feedback for current page
 - **Collapsible Design**: Smooth mobile sidebar functionality
@@ -476,6 +476,6 @@ For support and questions, please contact the development team or create an issu
 
 ---
 
-**ESP-CIT Student Feedback & Sentiment Analysis System** - Empowering educational institutions with modern feedback collection and analysis tools.
+**PRMSU CCIT Student Feedback & Sentiment Analysis System** - Empowering educational institutions with modern feedback collection and analysis tools.
 
 *Version 3.1 - Enhanced with part-specific survey analysis, professional tabbed modal interface, advanced sentiment scoring, and comprehensive survey responses viewer.*

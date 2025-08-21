@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>ESP-CIT - Student Feedback Survey</title>
+    <title>PRMSU CCIT - Student Feedback Survey</title>
 
     <!-- Google Font: Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
@@ -800,9 +800,9 @@
         <div class="survey-container">
             <div class="survey-header">
                 <div class="logo-section">
-                    <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" class="logo">
-                </div>
-                <h1>ESP-CIT</h1>
+                                    <img src="{{ asset('images/logo.png') }}" alt="PRMSU CCIT" class="logo">
+            </div>
+            <h1>PRMSU CCIT</h1>
                 <p>Student Feedback Survey</p>
             </div>
             
@@ -1121,7 +1121,7 @@
         </div>
         
         <div class="footer">
-            <p>&copy; {{ date('Y') }} ESP-CIT. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} PRMSU CCIT. All rights reserved.</p>
         </div>
     </div>
 

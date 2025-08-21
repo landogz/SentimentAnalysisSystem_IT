@@ -907,7 +907,7 @@
                 <!-- Brand Logo at Top -->
                 <div class="text-center" style="padding: 25px 15px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
                     <a href="{{ route('dashboard') }}" style="text-decoration: none; display: block;">
-                        <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" style="height: 150px; width: auto; margin-bottom: 10px; filter: brightness(1.1) contrast(1.1);">
+                        <img src="{{ asset('images/logo.png') }}" alt="PRMSU CCIT" style="height: 150px; width: auto; margin-bottom: 10px; filter: brightness(1.1) contrast(1.1);">
                         <div style="color: white; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.4rem; margin-top: 5px;">PRMSU CCIT</div>
                     </a>
                 </div>

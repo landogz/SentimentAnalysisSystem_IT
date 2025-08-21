@@ -53,7 +53,7 @@ class LicenseService
         try {
             $response = Http::timeout(15)
                 ->withHeaders([
-                    'User-Agent' => 'ESP-CIT-SentimentAnalysis/1.0',
+                    'User-Agent' => 'PRMSU-CCIT-SentimentAnalysis/1.0',
                     'Accept' => 'application/json'
                 ])
                 ->get($this->licenseApiUrl);

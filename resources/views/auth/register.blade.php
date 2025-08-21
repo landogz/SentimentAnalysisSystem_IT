@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>Register - ESP-CIT Student Feedback System</title>
+    <title>Register - PRMSU CCIT Student Feedback System</title>
 
     <!-- Google Font: Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
@@ -411,9 +411,9 @@
         <div class="register-container">
             <div class="register-header">
                 <div class="logo-section">
-                    <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" class="logo">
+                    <img src="{{ asset('images/logo.png') }}" alt="PRMSU CCIT" class="logo">
                 </div>
-                <h1>ESP-CIT</h1>
+                <h1>PRMSU CCIT</h1>
                 <p>Student Feedback System</p>
             </div>
             
@@ -527,7 +527,7 @@
         </div>
         
         <div class="footer">
-            <p>&copy; {{ date('Y') }} ESP-CIT. All rights reserved.</p>
+                            <p>&copy; {{ date('Y') }} PRMSU CCIT. All rights reserved.</p>
         </div>
     </div>
 

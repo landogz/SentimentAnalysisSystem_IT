@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\TeacherController;
@@ -49,6 +50,11 @@ Route::middleware('guest')->group(function () {
     Route::get('/forgot-password', function () {
         return view('auth.forgot-password');
     })->name('password.request');
+    
+    Route::get('/reset-password/{token}', function (Request $request, $token) {
+        $email = $request->query('email');
+        return view('auth.reset-password', ['request' => $request, 'token' => $token, 'email' => $email]);
+    })->name('password.reset');
 });
 
 // Public survey routes (license required)

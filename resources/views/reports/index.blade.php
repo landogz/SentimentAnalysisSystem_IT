@@ -532,7 +532,7 @@ function exportReport(format) {
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `esp-cit-feedback-report-${new Date().toISOString().slice(0,10)}.csv`;
+                    a.download = `prmsu-ccit-feedback-report-${new Date().toISOString().slice(0,10)}.csv`;
                     document.body.appendChild(a);
                     a.click();
                     window.URL.revokeObjectURL(url);

@@ -40,7 +40,7 @@ if (!file_exists($jsonFile)) {
             "license_id" => "LWS-004",
             "system_name" => "Sentiment Analysis System",
             "license_type" => "Annual",
-            "issued_to" => "ESP-CIT Sentiment Analysis System",
+            "issued_to" => "PRMSU CCIT Sentiment Analysis System",
             "issue_date" => "2025-08-01",
             "expiry_date" => "2026-08-10",
             "status" => "Active"
