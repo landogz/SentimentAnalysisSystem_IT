@@ -330,7 +330,7 @@
     <div class="license-container">
         <div class="license-header">
             <div class="logo-section">
-                <img src="{{ asset('images/logo_company.png') }}" alt="PRMSU CCIT" class="logo">
+                <img src="{{ asset('images/logo.png') }}" alt="PRMSU CCIT" class="logo">
             </div>
             <h1>License Activation</h1>
             <p>Enter your license key to activate the system</p>
