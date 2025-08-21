@@ -53,6 +53,35 @@ Route::middleware('guest')->group(function () {
     
     Route::get('/reset-password/{token}', function (Request $request, $token) {
         $email = $request->query('email');
+        
+        // Log for debugging
+        \Log::info('Reset password page accessed', [
+            'token' => $token,
+            'email' => $email,
+            'all_query_params' => $request->query()
+        ]);
+        
+        // If email is missing, try to get it from the token
+        if (empty($email)) {
+            // Try to find the token record - Laravel might store it differently
+            $tokenRecord = \DB::table('password_reset_tokens')->where('token', $token)->first();
+            if (!$tokenRecord) {
+                // Try with hashed token
+                $tokenRecord = \DB::table('password_reset_tokens')->where('token', hash('sha256', $token))->first();
+            }
+            if (!$tokenRecord) {
+                // Try with base64 encoded token
+                $tokenRecord = \DB::table('password_reset_tokens')->where('token', base64_encode($token))->first();
+            }
+            
+            if ($tokenRecord) {
+                $email = $tokenRecord->email;
+                \Log::info('Email retrieved from token', ['email' => $email, 'token_type' => 'found']);
+            } else {
+                \Log::warning('Token not found in database', ['token' => $token]);
+            }
+        }
+        
         return view('auth.reset-password', ['request' => $request, 'token' => $token, 'email' => $email]);
     })->name('password.reset');
 });

@@ -345,7 +345,13 @@
                     <input type="hidden" name="token" value="{{ $token }}">
                     
                     <!-- Email Address -->
-                    <input type="hidden" name="email" value="{{ $email }}">
+                    <input type="hidden" name="email" value="{{ $email ?? '' }}">
+                    @if(empty($email))
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Email address not found. Please check your reset link or try requesting a new password reset.
+                        </div>
+                    @endif
                     
                     <div class="form-group">
                         <label for="password">
@@ -389,7 +395,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="submit" class="btn btn-reset" id="resetBtn">
+                        <button type="submit" class="btn btn-reset" id="resetBtn" {{ empty($email) ? 'disabled' : '' }}>
                             <i class="fas fa-save me-2"></i>Reset Password
                         </button>
                     </div>
@@ -426,6 +432,21 @@
         $(document).ready(function() {
             const resetBtn = $('#resetBtn');
             const originalText = resetBtn.html();
+            const email = '{{ $email ?? "" }}';
+            
+            // Prevent form submission if email is missing
+            $('#resetForm').on('submit', function(e) {
+                if (!email || email.trim() === '') {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Email address is missing. Please check your reset link or request a new password reset.',
+                        confirmButtonColor: '#98AAE7'
+                    });
+                    return false;
+                }
+            });
             
             // Password visibility toggle
             $('#togglePassword').click(function() {

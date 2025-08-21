@@ -22,6 +22,15 @@ class NewPasswordController extends Controller
     public function store(Request $request)
     {
         try {
+            // Log the incoming request data
+            \Log::info('Password reset request received', [
+                'email' => $request->email,
+                'token' => $request->token,
+                'has_password' => !empty($request->password),
+                'has_password_confirmation' => !empty($request->password_confirmation),
+                'all_request_data' => $request->only(['email', 'token', 'password', 'password_confirmation'])
+            ]);
+            
             $request->validate([
                 'token' => ['required'],
                 'email' => ['required', 'email'],

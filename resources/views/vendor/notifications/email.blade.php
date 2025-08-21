@@ -175,8 +175,6 @@
 <body>
     <div class="email-container">
         <div class="email-header">
-            <img src="{{ config('app.url') }}/images/logo.png" alt="PRMSU CCIT" class="logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="logo-fallback" style="display: none;">PRMSU</div>
             <h1>PRMSU CCIT</h1>
             <p>Student Feedback System</p>
         </div>
