@@ -318,6 +318,47 @@
             scroll-behavior: smooth;
         }
         
+        /* Mobile scrolling improvements */
+        @media (max-width: 768px) {
+            html, body {
+                overflow-x: hidden;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .survey-container {
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* Ensure proper scrolling on mobile */
+            .form-section, .part-section {
+                scroll-margin-top: 20px;
+            }
+            
+            /* Touch feedback for mobile interactions */
+            .form-section.touching, .part-section.touching {
+                transform: scale(0.98);
+                transition: transform 0.1s ease;
+            }
+            
+            .btn-group .btn.btn-touching {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+            
+            /* Improve touch targets */
+            .btn-group .btn {
+                min-height: 50px;
+                min-width: 50px;
+                touch-action: manipulation;
+            }
+            
+            /* Better scrolling for mobile */
+            .survey-container {
+                position: relative;
+                z-index: 1;
+            }
+        }
+        
         /* Better focus indicators for accessibility */
         .form-control:focus,
         .btn:focus,
@@ -933,17 +974,12 @@
                                 
                                 @php
                                     $part1Questions = $questionsByPart['part1'];
-                                    $sections = [
-                                        'A. Commitment' => $part1Questions->where('order_number', '<=', 5),
-                                        'B. Knowledge of Subject' => $part1Questions->where('order_number', '>', 5)->where('order_number', '<=', 10),
-                                        'C. Teaching for Independent Learning' => $part1Questions->where('order_number', '>', 10)->where('order_number', '<=', 15),
-                                        'D. Management of Learning' => $part1Questions->where('order_number', '>', 15)->where('order_number', '<=', 20)
-                                    ];
+                                    $sections = $part1Questions->groupBy('section');
                                 @endphp
                                 
                                 @foreach($sections as $sectionName => $sectionQuestions)
                                 <div class="mb-4">
-                                    <div class="section-subtitle">{{ $sectionName }}</div>
+                                    <div class="section-subtitle">{{ $sectionQuestions->first()->section_label ?? $sectionName }}</div>
                                     @foreach($sectionQuestions as $question)
                                     <div class="form-group mb-3">
                                         <label class="question-label">
@@ -1009,7 +1045,17 @@
                                     <strong>Rating Scale:</strong> 5 (Very Difficult) | 4 (Difficult) | 3 (Slightly Difficult) | 2 (Not Difficult) | 1 (Very Not Difficult)
                                 </div>
                                 
-                                @foreach($questionsByPart['part2'] as $question)
+                                @php
+                                    $part2Questions = $questionsByPart['part2'];
+                                    $part2Sections = $part2Questions->groupBy('section');
+                                @endphp
+                                
+                                @foreach($part2Sections as $sectionName => $sectionQuestions)
+                                <div class="mb-4">
+                                    @if($sectionName)
+                                        <div class="section-subtitle">{{ $sectionQuestions->first()->section_label ?? $sectionName }}</div>
+                                    @endif
+                                    @foreach($sectionQuestions as $question)
                                 <div class="form-group mb-3">
                                     <label class="question-label">
                                         <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
@@ -1046,6 +1092,8 @@
                                         </label>
                                     </div>
                                 </div>
+                                    @endforeach
+                                </div>
                                 @endforeach
                             </div>
                             
@@ -1072,7 +1120,17 @@
                                     <strong>Instructions:</strong> Please provide detailed responses to the following questions.
                                 </div>
                                 
-                                @foreach($questionsByPart['part3'] as $question)
+                                @php
+                                    $part3Questions = $questionsByPart['part3'];
+                                    $part3Sections = $part3Questions->groupBy('section');
+                                @endphp
+                                
+                                @foreach($part3Sections as $sectionName => $sectionQuestions)
+                                <div class="mb-4">
+                                    @if($sectionName)
+                                        <div class="section-subtitle">{{ $sectionQuestions->first()->section_label ?? $sectionName }}</div>
+                                    @endif
+                                    @foreach($sectionQuestions as $question)
                                 <div class="form-group mb-3">
                                     <label for="comment_{{ $question->id }}" class="question-label">
                                         <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
@@ -1082,6 +1140,8 @@
                                               name="question_responses[{{ $question->id }}]" 
                                               rows="3" 
                                               placeholder="Please provide your response..."></textarea>
+                                </div>
+                                    @endforeach
                                 </div>
                                 @endforeach
                             </div>
@@ -1136,6 +1196,27 @@
         $(document).ready(function() {
             let currentTab = 1;
             const totalTabs = 3;
+            
+            // Mobile-friendly scroll function
+            function scrollToElement(element, offset = 100) {
+                if (element && element.length) {
+                    const elementTop = element.offset().top - offset;
+                    
+                    // Use different scrolling methods for mobile vs desktop
+                    if (window.innerWidth <= 768) {
+                        // Mobile: Use window.scrollTo for better compatibility
+                        window.scrollTo({
+                            top: elementTop,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        // Desktop: Use jQuery animate
+                        $('html, body').animate({
+                            scrollTop: elementTop
+                        }, 500);
+                    }
+                }
+            }
             
             // Tab Navigation Functions
             function showTab(tabNumber) {
@@ -1198,9 +1279,7 @@
                     showTab(currentTab);
                     
                     // Scroll to top of new tab
-                    $('html, body').animate({
-                        scrollTop: $('.survey-tab.active').offset().top - 100
-                    }, 500);
+                    scrollToElement($('.survey-tab.active'), 100);
                 } else {
                     Swal.fire({
                         icon: 'warning',
@@ -1216,9 +1295,7 @@
                 showTab(currentTab);
                 
                 // Scroll to top of new tab
-                $('html, body').animate({
-                    scrollTop: $('.survey-tab.active').offset().top - 100
-                }, 500);
+                scrollToElement($('.survey-tab.active'), 100);
             });
             
             // Tab dot click handlers
@@ -1229,9 +1306,7 @@
                     showTab(currentTab);
                     
                     // Scroll to top of new tab
-                    $('html, body').animate({
-                        scrollTop: $('.survey-tab.active').offset().top - 100
-                    }, 500);
+                    scrollToElement($('.survey-tab.active'), 100);
                 } else {
                     Swal.fire({
                         icon: 'warning',
@@ -1354,6 +1429,44 @@
                 }
                 lastTouchEnd = now;
             }, false);
+            
+            // Mobile-specific touch handlers for better scrolling
+            if (window.innerWidth <= 768) {
+                // Add touch event listeners for form sections
+                $('.form-section, .part-section').on('touchstart', function() {
+                    $(this).addClass('touching');
+                }).on('touchend', function() {
+                    $(this).removeClass('touching');
+                });
+                
+                // Improve button group interactions on mobile
+                $('.btn-group .btn').on('touchstart', function() {
+                    $(this).addClass('btn-touching');
+                }).on('touchend', function() {
+                    $(this).removeClass('btn-touching');
+                });
+                
+                // Add smooth scrolling for form controls
+                $('.form-control, .form-select').on('focus', function() {
+                    setTimeout(() => {
+                        scrollToElement($(this), 150);
+                    }, 300);
+                });
+            }
+            
+            // Handle window resize to update mobile functionality
+            $(window).on('resize', function() {
+                // Re-initialize mobile touch handlers if needed
+                if (window.innerWidth <= 768) {
+                    // Ensure mobile touch handlers are active
+                    $('.form-section, .part-section').off('touchstart touchend');
+                    $('.form-section, .part-section').on('touchstart', function() {
+                        $(this).addClass('touching');
+                    }).on('touchend', function() {
+                        $(this).removeClass('touching');
+                    });
+                }
+            });
         });
     </script>
 </body>

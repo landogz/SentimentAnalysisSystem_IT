@@ -751,6 +751,46 @@
             }
         }
         
+        /* Mobile Scrolling Improvements */
+        @media (max-width: 768px) {
+            html, body {
+                overflow-x: hidden !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+            
+            .content-wrapper {
+                -webkit-overflow-scrolling: touch !important;
+            }
+            
+            /* Ensure proper scrolling on mobile */
+            .card, .table-responsive, .form-section {
+                scroll-margin-top: 20px !important;
+            }
+            
+            /* Touch feedback for mobile interactions */
+            .card.touching, .table-responsive.touching, .form-section.touching {
+                transform: scale(0.98) !important;
+                transition: transform 0.1s ease !important;
+            }
+            
+            .btn.touching {
+                transform: scale(0.95) !important;
+                transition: transform 0.1s ease !important;
+            }
+            
+            /* Improve touch targets */
+            .btn, .nav-link, .form-control, .form-select {
+                min-height: 44px !important;
+                touch-action: manipulation !important;
+            }
+            
+            /* Better scrolling for mobile */
+            .content-wrapper {
+                position: relative !important;
+                z-index: 1 !important;
+            }
+        }
+
         /* Mobile Table Scrolling Fixes */
         @media (max-width: 768px) {
             .table-responsive {
@@ -822,7 +862,7 @@
             .table-responsive,
             .dataTables_wrapper,
             .card-body {
-                touch-action: pan-x !important;
+                /* touch-action: pan-x !important; */
                 -webkit-overflow-scrolling: touch !important;
             }
         }
@@ -1049,6 +1089,27 @@
             }
         });
 
+        // Mobile-friendly scroll function
+        function scrollToElement(element, offset = 100) {
+            if (element && element.length) {
+                const elementTop = element.offset().top - offset;
+                
+                // Use different scrolling methods for mobile vs desktop
+                if (window.innerWidth <= 768) {
+                    // Mobile: Use window.scrollTo for better compatibility
+                    window.scrollTo({
+                        top: elementTop,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    // Desktop: Use jQuery animate
+                    $('html, body').animate({
+                        scrollTop: elementTop
+                    }, 500);
+                }
+            }
+        }
+
         // Global success/error message handlers
         function showSuccess(message) {
             Swal.fire({
@@ -1172,6 +1233,51 @@
             $(document).ajaxError(function(event, xhr, settings) {
                 if (xhr.status === 419) { // CSRF token mismatch (session expired)
                     showSessionExpiredAlert();
+                }
+            });
+
+            // Mobile-specific touch handlers for better scrolling
+            if (window.innerWidth <= 768) {
+                // Add touch event listeners for cards and tables
+                $('.card, .table-responsive, .form-section').on('touchstart', function() {
+                    $(this).addClass('touching');
+                }).on('touchend', function() {
+                    $(this).removeClass('touching');
+                });
+                
+                // Improve button interactions on mobile
+                $('.btn, .nav-link').on('touchstart', function() {
+                    $(this).addClass('touching');
+                }).on('touchend', function() {
+                    $(this).removeClass('touching');
+                });
+                
+                // Add smooth scrolling for form controls
+                $('.form-control, .form-select').on('focus', function() {
+                    setTimeout(() => {
+                        scrollToElement($(this), 150);
+                    }, 300);
+                });
+            }
+            
+            // Handle window resize to update mobile functionality
+            $(window).on('resize', function() {
+                // Re-initialize mobile touch handlers if needed
+                if (window.innerWidth <= 768) {
+                    // Ensure mobile touch handlers are active
+                    $('.card, .table-responsive, .form-section').off('touchstart touchend');
+                    $('.card, .table-responsive, .form-section').on('touchstart', function() {
+                        $(this).addClass('touching');
+                    }).on('touchend', function() {
+                        $(this).removeClass('touching');
+                    });
+                    
+                    $('.btn, .nav-link').off('touchstart touchend');
+                    $('.btn, .nav-link').on('touchstart', function() {
+                        $(this).addClass('touching');
+                    }).on('touchend', function() {
+                        $(this).removeClass('touching');
+                    });
                 }
             });
         });

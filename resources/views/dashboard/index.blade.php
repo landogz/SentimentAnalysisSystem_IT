@@ -35,6 +35,60 @@
     .equal-height-cards .card-body .row:last-child {
         margin-top: auto;
     }
+    
+    /* Mobile scrolling fixes for equal-height-cards */
+    @media (max-width: 768px) {
+        .equal-height-cards {
+            -webkit-overflow-scrolling: touch !important;
+            overflow-x: auto !important;
+            overflow-y: visible !important;
+        }
+        
+        .equal-height-cards .card {
+            min-width: 300px !important;
+            margin-bottom: 1rem !important;
+            touch-action: manipulation !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+        
+        .equal-height-cards .card.touching {
+            transform: scale(0.98) !important;
+            transition: transform 0.1s ease !important;
+        }
+        
+        .equal-height-cards .card-body {
+            -webkit-overflow-scrolling: touch !important;
+            overflow-x: auto !important;
+        }
+        
+        .equal-height-cards .card-body canvas {
+            touch-action: manipulation !important;
+        }
+        
+        /* Touch feedback for individual items in card body */
+        .equal-height-cards .card-body .d-flex.touching {
+            transform: scale(0.98) !important;
+            transition: transform 0.1s ease !important;
+            background-color: rgba(152, 170, 231, 0.1) !important;
+            border-radius: 8px !important;
+            padding: 0.5rem !important;
+            margin: -0.5rem !important;
+        }
+        
+        /* Ensure proper touch targets for individual items */
+        .equal-height-cards .card-body .d-flex {
+            min-height: 60px !important;
+            padding: 0.75rem 0 !important;
+            touch-action: manipulation !important;
+            cursor: pointer !important;
+        }
+        
+        /* Touch feedback for rating stars */
+        .equal-height-cards .rating-stars {
+            touch-action: manipulation !important;
+            cursor: pointer !important;
+        }
+    }
 </style>
 
 <div class="row">
@@ -312,6 +366,138 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    // Mobile scrolling improvements for dashboard
+    if (window.innerWidth <= 768) {
+        // Add touch event listeners for dashboard cards
+        $('.small-box, .card').on('touchstart', function() {
+            $(this).addClass('touching');
+        }).on('touchend', function() {
+            $(this).removeClass('touching');
+        });
+        
+        // Smooth scrolling for chart interactions
+        $('.card-body canvas').on('touchstart', function() {
+            $(this).closest('.card').addClass('touching');
+        }).on('touchend', function() {
+            $(this).closest('.card').removeClass('touching');
+        });
+        
+        // Specific handling for equal-height-cards
+        $('.equal-height-cards .card').on('touchstart', function(e) {
+            e.preventDefault();
+            $(this).addClass('touching');
+            
+            // Scroll to the card when touched
+            setTimeout(() => {
+                scrollToElement($(this), 100);
+            }, 100);
+        }).on('touchend', function() {
+            $(this).removeClass('touching');
+        });
+        
+        // Handle clicks on equal-height-cards
+        $('.equal-height-cards .card').on('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                scrollToElement($(this), 100);
+            }
+        });
+        
+        // Handle touch events on card content
+        $('.equal-height-cards .card-body, .equal-height-cards .card-header').on('touchstart', function(e) {
+            e.stopPropagation();
+            $(this).closest('.card').addClass('touching');
+        }).on('touchend', function() {
+            $(this).closest('.card').removeClass('touching');
+        });
+        
+        // Handle touch events on individual items within card body
+        $('.equal-height-cards .card-body .d-flex').on('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).addClass('touching');
+            
+            // Scroll to the item when touched
+            setTimeout(() => {
+                scrollToElement($(this), 150);
+            }, 100);
+        }).on('touchend', function() {
+            $(this).removeClass('touching');
+        });
+        
+        // Handle clicks on individual items within card body
+        $('.equal-height-cards .card-body .d-flex').on('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                scrollToElement($(this), 150);
+            }
+        });
+        
+        // Handle touch events on rating stars
+        $('.equal-height-cards .rating-stars').on('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).closest('.d-flex').addClass('touching');
+            
+            // Scroll to the parent item when touched
+            setTimeout(() => {
+                scrollToElement($(this).closest('.d-flex'), 150);
+            }, 100);
+        }).on('touchend', function() {
+            $(this).closest('.d-flex').removeClass('touching');
+        });
+        
+        // Handle window resize for equal-height-cards
+        $(window).on('resize', function() {
+            if (window.innerWidth <= 768) {
+                // Re-initialize equal-height-cards touch handlers
+                $('.equal-height-cards .card').off('touchstart touchend click');
+                $('.equal-height-cards .card').on('touchstart', function(e) {
+                    e.preventDefault();
+                    $(this).addClass('touching');
+                    setTimeout(() => {
+                        scrollToElement($(this), 100);
+                    }, 100);
+                }).on('touchend', function() {
+                    $(this).removeClass('touching');
+                }).on('click', function(e) {
+                    e.preventDefault();
+                    scrollToElement($(this), 100);
+                });
+                
+                // Re-initialize individual item touch handlers
+                $('.equal-height-cards .card-body .d-flex').off('touchstart touchend click');
+                $('.equal-height-cards .card-body .d-flex').on('touchstart', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).addClass('touching');
+                    setTimeout(() => {
+                        scrollToElement($(this), 150);
+                    }, 100);
+                }).on('touchend', function() {
+                    $(this).removeClass('touching');
+                }).on('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    scrollToElement($(this), 150);
+                });
+                
+                // Re-initialize rating stars touch handlers
+                $('.equal-height-cards .rating-stars').off('touchstart touchend');
+                $('.equal-height-cards .rating-stars').on('touchstart', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).closest('.d-flex').addClass('touching');
+                    setTimeout(() => {
+                        scrollToElement($(this).closest('.d-flex'), 150);
+                    }, 100);
+                }).on('touchend', function() {
+                    $(this).closest('.d-flex').removeClass('touching');
+                });
+            }
+        });
+    }
     // Monthly Trends Chart
     const ctx = document.getElementById('monthlyTrendsChart').getContext('2d');
     new Chart(ctx, {

@@ -38,6 +38,7 @@ class SurveyQuestionController extends Controller
             'question_text' => 'required|string|max:1000',
             'question_type' => 'required|in:option,comment',
             'part' => 'required|in:part1,part2,part3',
+            'section' => 'nullable|string|max:10',
             'order_number' => 'required|integer|min:1',
             'is_active' => 'boolean'
         ]);
@@ -54,6 +55,7 @@ class SurveyQuestionController extends Controller
                 'question_text' => $request->question_text,
                 'question_type' => $request->question_type,
                 'part' => $request->part,
+                'section' => $request->section,
                 'order_number' => $request->order_number,
                 'is_active' => $request->boolean('is_active')
             ]);
@@ -118,6 +120,7 @@ class SurveyQuestionController extends Controller
             'question_text' => 'required|string|max:1000',
             'question_type' => 'required|in:option,comment',
             'part' => 'required|in:part1,part2,part3',
+            'section' => 'nullable|string|max:10',
             'order_number' => 'required|integer|min:1',
             'is_active' => 'boolean'
         ]);
@@ -139,6 +142,7 @@ class SurveyQuestionController extends Controller
                 'question_text' => $request->question_text,
                 'question_type' => $request->question_type,
                 'part' => $request->part,
+                'section' => $request->section,
                 'order_number' => $request->order_number,
                 'is_active' => $request->boolean('is_active')
             ]);

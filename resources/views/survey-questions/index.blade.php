@@ -53,21 +53,13 @@
                                 @if(isset($questionsByPart['part1']))
                                     @foreach($questionsByPart['part1'] as $question)
                                     @php
-                                        $section = '';
-                                        if ($question->order_number <= 5) {
-                                            $section = 'A. Commitment';
-                                        } elseif ($question->order_number <= 10) {
-                                            $section = 'B. Knowledge of Subject';
-                                        } elseif ($question->order_number <= 15) {
-                                            $section = 'C. Teaching for Independent Learning';
-                                        } else {
-                                            $section = 'D. Management of Learning';
-                                        }
+                                        $section = $question->section_label;
                                     @endphp
                                     <tr data-question-id="{{ $question->id }}" 
                                         data-question-text="{{ $question->question_text }}"
                                         data-question-type="{{ $question->question_type }}"
                                         data-part="{{ $question->part }}"
+                                        data-section="{{ $question->section }}"
                                         data-order="{{ $question->order_number }}"
                                         data-active="{{ $question->is_active ? '1' : '0' }}">
                                         <td>{{ $question->order_number }}</td>
@@ -125,6 +117,7 @@
                             <thead class="table-warning">
                                 <tr>
                                     <th width="80">Order</th>
+                                    <th width="100">Section</th>
                                     <th>Question</th>
                                     <th width="120">Type</th>
                                     <th width="100">Status</th>
@@ -138,9 +131,11 @@
                                         data-question-text="{{ $question->question_text }}"
                                         data-question-type="{{ $question->question_type }}"
                                         data-part="{{ $question->part }}"
+                                        data-section="{{ $question->section }}"
                                         data-order="{{ $question->order_number }}"
                                         data-active="{{ $question->is_active ? '1' : '0' }}">
                                         <td>{{ $question->order_number }}</td>
+                                        <td><span class="badge badge-secondary">{{ $question->section_label }}</span></td>
                                         <td>{{ $question->question_text }}</td>
                                         <td>
                                             <span class="badge {{ $question->question_type === 'option' ? 'badge-primary' : 'badge-info' }}">
@@ -174,7 +169,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted">No questions in Part 2</td>
+                                        <td colspan="6" class="text-center text-muted">No questions in Part 2</td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -194,6 +189,7 @@
                             <thead class="table-info">
                                 <tr>
                                     <th width="80">Order</th>
+                                    <th width="100">Section</th>
                                     <th>Question</th>
                                     <th width="120">Type</th>
                                     <th width="100">Status</th>
@@ -207,9 +203,11 @@
                                         data-question-text="{{ $question->question_text }}"
                                         data-question-type="{{ $question->question_type }}"
                                         data-part="{{ $question->part }}"
+                                        data-section="{{ $question->section }}"
                                         data-order="{{ $question->order_number }}"
                                         data-active="{{ $question->is_active ? '1' : '0' }}">
                                         <td>{{ $question->order_number }}</td>
+                                        <td><span class="badge badge-secondary">{{ $question->section_label }}</span></td>
                                         <td>{{ $question->question_text }}</td>
                                         <td>
                                             <span class="badge {{ $question->question_type === 'option' ? 'badge-primary' : 'badge-info' }}">
@@ -243,7 +241,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted">No questions in Part 3</td>
+                                        <td colspan="6" class="text-center text-muted">No questions in Part 3</td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -295,6 +293,18 @@
                                     <option value="part1">Part 1 - Instructor Evaluation</option>
                                     <option value="part2">Part 2 - Difficulty Level</option>
                                     <option value="part3">Part 3 - Open Comments</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="create_section" class="form-label">Section</label>
+                                <select class="form-select" id="create_section" name="section">
+                                    <option value="">Select Section</option>
+                                    <option value="A">A. Commitment</option>
+                                    <option value="B">B. Knowledge of Subject</option>
+                                    <option value="C">C. Teaching for Independent Learning</option>
+                                    <option value="D">D. Management of Learning</option>
                                 </select>
                             </div>
                         </div>
@@ -368,6 +378,18 @@
                                     <option value="part1">Part 1 - Instructor Evaluation</option>
                                     <option value="part2">Part 2 - Difficulty Level</option>
                                     <option value="part3">Part 3 - Open Comments</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="edit_section" class="form-label">Section</label>
+                                <select class="form-select" id="edit_section" name="section">
+                                    <option value="">Select Section</option>
+                                    <option value="A">A. Commitment</option>
+                                    <option value="B">B. Knowledge of Subject</option>
+                                    <option value="C">C. Teaching for Independent Learning</option>
+                                    <option value="D">D. Management of Learning</option>
                                 </select>
                             </div>
                         </div>
@@ -468,6 +490,7 @@ $(document).ready(function() {
         const questionText = row.data('question-text');
         const questionType = row.data('question-type');
         const part = row.data('part');
+        const section = row.data('section');
         const orderNumber = row.data('order');
         const isActive = row.data('active');
         
@@ -476,6 +499,7 @@ $(document).ready(function() {
         $('#edit_question_text').val(questionText);
         $('#edit_question_type').val(questionType);
         $('#edit_part').val(part);
+        $('#edit_section').val(section);
         $('#edit_order_number').val(orderNumber);
         $('#edit_is_active').val(isActive);
         
@@ -505,6 +529,7 @@ $(document).ready(function() {
         const questionText = $('#edit_question_text').val().trim();
         const questionType = $('#edit_question_type').val();
         const part = $('#edit_part').val();
+        const section = $('#edit_section').val();
         const orderNumber = $('#edit_order_number').val();
         const isActive = $('#edit_is_active').val();
         
@@ -576,6 +601,7 @@ $(document).ready(function() {
             question_text: questionText,
             question_type: questionType,
             part: part,
+            section: section,
             order_number: orderNumber,
             is_active: isActive,
             _method: 'PUT',

@@ -29,7 +29,7 @@ class SurveyController extends Controller
         $subjects = Subject::active()->with('teachers')->get();
         
         // Load questions organized by parts
-        $questions = SurveyQuestion::active()->orderBy('part')->orderBy('order_number')->get();
+        $questions = SurveyQuestion::active()->orderBy('part')->orderBy('section')->orderBy('order_number')->get();
         $questionsByPart = $questions->groupBy('part');
         
         // For backward compatibility, also provide the old format

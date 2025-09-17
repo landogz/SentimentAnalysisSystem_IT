@@ -14,6 +14,7 @@ class SurveyQuestion extends Model
         'question_text',
         'question_type',
         'part',
+        'section',
         'order_number',
         'is_active'
     ];
@@ -63,6 +64,14 @@ class SurveyQuestion extends Model
     }
 
     /**
+     * Scope for specific section
+     */
+    public function scopeSection($query, $section)
+    {
+        return $query->where('section', $section);
+    }
+
+    /**
      * Get the question type label
      */
     public function getQuestionTypeLabelAttribute(): string
@@ -80,6 +89,24 @@ class SurveyQuestion extends Model
             'part2' => 'Part 2 - Difficulty Level',
             'part3' => 'Part 3 - Open Comments',
             default => 'Unknown Part'
+        };
+    }
+
+    /**
+     * Get the section label
+     */
+    public function getSectionLabelAttribute(): string
+    {
+        if (!$this->section) {
+            return 'No Section';
+        }
+        
+        return match($this->section) {
+            'A' => 'A. Commitment',
+            'B' => 'B. Knowledge of Subject',
+            'C' => 'C. Teaching for Independent Learning',
+            'D' => 'D. Management of Learning',
+            default => $this->section
         };
     }
 
