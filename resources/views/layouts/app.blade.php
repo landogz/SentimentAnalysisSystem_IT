@@ -1239,25 +1239,25 @@
             // Mobile-specific touch handlers for better scrolling
             if (window.innerWidth <= 768) {
                 // Add touch event listeners for cards and tables
-                $('.card, .table-responsive, .form-section').on('touchstart', function() {
-                    $(this).addClass('touching');
-                }).on('touchend', function() {
-                    $(this).removeClass('touching');
-                });
+                // $('.card, .table-responsive, .form-section').on('touchstart', function() {
+                //     $(this).addClass('touching');
+                // }).on('touchend', function() {
+                //     $(this).removeClass('touching');
+                // });
                 
-                // Improve button interactions on mobile
-                $('.btn, .nav-link').on('touchstart', function() {
-                    $(this).addClass('touching');
-                }).on('touchend', function() {
-                    $(this).removeClass('touching');
-                });
+                // // Improve button interactions on mobile
+                // $('.btn, .nav-link').on('touchstart', function() {
+                //     $(this).addClass('touching');
+                // }).on('touchend', function() {
+                //     $(this).removeClass('touching');
+                // });
                 
-                // Add smooth scrolling for form controls
-                $('.form-control, .form-select').on('focus', function() {
-                    setTimeout(() => {
-                        scrollToElement($(this), 150);
-                    }, 300);
-                });
+                // // Add smooth scrolling for form controls
+                // $('.form-control, .form-select').on('focus', function() {
+                //     setTimeout(() => {
+                //         scrollToElement($(this), 150);
+                //     }, 300);
+                // });
             }
             
             // Handle window resize to update mobile functionality
