@@ -217,7 +217,7 @@
                     </div>
                     <div class="form-group">
                         <label for="edit_email">Email</label>
-                        <input type="email" class="form-control" id="edit_email" name="email" required>
+                        <input type="email" class="form-control" id="edit_email" name="email" >
                     </div>
                     <div class="form-group">
                         <label for="edit_department">Department</label>

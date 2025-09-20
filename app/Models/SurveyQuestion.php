@@ -102,10 +102,15 @@ class SurveyQuestion extends Model
         }
         
         return match($this->section) {
+            // Part 1 sections
             'A' => 'A. Commitment',
             'B' => 'B. Knowledge of Subject',
             'C' => 'C. Teaching for Independent Learning',
             'D' => 'D. Management of Learning',
+            // Part 2 sections
+            'A2' => 'A. Perception and Dependence on Instructors',
+            'B2' => 'B. Home and School Environment Support',
+            'C2' => 'C. Exposure, Resources, and Motivation',
             default => $this->section
         };
     }

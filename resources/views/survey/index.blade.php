@@ -974,7 +974,12 @@
                                 
                                 @php
                                     $part1Questions = $questionsByPart['part1'];
-                                    $sections = $part1Questions->groupBy('section');
+                                    $sections = $part1Questions->groupBy('section')->sortKeys();
+                                    // Move "No Section" to the end
+                                    if ($sections->has('')) {
+                                        $noSection = $sections->pull('');
+                                        $sections->put('', $noSection);
+                                    }
                                 @endphp
                                 
                                 @foreach($sections as $sectionName => $sectionQuestions)
@@ -1047,7 +1052,12 @@
                                 
                                 @php
                                     $part2Questions = $questionsByPart['part2'];
-                                    $part2Sections = $part2Questions->groupBy('section');
+                                    $part2Sections = $part2Questions->groupBy('section')->sortKeys();
+                                    // Move "No Section" to the end
+                                    if ($part2Sections->has('')) {
+                                        $noSection = $part2Sections->pull('');
+                                        $part2Sections->put('', $noSection);
+                                    }
                                 @endphp
                                 
                                 @foreach($part2Sections as $sectionName => $sectionQuestions)
@@ -1122,7 +1132,12 @@
                                 
                                 @php
                                     $part3Questions = $questionsByPart['part3'];
-                                    $part3Sections = $part3Questions->groupBy('section');
+                                    $part3Sections = $part3Questions->groupBy('section')->sortKeys();
+                                    // Move "No Section" to the end
+                                    if ($part3Sections->has('')) {
+                                        $noSection = $part3Sections->pull('');
+                                        $part3Sections->put('', $noSection);
+                                    }
                                 @endphp
                                 
                                 @foreach($part3Sections as $sectionName => $sectionQuestions)

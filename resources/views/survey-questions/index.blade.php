@@ -301,10 +301,17 @@
                                 <label for="create_section" class="form-label">Section</label>
                                 <select class="form-select" id="create_section" name="section">
                                     <option value="">Select Section</option>
-                                    <option value="A">A. Commitment</option>
-                                    <option value="B">B. Knowledge of Subject</option>
-                                    <option value="C">C. Teaching for Independent Learning</option>
-                                    <option value="D">D. Management of Learning</option>
+                                    <optgroup label="Part 1">
+                                        <option value="A">A. Commitment</option>
+                                        <option value="B">B. Knowledge of Subject</option>
+                                        <option value="C">C. Teaching for Independent Learning</option>
+                                        <option value="D">D. Management of Learning</option>
+                                    </optgroup>
+                                    <optgroup label="Part 2">
+                                        <option value="A2">A. Perception and Dependence on Instructors</option>
+                                        <option value="B2">B. Home and School Environment Support</option>
+                                        <option value="C2">C. Exposure, Resources, and Motivation</option>
+                                    </optgroup>
                                 </select>
                             </div>
                         </div>
@@ -386,10 +393,17 @@
                                 <label for="edit_section" class="form-label">Section</label>
                                 <select class="form-select" id="edit_section" name="section">
                                     <option value="">Select Section</option>
-                                    <option value="A">A. Commitment</option>
-                                    <option value="B">B. Knowledge of Subject</option>
-                                    <option value="C">C. Teaching for Independent Learning</option>
-                                    <option value="D">D. Management of Learning</option>
+                                    <optgroup label="Part 1">
+                                        <option value="A">A. Commitment</option>
+                                        <option value="B">B. Knowledge of Subject</option>
+                                        <option value="C">C. Teaching for Independent Learning</option>
+                                        <option value="D">D. Management of Learning</option>
+                                    </optgroup>
+                                    <optgroup label="Part 2">
+                                        <option value="A2">A. Perception and Dependence on Instructors</option>
+                                        <option value="B2">B. Home and School Environment Support</option>
+                                        <option value="C2">C. Exposure, Resources, and Motivation</option>
+                                    </optgroup>
                                 </select>
                             </div>
                         </div>

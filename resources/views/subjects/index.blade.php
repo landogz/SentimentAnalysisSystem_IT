@@ -330,7 +330,12 @@ $(document).ready(function() {
 
     // Handle teacher checkbox changes for primary teacher selection
     $('.teacher-checkbox').on('change', function() {
-        updatePrimaryTeacherOptions();
+        updatePrimaryTeacherOptions.call(this);
+    });
+
+    // Update primary teacher options when modal is shown
+    $('#addSubjectModal').on('shown.bs.modal', function() {
+        updatePrimaryTeacherOptions.call($(this).find('.teacher-checkbox:checked').first());
     });
 
     // Add subject form
@@ -446,6 +451,9 @@ function updatePrimaryTeacherOptions() {
     // If only one teacher is selected, auto-select as primary
     if (selectedTeachers.length === 1) {
         primarySelect.val(selectedTeachers.val());
+    } else if (selectedTeachers.length === 0) {
+        // If no teachers selected, clear the primary teacher selection
+        primarySelect.val('');
     }
 }
 
