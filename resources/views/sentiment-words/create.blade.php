@@ -77,7 +77,7 @@
                                 <label for="score" class="form-label">Score <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('score') is-invalid @enderror" 
                                        id="score" name="score" value="{{ old('score', 1.0) }}" 
-                                       min="-5" max="5" step="0.1" required>
+                                       min="-5" max="5" step="1" required>
                                 <small class="form-text text-muted">Score range: -5.0 to 5.0</small>
                                 @error('score')
                                     <div class="invalid-feedback">{{ $message }}</div>

@@ -1174,7 +1174,7 @@
                         @endif
                     </div>
 
-                    <div class="form-section">
+                    <div class="form-section" style="display: none;">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
                             <i class="fas fa-comments me-2" style="color: var(--light-blue);"></i>
                             Additional Comments
