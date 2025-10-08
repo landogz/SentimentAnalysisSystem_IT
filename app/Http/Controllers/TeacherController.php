@@ -60,12 +60,17 @@ class TeacherController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:teachers,email',
+            'email' => 'nullable|email|unique:teachers,email',
             'department' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:1000',
             'is_active' => 'nullable|boolean'
         ]);
+
+        // If email is empty, remove it from validation to avoid unique constraint issues
+        if (empty($request->email)) {
+            $request->merge(['email' => null]);
+        }
 
         if ($validator->fails()) {
             return response()->json([
@@ -83,9 +88,17 @@ class TeacherController extends Controller
                 'teacher' => $teacher
             ]);
         } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Teacher creation error: ' . $e->getMessage(), [
+                'request_data' => $request->all(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred while creating the teacher.'
+                'message' => 'An error occurred while creating the teacher: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -143,12 +156,17 @@ class TeacherController extends Controller
         
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:teachers,email,' . $id,
+            'email' => 'nullable|email|unique:teachers,email,' . $id,
             'department' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:1000',
             'is_active' => 'nullable|boolean'
         ]);
+
+        // If email is empty, remove it from validation to avoid unique constraint issues
+        if (empty($request->email)) {
+            $request->merge(['email' => null]);
+        }
 
         if ($validator->fails()) {
             return response()->json([
@@ -166,9 +184,18 @@ class TeacherController extends Controller
                 'teacher' => $teacher
             ]);
         } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Teacher update error: ' . $e->getMessage(), [
+                'teacher_id' => $id,
+                'request_data' => $request->all(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred while updating the teacher.'
+                'message' => 'An error occurred while updating the teacher: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -217,5 +244,106 @@ class TeacherController extends Controller
         $teachers = $query->get(['id', 'name', 'department']);
         
         return response()->json($teachers);
+    }
+
+    /**
+     * Get teacher surveys for DataTable AJAX requests
+     */
+    public function getTeacherSurveys(Request $request, string $id)
+    {
+        $teacher = Teacher::findOrFail($id);
+        
+        $query = $teacher->surveys()->with('subject');
+        
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->whereHas('subject', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('subject_code', 'like', "%{$search}%");
+            })->orWhere('feedback_text', 'like', "%{$search}%");
+        }
+        
+        // Apply sentiment filter
+        if ($request->filled('sentiment')) {
+            $query->where('sentiment', $request->get('sentiment'));
+        }
+        
+        // Apply rating filter
+        if ($request->filled('rating_min')) {
+            $query->where('rating', '>=', $request->get('rating_min'));
+        }
+        if ($request->filled('rating_max')) {
+            $query->where('rating', '<=', $request->get('rating_max'));
+        }
+        
+        // Apply date range filter
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->get('date_from'));
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->get('date_to'));
+        }
+        
+        // Get total count before pagination
+        $totalRecords = $query->count();
+        
+        // Apply pagination
+        $start = $request->get('start', 0);
+        $length = $request->get('length', 10);
+        
+        $surveys = $query->orderBy('created_at', 'desc')
+                       ->offset($start)
+                       ->limit($length)
+                       ->get();
+        
+        // Format data for DataTable
+        $data = $surveys->map(function($survey) {
+            $ratingStars = '';
+            for ($i = 1; $i <= 5; $i++) {
+                if ($i <= $survey->rating) {
+                    $ratingStars .= '<i class="fas fa-star"></i>';
+                } elseif ($i - 0.5 <= $survey->rating) {
+                    $ratingStars .= '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    $ratingStars .= '<i class="far fa-star"></i>';
+                }
+            }
+            
+            $sentimentBadge = '';
+            switch ($survey->sentiment) {
+                case 'positive':
+                    $sentimentBadge = '<span class="badge badge-success">Positive</span>';
+                    break;
+                case 'negative':
+                    $sentimentBadge = '<span class="badge badge-danger">Negative</span>';
+                    break;
+                case 'neutral':
+                    $sentimentBadge = '<span class="badge badge-warning">Neutral</span>';
+                    break;
+                default:
+                    $sentimentBadge = '<span class="badge badge-secondary">Unknown</span>';
+            }
+            
+            return [
+                'date' => $survey->created_at->format('M d, Y'),
+                'subject' => $survey->subject->name,
+                'rating' => $ratingStars . ' <span class="ml-1">' . $survey->rating . '</span>',
+                'sentiment' => $sentimentBadge,
+                'feedback' => $survey->feedback_text ? 
+                    '<span class="text-muted">' . \Str::limit($survey->feedback_text, 50) . '</span>' : 
+                    '<span class="text-muted">No feedback</span>',
+                'actions' => '<button class="btn btn-sm btn-info view-survey" data-survey-id="' . $survey->id . '">
+                    <i class="fas fa-eye"></i> View
+                </button>'
+            ];
+        });
+        
+        return response()->json([
+            'draw' => intval($request->get('draw')),
+            'recordsTotal' => $teacher->surveys()->count(),
+            'recordsFiltered' => $totalRecords,
+            'data' => $data
+        ]);
     }
 }

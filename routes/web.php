@@ -105,10 +105,12 @@ Route::middleware(['auth', 'license'])->group(function () {
     // Teacher management
     Route::resource('teachers', TeacherController::class);
     Route::get('/teachers-ajax', [TeacherController::class, 'getTeachers'])->name('teachers.ajax');
+    Route::get('/teachers/{id}/surveys-ajax', [TeacherController::class, 'getTeacherSurveys'])->name('teachers.surveys-ajax');
     
     // Subject management
     Route::resource('subjects', SubjectController::class);
     Route::get('/subjects-ajax', [SubjectController::class, 'getSubjects'])->name('subjects.ajax');
+    Route::get('/subjects/{id}/surveys-ajax', [SubjectController::class, 'getSubjectSurveys'])->name('subjects.surveys-ajax');
     
     // User management
     Route::resource('users', UserController::class);

@@ -247,58 +247,91 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-clock mr-1"></i>
-                    Recent Surveys
+                    All Surveys
                 </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body">
+                <!-- Filters -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="searchInput">Search:</label>
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search surveys...">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="sentimentFilter">Sentiment:</label>
+                            <select class="form-control" id="sentimentFilter">
+                                <option value="">All</option>
+                                <option value="positive">Positive</option>
+                                <option value="negative">Negative</option>
+                                <option value="neutral">Neutral</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="ratingMin">Min Rating:</label>
+                            <select class="form-control" id="ratingMin">
+                                <option value="">Any</option>
+                                <option value="1">1+</option>
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                                <option value="4">4+</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="ratingMax">Max Rating:</label>
+                            <select class="form-control" id="ratingMax">
+                                <option value="">Any</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <div>
+                                <button type="button" class="btn btn-primary" id="applyFilters">
+                                    <i class="fas fa-filter"></i> Apply Filters
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="clearFilters">
+                                    <i class="fas fa-times"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DataTable -->
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="surveysTable">
                         <thead>
                             <tr>
                                 <th>Date</th>
                                 <th>Student</th>
+                                <th>Teacher</th>
                                 <th>Rating</th>
                                 <th>Sentiment</th>
                                 <th>Feedback</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($subject->surveys->take(10) as $survey)
-                            <tr class="survey-row" data-survey-id="{{ $survey->id }}" style="cursor: pointer;">
-                                <td>{{ $survey->created_at->format('M d, Y') }}</td>
-                                <td>{{ $survey->student_name ?? 'Anonymous' }}</td>
-                                <td>
-                                    <span class="rating-stars">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            @if($i <= $survey->rating)
-                                                <i class="fas fa-star"></i>
-                                            @elseif($i - 0.5 <= $survey->rating)
-                                                <i class="fas fa-star-half-alt"></i>
-                                            @else
-                                                <i class="far fa-star"></i>
-                                            @endif
-                                        @endfor
-                                    </span>
-                                    <span class="ml-1">{{ $survey->rating }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge {{ $survey->sentiment_badge_class }}">
-                                        {{ $survey->sentiment_label }}
-                                    </span>
-                                </td>
-                                <td>
-                                    @if($survey->feedback_text)
-                                        <span class="text-muted">{{ Str::limit($survey->feedback_text, 50) }}</span>
-                                    @else
-                                        <span class="text-muted">No feedback</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="5" class="text-center">No surveys submitted yet.</td>
-                            </tr>
-                            @endforelse
+                            <!-- Data will be loaded via AJAX -->
                         </tbody>
                     </table>
                 </div>
@@ -365,8 +398,63 @@ $(document).ready(function() {
         }
     });
 
-    // Survey row click handler
-    $('.survey-row').click(function() {
+    // Initialize DataTable
+    var surveysTable = $('#surveysTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '{{ route("subjects.surveys-ajax", $subject->id) }}',
+            type: 'GET',
+            data: function(d) {
+                d.search = $('#searchInput').val();
+                d.sentiment = $('#sentimentFilter').val();
+                d.rating_min = $('#ratingMin').val();
+                d.rating_max = $('#ratingMax').val();
+            }
+        },
+        columns: [
+            { data: 'date', name: 'created_at' },
+            { data: 'student', name: 'student_name' },
+            { data: 'teacher', name: 'teacher.name' },
+            { data: 'rating', name: 'rating', orderable: false },
+            { data: 'sentiment', name: 'sentiment', orderable: false },
+            { data: 'feedback', name: 'feedback_text', orderable: false },
+            { data: 'actions', name: 'actions', orderable: false, searchable: false }
+        ],
+        order: [[0, 'desc']],
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+        language: {
+            processing: "Loading surveys...",
+            emptyTable: "No surveys found for this subject.",
+            zeroRecords: "No surveys match your search criteria."
+        },
+        dom: 'Bfrtip'
+    });
+
+    // Apply filters button
+    $('#applyFilters').click(function() {
+        surveysTable.ajax.reload();
+    });
+
+    // Clear filters button
+    $('#clearFilters').click(function() {
+        $('#searchInput').val('');
+        $('#sentimentFilter').val('');
+        $('#ratingMin').val('');
+        $('#ratingMax').val('');
+        surveysTable.ajax.reload();
+    });
+
+    // Search on Enter key
+    $('#searchInput').keypress(function(e) {
+        if (e.which === 13) {
+            surveysTable.ajax.reload();
+        }
+    });
+
+    // Survey view button click handler
+    $(document).on('click', '.view-survey', function() {
         const surveyId = $(this).data('survey-id');
         const modal = $('#surveyResponsesModal');
         
@@ -390,16 +478,6 @@ $(document).ready(function() {
             }
         });
     });
-
-    // Hover effect for survey rows
-    $('.survey-row').hover(
-        function() {
-            $(this).addClass('table-hover');
-        },
-        function() {
-            $(this).removeClass('table-hover');
-        }
-    );
 });
 </script>
 @endpush 
