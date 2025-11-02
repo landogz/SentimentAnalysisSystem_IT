@@ -193,16 +193,32 @@
                 </h3>
             </div>
             <div class="card-body">
-                <canvas id="coursePieChart" style="height: 300px;"></canvas>
-                <div class="mt-3 text-center">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas id="coursePieChart" style="height: 200px;"></canvas>
+                    </div>
+                </div>
+                <div class="row mt-3">
                     @if(count($courseChartData['labels']) > 0)
+                        @php
+                            $courseCount = count($courseChartData['labels']);
+                            $colSize = $courseCount == 1 ? 12 : ($courseCount == 2 ? 6 : ($courseCount == 3 ? 4 : 3));
+                        @endphp
                         @foreach($courseChartData['labels'] as $index => $course)
-                            <span class="badge badge-primary mr-2 mb-2" style="background-color: var(--light-blue);">
-                                {{ $course }}: {{ $courseChartData['data'][$index] }}
-                            </span>
+                            <div class="col-{{ $colSize }} col-md-{{ $colSize }}">
+                                <div class="text-center">
+                                    <div class="mb-2" style="color: var(--light-blue);">
+                                        <i class="fas fa-graduation-cap fa-2x"></i>
+                                    </div>
+                                    <h5 id="courseCount{{ $index }}" style="color: var(--light-blue);">{{ $courseChartData['data'][$index] }}</h5>
+                                    <small class="text-muted">{{ $course }}</small>
+                                </div>
+                            </div>
                         @endforeach
                     @else
-                        <p class="text-muted">No course data available</p>
+                        <div class="col-12">
+                            <p class="text-muted text-center">No course data available</p>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -218,16 +234,28 @@
                 </h3>
             </div>
             <div class="card-body">
-                <canvas id="yearPieChart" style="height: 300px;"></canvas>
-                <div class="mt-3 text-center">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas id="yearPieChart" style="height: 200px;"></canvas>
+                    </div>
+                </div>
+                <div class="row mt-3">
                     @if(count($yearChartData['labels']) > 0)
                         @foreach($yearChartData['labels'] as $index => $year)
-                            <span class="badge badge-success mr-2 mb-2" style="background-color: var(--light-green);">
-                                {{ $year }}: {{ $yearChartData['data'][$index] }}
-                            </span>
+                            <div class="col-3 col-md-3">
+                                <div class="text-center">
+                                    <div class="mb-2" style="color: var(--light-green);">
+                                        <i class="fas fa-calendar-alt fa-2x"></i>
+                                    </div>
+                                    <h5 id="yearCount{{ $index }}" style="color: var(--light-green);">{{ $yearChartData['data'][$index] }}</h5>
+                                    <small class="text-muted">{{ $year }}</small>
+                                </div>
+                            </div>
                         @endforeach
                     @else
-                        <p class="text-muted">No year data available</p>
+                        <div class="col-12">
+                            <p class="text-muted text-center">No year data available</p>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -517,106 +545,80 @@ function initializeCharts() {
     });
 
     // Course Distribution Pie Chart
-    @if(count($courseChartData['labels']) > 0)
-    const courseCtx = document.getElementById('coursePieChart').getContext('2d');
-    courseChart = new Chart(courseCtx, {
-        type: 'pie',
-        data: {
-            labels: @json($courseChartData['labels']),
-            datasets: [{
-                data: @json($courseChartData['data']),
-                backgroundColor: [
-                    '#98AAE7',
-                    '#8FCFA8',
-                    '#F5B445',
-                    '#F16E70'
-                ],
-                borderWidth: 2,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 15,
-                        font: {
-                            size: 12
-                        }
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.label || '';
-                            if (label) {
-                                label += ': ';
+    const courseCanvas = document.getElementById('coursePieChart');
+    if (courseCanvas && typeof Chart !== 'undefined') {
+        const courseData = @json($courseChartData);
+        if (courseData && courseData.labels && courseData.labels.length > 0 && courseData.data && courseData.data.length > 0) {
+            try {
+                const courseCtx = courseCanvas.getContext('2d');
+                courseChart = new Chart(courseCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: courseData.labels,
+                        datasets: [{
+                            data: courseData.data,
+                            backgroundColor: [
+                                '#98AAE7',
+                                '#8FCFA8',
+                                '#F5B445',
+                                '#F16E70'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
                             }
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((context.parsed / total) * 100).toFixed(1);
-                            label += context.parsed + ' (' + percentage + '%)';
-                            return label;
                         }
                     }
-                }
+                });
+            } catch (e) {
+                console.error('Error initializing course chart:', e);
             }
         }
-    });
-    @endif
+    }
 
     // Year Distribution Pie Chart
-    @if(count($yearChartData['labels']) > 0)
-    const yearCtx = document.getElementById('yearPieChart').getContext('2d');
-    yearChart = new Chart(yearCtx, {
-        type: 'pie',
-        data: {
-            labels: @json($yearChartData['labels']),
-            datasets: [{
-                data: @json($yearChartData['data']),
-                backgroundColor: [
-                    '#98AAE7',
-                    '#8FCFA8',
-                    '#F5B445',
-                    '#F16E70'
-                ],
-                borderWidth: 2,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 15,
-                        font: {
-                            size: 12
-                        }
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.label || '';
-                            if (label) {
-                                label += ': ';
+    const yearCanvas = document.getElementById('yearPieChart');
+    if (yearCanvas && typeof Chart !== 'undefined') {
+        const yearData = @json($yearChartData);
+        if (yearData && yearData.labels && yearData.labels.length > 0 && yearData.data && yearData.data.length > 0) {
+            try {
+                const yearCtx = yearCanvas.getContext('2d');
+                yearChart = new Chart(yearCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: yearData.labels,
+                        datasets: [{
+                            data: yearData.data,
+                            backgroundColor: [
+                                '#98AAE7',
+                                '#8FCFA8',
+                                '#F5B445',
+                                '#F16E70'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
                             }
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((context.parsed / total) * 100).toFixed(1);
-                            label += context.parsed + ' (' + percentage + '%)';
-                            return label;
                         }
                     }
-                }
+                });
+            } catch (e) {
+                console.error('Error initializing year chart:', e);
             }
         }
-    });
-    @endif
+    }
 }
 
 function loadReportData() {
@@ -642,40 +644,46 @@ function loadReportData() {
         $('#neutralCount').text(data.sentiment_stats.neutral);
         $('#negativeCount').text(data.sentiment_stats.negative);
         
-        // Update course chart if it exists
-        if (courseChart && data.course_chart) {
-            courseChart.data.labels = data.course_chart.labels;
-            courseChart.data.datasets[0].data = data.course_chart.data;
-            courseChart.update();
-            
-            // Update course badges
-            let courseBadgesHtml = '';
-            if (data.course_chart.labels.length > 0) {
-                data.course_chart.labels.forEach((course, index) => {
-                    courseBadgesHtml += `<span class="badge badge-primary mr-2 mb-2" style="background-color: var(--light-blue);">${course}: ${data.course_chart.data[index]}</span>`;
-                });
-            } else {
-                courseBadgesHtml = '<p class="text-muted">No course data available</p>';
+        // Update course chart if it exists and has data
+        if (data.course_chart && data.course_chart.labels && data.course_chart.labels.length > 0) {
+            if (courseChart) {
+                try {
+                    courseChart.data.labels = data.course_chart.labels;
+                    courseChart.data.datasets[0].data = data.course_chart.data;
+                    courseChart.update();
+                } catch (e) {
+                    console.error('Error updating course chart:', e);
+                }
             }
-            $('#coursePieChart').closest('.card-body').find('.text-center').html(courseBadgesHtml);
+            
+            // Update course counts
+            data.course_chart.labels.forEach((course, index) => {
+                const countElement = $('#courseCount' + index);
+                if (countElement.length) {
+                    countElement.text(data.course_chart.data[index]);
+                }
+            });
         }
         
-        // Update year chart if it exists
-        if (yearChart && data.year_chart) {
-            yearChart.data.labels = data.year_chart.labels;
-            yearChart.data.datasets[0].data = data.year_chart.data;
-            yearChart.update();
-            
-            // Update year badges
-            let yearBadgesHtml = '';
-            if (data.year_chart.labels.length > 0) {
-                data.year_chart.labels.forEach((year, index) => {
-                    yearBadgesHtml += `<span class="badge badge-success mr-2 mb-2" style="background-color: var(--light-green);">${year}: ${data.year_chart.data[index]}</span>`;
-                });
-            } else {
-                yearBadgesHtml = '<p class="text-muted">No year data available</p>';
+        // Update year chart if it exists and has data
+        if (data.year_chart && data.year_chart.labels && data.year_chart.labels.length > 0) {
+            if (yearChart) {
+                try {
+                    yearChart.data.labels = data.year_chart.labels;
+                    yearChart.data.datasets[0].data = data.year_chart.data;
+                    yearChart.update();
+                } catch (e) {
+                    console.error('Error updating year chart:', e);
+                }
             }
-            $('#yearPieChart').closest('.card-body').find('.text-center').html(yearBadgesHtml);
+            
+            // Update year counts
+            data.year_chart.labels.forEach((year, index) => {
+                const countElement = $('#yearCount' + index);
+                if (countElement.length) {
+                    countElement.text(data.year_chart.data[index]);
+                }
+            });
         }
         
         // Load rating distribution

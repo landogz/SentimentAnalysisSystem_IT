@@ -27,7 +27,7 @@ use App\Http\Controllers\SentimentWordController;
 
 // Public routes
 Route::get('/', function () {
-    return redirect()->route('survey.index');
+    return redirect()->route('login');
 });
 
 // Authentication view routes

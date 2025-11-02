@@ -373,16 +373,32 @@
                 </h3>
             </div>
             <div class="card-body">
-                <canvas id="coursePieChart" style="height: 300px;"></canvas>
-                <div class="mt-3 text-center">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas id="coursePieChart" style="height: 200px;"></canvas>
+                    </div>
+                </div>
+                <div class="row mt-3">
                     @if(count($courseChartData['labels']) > 0)
+                        @php
+                            $courseCount = count($courseChartData['labels']);
+                            $colSize = $courseCount == 1 ? 12 : ($courseCount == 2 ? 6 : ($courseCount == 3 ? 4 : 3));
+                        @endphp
                         @foreach($courseChartData['labels'] as $index => $course)
-                            <span class="badge badge-primary mr-2 mb-2">
-                                {{ $course }}: {{ $courseChartData['data'][$index] }}
-                            </span>
+                            <div class="col-{{ $colSize }}">
+                                <div class="text-center">
+                                    <div class="mb-2" style="color: #17a2b8;">
+                                        <i class="fas fa-graduation-cap fa-2x"></i>
+                                    </div>
+                                    <h5 style="color: #17a2b8;">{{ $courseChartData['data'][$index] }}</h5>
+                                    <small class="text-muted">{{ $course }}</small>
+                                </div>
+                            </div>
                         @endforeach
                     @else
-                        <p class="text-muted">No course data available</p>
+                        <div class="col-12">
+                            <p class="text-muted text-center">No course data available</p>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -399,16 +415,28 @@
                 </h3>
             </div>
             <div class="card-body">
-                <canvas id="yearPieChart" style="height: 300px;"></canvas>
-                <div class="mt-3 text-center">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas id="yearPieChart" style="height: 200px;"></canvas>
+                    </div>
+                </div>
+                <div class="row mt-3">
                     @if(count($yearChartData['labels']) > 0)
                         @foreach($yearChartData['labels'] as $index => $year)
-                            <span class="badge badge-success mr-2 mb-2">
-                                {{ $year }}: {{ $yearChartData['data'][$index] }}
-                            </span>
+                            <div class="col-3">
+                                <div class="text-center">
+                                    <div class="text-success mb-2">
+                                        <i class="fas fa-calendar-alt fa-2x"></i>
+                                    </div>
+                                    <h5 class="text-success">{{ $yearChartData['data'][$index] }}</h5>
+                                    <small class="text-muted">{{ $year }}</small>
+                                </div>
+                            </div>
                         @endforeach
                     @else
-                        <p class="text-muted">No year data available</p>
+                        <div class="col-12">
+                            <p class="text-muted text-center">No year data available</p>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -630,8 +658,7 @@ $(document).ready(function() {
                     '#F5B445',
                     '#F16E70'
                 ],
-                borderWidth: 2,
-                borderColor: '#fff'
+                borderWidth: 0
             }]
         },
         options: {
@@ -639,27 +666,7 @@ $(document).ready(function() {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 15,
-                        font: {
-                            size: 12
-                        }
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((context.parsed / total) * 100).toFixed(1);
-                            label += context.parsed + ' (' + percentage + '%)';
-                            return label;
-                        }
-                    }
+                    position: 'bottom'
                 }
             }
         }
@@ -681,8 +688,7 @@ $(document).ready(function() {
                     '#F5B445',
                     '#F16E70'
                 ],
-                borderWidth: 2,
-                borderColor: '#fff'
+                borderWidth: 0
             }]
         },
         options: {
@@ -690,27 +696,7 @@ $(document).ready(function() {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 15,
-                        font: {
-                            size: 12
-                        }
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((context.parsed / total) * 100).toFixed(1);
-                            label += context.parsed + ' (' + percentage + '%)';
-                            return label;
-                        }
-                    }
+                    position: 'bottom'
                 }
             }
         }
