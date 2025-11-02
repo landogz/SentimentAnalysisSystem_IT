@@ -77,6 +77,29 @@ class DashboardController extends Controller
             $monthlyTrends['data'][$trend->month - 1] = $trend->count;
         }
         
+        // Get course distribution
+        $courseDistribution = Survey::selectRaw('course, COUNT(*) as count')
+            ->whereNotNull('course')
+            ->groupBy('course')
+            ->get();
+        
+        $courseChartData = [
+            'labels' => $courseDistribution->pluck('course')->toArray(),
+            'data' => $courseDistribution->pluck('count')->toArray()
+        ];
+        
+        // Get year distribution
+        $yearDistribution = Survey::selectRaw('year, COUNT(*) as count')
+            ->whereNotNull('year')
+            ->groupBy('year')
+            ->orderByRaw("FIELD(year, '1st Year', '2nd Year', '3rd Year', '4th Year')")
+            ->get();
+        
+        $yearChartData = [
+            'labels' => $yearDistribution->pluck('year')->toArray(),
+            'data' => $yearDistribution->pluck('count')->toArray()
+        ];
+        
         return view('dashboard.index', compact(
             'totalSurveys',
             'totalTeachers', 
@@ -86,7 +109,9 @@ class DashboardController extends Controller
             'topTeachers',
             'topSubjects',
             'recentSurveys',
-            'monthlyTrends'
+            'monthlyTrends',
+            'courseChartData',
+            'yearChartData'
         ));
     }
 

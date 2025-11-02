@@ -901,6 +901,38 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="year" class="form-label">Year Level <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('year') is-invalid @enderror" 
+                                            id="year" name="year" required>
+                                        <option value="">Select Year Level...</option>
+                                        <option value="1st Year" {{ old('year') == '1st Year' ? 'selected' : '' }}>1st Year</option>
+                                        <option value="2nd Year" {{ old('year') == '2nd Year' ? 'selected' : '' }}>2nd Year</option>
+                                        <option value="3rd Year" {{ old('year') == '3rd Year' ? 'selected' : '' }}>3rd Year</option>
+                                        <option value="4th Year" {{ old('year') == '4th Year' ? 'selected' : '' }}>4th Year</option>
+                                    </select>
+                                    @error('year')
+                                        <div class="error-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="course" class="form-label">Course <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('course') is-invalid @enderror" 
+                                            id="course" name="course" required>
+                                        <option value="">Select Course...</option>
+                                        <option value="BSIT" {{ old('course') == 'BSIT' ? 'selected' : '' }}>BSIT</option>
+                                        <option value="BSCS" {{ old('course') == 'BSCS' ? 'selected' : '' }}>BSCS</option>
+                                    </select>
+                                    @error('course')
+                                        <div class="error-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-section">

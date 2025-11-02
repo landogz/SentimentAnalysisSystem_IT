@@ -361,6 +361,60 @@
         </div>
     </div>
 </div>
+
+<div class="row equal-height-cards mt-3">
+    <!-- Course Distribution Pie Chart -->
+    <div class="col-lg-6">
+        <div class="card card-outline card-info">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-graduation-cap mr-2"></i>
+                    Survey Distribution by Course
+                </h3>
+            </div>
+            <div class="card-body">
+                <canvas id="coursePieChart" style="height: 300px;"></canvas>
+                <div class="mt-3 text-center">
+                    @if(count($courseChartData['labels']) > 0)
+                        @foreach($courseChartData['labels'] as $index => $course)
+                            <span class="badge badge-primary mr-2 mb-2">
+                                {{ $course }}: {{ $courseChartData['data'][$index] }}
+                            </span>
+                        @endforeach
+                    @else
+                        <p class="text-muted">No course data available</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Year Distribution Pie Chart -->
+    <div class="col-lg-6">
+        <div class="card card-outline card-success">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    Survey Distribution by Year Level
+                </h3>
+            </div>
+            <div class="card-body">
+                <canvas id="yearPieChart" style="height: 300px;"></canvas>
+                <div class="mt-3 text-center">
+                    @if(count($yearChartData['labels']) > 0)
+                        @foreach($yearChartData['labels'] as $index => $year)
+                            <span class="badge badge-success mr-2 mb-2">
+                                {{ $year }}: {{ $yearChartData['data'][$index] }}
+                            </span>
+                        @endforeach
+                    @else
+                        <p class="text-muted">No year data available</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -560,6 +614,108 @@ $(document).ready(function() {
             }
         }
     });
+
+    // Course Distribution Pie Chart
+    @if(count($courseChartData['labels']) > 0)
+    const courseCtx = document.getElementById('coursePieChart').getContext('2d');
+    new Chart(courseCtx, {
+        type: 'pie',
+        data: {
+            labels: @json($courseChartData['labels']),
+            datasets: [{
+                data: @json($courseChartData['data']),
+                backgroundColor: [
+                    '#98AAE7',
+                    '#8FCFA8',
+                    '#F5B445',
+                    '#F16E70'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            label += context.parsed + ' (' + percentage + '%)';
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    @endif
+
+    // Year Distribution Pie Chart
+    @if(count($yearChartData['labels']) > 0)
+    const yearCtx = document.getElementById('yearPieChart').getContext('2d');
+    new Chart(yearCtx, {
+        type: 'pie',
+        data: {
+            labels: @json($yearChartData['labels']),
+            datasets: [{
+                data: @json($yearChartData['data']),
+                backgroundColor: [
+                    '#98AAE7',
+                    '#8FCFA8',
+                    '#F5B445',
+                    '#F16E70'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            label += context.parsed + ' (' + percentage + '%)';
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    @endif
 });
 </script>
 @endpush 

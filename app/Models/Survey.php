@@ -20,6 +20,8 @@ class Survey extends Model
         'survey_responses',
         'student_name',
         'student_email',
+        'year',
+        'course',
         'ip_address'
     ];
 

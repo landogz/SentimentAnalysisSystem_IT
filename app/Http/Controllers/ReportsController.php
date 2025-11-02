@@ -61,6 +61,29 @@ class ReportsController extends Controller
         ->orderBy('rating_group')
         ->get();
 
+        // Get course distribution
+        $courseDistribution = Survey::selectRaw('course, COUNT(*) as count')
+            ->whereNotNull('course')
+            ->groupBy('course')
+            ->get();
+        
+        $courseChartData = [
+            'labels' => $courseDistribution->pluck('course')->toArray(),
+            'data' => $courseDistribution->pluck('count')->toArray()
+        ];
+        
+        // Get year distribution
+        $yearDistribution = Survey::selectRaw('year, COUNT(*) as count')
+            ->whereNotNull('year')
+            ->groupBy('year')
+            ->orderByRaw("FIELD(year, '1st Year', '2nd Year', '3rd Year', '4th Year')")
+            ->get();
+        
+        $yearChartData = [
+            'labels' => $yearDistribution->pluck('year')->toArray(),
+            'data' => $yearDistribution->pluck('count')->toArray()
+        ];
+
         return view('reports.index', compact(
             'teachers',
             'subjects',
@@ -69,7 +92,9 @@ class ReportsController extends Controller
             'totalSurveys',
             'averageRating',
             'sentimentStats',
-            'ratingDistribution'
+            'ratingDistribution',
+            'courseChartData',
+            'yearChartData'
         ));
     }
 
@@ -378,10 +403,37 @@ class ReportsController extends Controller
             'neutral' => (clone $query)->where('sentiment', 'neutral')->count(),
         ];
 
+        // Get filtered course distribution
+        $courseQuery = clone $query;
+        $courseDistribution = $courseQuery->selectRaw('course, COUNT(*) as count')
+            ->whereNotNull('course')
+            ->groupBy('course')
+            ->get();
+        
+        $courseChartData = [
+            'labels' => $courseDistribution->pluck('course')->toArray(),
+            'data' => $courseDistribution->pluck('count')->toArray()
+        ];
+        
+        // Get filtered year distribution
+        $yearQuery = clone $query;
+        $yearDistribution = $yearQuery->selectRaw('year, COUNT(*) as count')
+            ->whereNotNull('year')
+            ->groupBy('year')
+            ->orderByRaw("FIELD(year, '1st Year', '2nd Year', '3rd Year', '4th Year')")
+            ->get();
+        
+        $yearChartData = [
+            'labels' => $yearDistribution->pluck('year')->toArray(),
+            'data' => $yearDistribution->pluck('count')->toArray()
+        ];
+
         return response()->json([
             'total_surveys' => $totalSurveys,
             'average_rating' => number_format($averageRating, 1),
-            'sentiment_stats' => $sentimentStats
+            'sentiment_stats' => $sentimentStats,
+            'course_chart' => $courseChartData,
+            'year_chart' => $yearChartData
         ]);
     }
 } 

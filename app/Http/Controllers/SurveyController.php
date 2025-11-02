@@ -50,6 +50,8 @@ class SurveyController extends Controller
             'feedback_text' => 'nullable|string|max:1000',
             'student_name' => 'nullable|string|max:255',
             'student_email' => 'nullable|email|max:255',
+            'year' => 'required|string|in:1st Year,2nd Year,3rd Year,4th Year',
+            'course' => 'required|string|in:BSIT,BSCS',
             'question_responses' => 'nullable|array'
         ]);
 
@@ -164,6 +166,8 @@ class SurveyController extends Controller
                         'feedback_text' => $request->feedback_text,
                         'student_name' => $request->student_name,
                         'student_email' => $request->student_email,
+                        'year' => $request->year,
+                        'course' => $request->course,
                         'ip_address' => $request->ip()
                     ]);
 
@@ -263,6 +267,8 @@ class SurveyController extends Controller
             'feedback_text' => 'nullable|string|max:1000',
             'student_name' => 'nullable|string|max:255',
             'student_email' => 'nullable|email|max:255',
+            'year' => 'nullable|string|in:1st Year,2nd Year,3rd Year,4th Year',
+            'course' => 'nullable|string|in:BSIT,BSCS',
         ]);
 
         if ($validator->fails()) {
