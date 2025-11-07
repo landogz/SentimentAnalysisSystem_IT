@@ -196,8 +196,6 @@
                     
                     <strong>Neutral:</strong><br>
                     • Okay (0.0)<br>
-                    • Fine (0.5)<br>
-                    • Average (0.0)
                 </div>
             </div>
         </div>
