@@ -257,7 +257,7 @@ $(document).ready(function() {
                 if (scoreInput.val() > 0) scoreInput.val(-2.0);
                 break;
             case 'neutral':
-                scoreInput.val(0.5);
+                scoreInput.val(0.0);
                 break;
         }
     });

@@ -103,9 +103,9 @@ $sentimentService->updateSentimentWordScore('good', 2.5, 'en');
 The system comes pre-loaded with:
 
 ### English Words (96 words)
-- **Positive**: excellent (3.0), great (2.5), amazing (3.0), love (3.0), etc.
-- **Negative**: terrible (-3.0), awful (-3.0), bad (-2.0), hate (-3.0), etc.
-- **Neutral**: okay (0.5), fine (0.5), average (0.0), normal (0.0), etc.
+- **Positive**: excellent (5.0), great (3.0), good (1.0), amazing (3.0), love (3.0), etc.
+- **Negative**: terrible (-5.0), bad (-3.0), poor (-1.0), awful (-3.0), hate (-3.0), etc.
+- **Neutral**: okay (0.0), fine (0.5), average (0.0), normal (0.0), etc.
 
 ### Tagalog Words (113 words)
 - **Positive**: maganda (2.0), mahusay (2.5), gusto (2.0), mahal (2.5), etc.
@@ -200,14 +200,14 @@ The enhanced system provides detailed analysis results:
 1. English Text Analysis:
 Original Text: i love this teacher, they are excellent and very helpful!
 Sentiment: positive
-Score: 8
-Rating: 4.6/5
-Positive Score: 8
+Score: 10
+Rating: 5.0/5
+Positive Score: 10
 Negative Score: 0
 Neutral Score: 0
 Matched Words:
   - love (3.0) [positive]
-  - excellent (3.0) [positive]
+  - excellent (5.0) [positive]
   - helpful (2.0) [positive]
 
 2. Tagalog Text Analysis (Direct):

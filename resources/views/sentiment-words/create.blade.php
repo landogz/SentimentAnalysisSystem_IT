@@ -109,7 +109,7 @@
                                 <div class="card bg-success text-white">
                                     <div class="card-body p-2">
                                         <h6 class="mb-1">Positive Words</h6>
-                                        <small>1.0 - 3.0: Good, Great, Excellent</small>
+                                        <small>1.0 - 5.0: Good, Great, Excellent</small>
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                                 <div class="card bg-danger text-white">
                                     <div class="card-body p-2">
                                         <h6 class="mb-1">Negative Words</h6>
-                                        <small>-1.0 - -3.0: Bad, Terrible, Awful</small>
+                                        <small>-1.0 - -5.0: Poor, Bad, Terrible</small>
                                     </div>
                                 </div>
                             </div>
@@ -125,7 +125,7 @@
                                 <div class="card bg-warning text-white">
                                     <div class="card-body p-2">
                                         <h6 class="mb-1">Neutral Words</h6>
-                                        <small>0.0 - 0.5: Okay, Fine, Average</small>
+                                        <small>0.0: Okay, Fine, Average</small>
                                     </div>
                                 </div>
                             </div>
@@ -185,17 +185,17 @@
                 <h6>Score Examples</h6>
                 <div class="small">
                     <strong>Positive:</strong><br>
-                    • Excellent (3.0)<br>
-                    • Great (2.5)<br>
-                    • Good (1.5)<br><br>
+                    • Excellent (5.0)<br>
+                    • Great (3.0)<br>
+                    • Good (1.0)<br><br>
                     
                     <strong>Negative:</strong><br>
-                    • Terrible (-3.0)<br>
-                    • Bad (-2.0)<br>
-                    • Poor (-1.5)<br><br>
+                    • Terrible (-5.0)<br>
+                    • Bad (-3.0)<br>
+                    • Poor (-1.0)<br><br>
                     
                     <strong>Neutral:</strong><br>
-                    • Okay (0.5)<br>
+                    • Okay (0.0)<br>
                     • Fine (0.5)<br>
                     • Average (0.0)
                 </div>
@@ -231,7 +231,7 @@ $(document).ready(function() {
                 scoreInput.val(-2.0);
                 break;
             case 'neutral':
-                scoreInput.val(0.5);
+                scoreInput.val(0.0);
                 break;
         }
     });

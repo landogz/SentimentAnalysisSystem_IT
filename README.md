@@ -147,7 +147,7 @@ CREATE TABLE sentiment_words (
 
 ### **Sample Data**
 The system comes pre-loaded with:
-- **English Words (96)**: excellent (3.0), great (2.5), terrible (-3.0), etc.
+- **English Words (96)**: excellent (5.0), great (3.0), terrible (-5.0), etc.
 - **Tagalog Words (113)**: maganda (2.0), mahusay (2.5), masama (-2.0), etc.
 - **Negation Pairs**: beautiful → ugly, good → bad, excellent → terrible
 

@@ -19,8 +19,8 @@ class SentimentWordSeeder extends Seeder
 
         // English positive words with scores and negations
         $englishPositiveWords = [
-            'excellent' => ['score' => 3.0, 'negation' => 'terrible'],
-            'great' => ['score' => 2.5, 'negation' => 'awful'],
+            'excellent' => ['score' => 5.0, 'negation' => 'terrible'],
+            'great' => ['score' => 3.0, 'negation' => 'awful'],
             'amazing' => ['score' => 3.0, 'negation' => 'disappointing'],
             'outstanding' => ['score' => 3.0, 'negation' => 'poor'],
             'fantastic' => ['score' => 2.5, 'negation' => 'terrible'],
@@ -58,18 +58,18 @@ class SentimentWordSeeder extends Seeder
             'love' => ['score' => 3.0, 'negation' => 'hate'],
             'happy' => ['score' => 2.0, 'negation' => 'sad'],
             'satisfied' => ['score' => 2.0, 'negation' => 'dissatisfied'],
-            'good' => ['score' => 1.5, 'negation' => 'bad'],
+            'good' => ['score' => 1.0, 'negation' => 'bad'],
             'beautiful' => ['score' => 3.0, 'negation' => 'ugly'],
             'smart' => ['score' => 2.0, 'negation' => 'stupid'],
         ];
 
         // English negative words with scores and negations
         $englishNegativeWords = [
-            'poor' => ['score' => -2.0, 'negation' => 'excellent'],
-            'terrible' => ['score' => -3.0, 'negation' => 'excellent'],
+            'poor' => ['score' => -1.0, 'negation' => 'excellent'],
+            'terrible' => ['score' => -5.0, 'negation' => 'excellent'],
             'awful' => ['score' => -3.0, 'negation' => 'great'],
             'horrible' => ['score' => -3.0, 'negation' => 'wonderful'],
-            'bad' => ['score' => -2.0, 'negation' => 'good'],
+            'bad' => ['score' => -3.0, 'negation' => 'good'],
             'worst' => ['score' => -3.0, 'negation' => 'best'],
             'disappointing' => ['score' => -2.5, 'negation' => 'amazing'],
             'confusing' => ['score' => -2.0, 'negation' => 'clear'],
@@ -110,7 +110,7 @@ class SentimentWordSeeder extends Seeder
 
         // English neutral words with scores
         $englishNeutralWords = [
-            'okay' => ['score' => 0.5, 'negation' => null],
+            'okay' => ['score' => 0.0, 'negation' => null],
             'fine' => ['score' => 0.5, 'negation' => null],
             'average' => ['score' => 0.0, 'negation' => null],
             'normal' => ['score' => 0.0, 'negation' => null],
@@ -166,7 +166,7 @@ class SentimentWordSeeder extends Seeder
         $tagalogNeutralWords = [
             'sige' => ['score' => 0.5, 'negation' => null],
             'pwede' => ['score' => 0.5, 'negation' => null],
-            'okay' => ['score' => 0.5, 'negation' => null],
+            'okay' => ['score' => 0.0, 'negation' => null],
             'fine' => ['score' => 0.5, 'negation' => null],
             'average' => ['score' => 0.0, 'negation' => null],
             'normal' => ['score' => 0.0, 'negation' => null],

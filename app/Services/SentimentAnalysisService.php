@@ -132,17 +132,40 @@ class SentimentAnalysisService
                 $wordType = 'neutral';
                 $neutralScore += $wordScore;
             } else {
-                // Fallback to hardcoded words
+                // Fallback to hardcoded words with new scoring system
                 if (in_array($cleanWord, $this->positiveWords)) {
-                    $wordScore = 2.0;
+                    // Use specific scores for key words
+                    if ($cleanWord === 'excellent') {
+                        $wordScore = 5.0;
+                    } elseif ($cleanWord === 'great') {
+                        $wordScore = 3.0;
+                    } elseif ($cleanWord === 'good') {
+                        $wordScore = 1.0;
+                    } else {
+                        $wordScore = 2.0; // Default for other positive words
+                    }
                     $wordType = 'positive';
                     $positiveScore += $wordScore;
                 } elseif (in_array($cleanWord, $this->negativeWords)) {
-                    $wordScore = -2.0;
+                    // Use specific scores for key words
+                    if ($cleanWord === 'terrible') {
+                        $wordScore = -5.0;
+                    } elseif ($cleanWord === 'bad') {
+                        $wordScore = -3.0;
+                    } elseif ($cleanWord === 'poor') {
+                        $wordScore = -1.0;
+                    } else {
+                        $wordScore = -2.0; // Default for other negative words
+                    }
                     $wordType = 'negative';
                     $negativeScore += $wordScore;
                 } elseif (in_array($cleanWord, $this->neutralWords)) {
-                    $wordScore = 0.5;
+                    // Use specific score for okay
+                    if ($cleanWord === 'okay') {
+                        $wordScore = 0.0;
+                    } else {
+                        $wordScore = 0.5; // Default for other neutral words
+                    }
                     $wordType = 'neutral';
                     $neutralScore += $wordScore;
                 }
@@ -164,15 +187,38 @@ class SentimentAnalysisService
                     $nextWordScore = $dbWords['neutral'][$nextCleanWord];
                     $nextWordType = 'neutral';
                 } else {
-                    // Fallback to hardcoded words
+                    // Fallback to hardcoded words with new scoring system
                     if (in_array($nextCleanWord, $this->positiveWords)) {
-                        $nextWordScore = 2.0;
+                        // Use specific scores for key words
+                        if ($nextCleanWord === 'excellent') {
+                            $nextWordScore = 5.0;
+                        } elseif ($nextCleanWord === 'great') {
+                            $nextWordScore = 3.0;
+                        } elseif ($nextCleanWord === 'good') {
+                            $nextWordScore = 1.0;
+                        } else {
+                            $nextWordScore = 2.0; // Default for other positive words
+                        }
                         $nextWordType = 'positive';
                     } elseif (in_array($nextCleanWord, $this->negativeWords)) {
-                        $nextWordScore = -2.0;
+                        // Use specific scores for key words
+                        if ($nextCleanWord === 'terrible') {
+                            $nextWordScore = -5.0;
+                        } elseif ($nextCleanWord === 'bad') {
+                            $nextWordScore = -3.0;
+                        } elseif ($nextCleanWord === 'poor') {
+                            $nextWordScore = -1.0;
+                        } else {
+                            $nextWordScore = -2.0; // Default for other negative words
+                        }
                         $nextWordType = 'negative';
                     } elseif (in_array($nextCleanWord, $this->neutralWords)) {
-                        $nextWordScore = 0.5;
+                        // Use specific score for okay
+                        if ($nextCleanWord === 'okay') {
+                            $nextWordScore = 0.0;
+                        } else {
+                            $nextWordScore = 0.5; // Default for other neutral words
+                        }
                         $nextWordType = 'neutral';
                     }
                 }
