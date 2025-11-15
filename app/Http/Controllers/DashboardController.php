@@ -77,28 +77,53 @@ class DashboardController extends Controller
             $monthlyTrends['data'][$trend->month - 1] = $trend->count;
         }
         
-        // Get course distribution
-        $courseDistribution = Survey::selectRaw('course, COUNT(*) as count')
-            ->whereNotNull('course')
-            ->groupBy('course')
-            ->get();
-        
-        $courseChartData = [
-            'labels' => $courseDistribution->pluck('course')->toArray(),
-            'data' => $courseDistribution->pluck('count')->toArray()
-        ];
-        
-        // Get year distribution
-        $yearDistribution = Survey::selectRaw('year, COUNT(*) as count')
+        // Get CS (BSCS) distribution by year level
+        $csDistribution = Survey::selectRaw('year, COUNT(*) as count')
+            ->where('course', 'BSCS')
             ->whereNotNull('year')
             ->groupBy('year')
             ->orderByRaw("FIELD(year, '1st Year', '2nd Year', '3rd Year', '4th Year')")
             ->get();
         
-        $yearChartData = [
-            'labels' => $yearDistribution->pluck('year')->toArray(),
-            'data' => $yearDistribution->pluck('count')->toArray()
+        // Initialize all year levels with 0 count for CS
+        $csChartData = [
+            'labels' => ['1st Year', '2nd Year', '3rd Year', '4th Year'],
+            'data' => [0, 0, 0, 0]
         ];
+        
+        // Fill in actual CS data
+        foreach ($csDistribution as $dist) {
+            $yearIndex = array_search($dist->year, $csChartData['labels']);
+            if ($yearIndex !== false) {
+                $csChartData['data'][$yearIndex] = $dist->count;
+            }
+        }
+        
+        // Get IT (BSIT) distribution by year level
+        $itDistribution = Survey::selectRaw('year, COUNT(*) as count')
+            ->where('course', 'BSIT')
+            ->whereNotNull('year')
+            ->groupBy('year')
+            ->orderByRaw("FIELD(year, '1st Year', '2nd Year', '3rd Year', '4th Year')")
+            ->get();
+        
+        // Initialize all year levels with 0 count for IT
+        $itChartData = [
+            'labels' => ['1st Year', '2nd Year', '3rd Year', '4th Year'],
+            'data' => [0, 0, 0, 0]
+        ];
+        
+        // Fill in actual IT data
+        foreach ($itDistribution as $dist) {
+            $yearIndex = array_search($dist->year, $itChartData['labels']);
+            if ($yearIndex !== false) {
+                $itChartData['data'][$yearIndex] = $dist->count;
+            }
+        }
+        
+        // Keep old variable names for backward compatibility but use new data
+        $courseChartData = $csChartData;
+        $yearChartData = $itChartData;
         
         return view('dashboard.index', compact(
             'totalSurveys',

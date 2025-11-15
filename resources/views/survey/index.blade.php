@@ -1439,7 +1439,7 @@
                             text: 'Your feedback has been submitted successfully.',
                             confirmButtonColor: '#98AAE7'
                         }).then(function() {
-                            window.location.reload();
+                            window.location.href = '{{ route("survey.index") }}';
                         });
                     },
                     error: function(xhr) {

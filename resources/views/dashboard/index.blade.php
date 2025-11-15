@@ -363,13 +363,13 @@
 </div>
 
 <div class="row equal-height-cards mt-3">
-    <!-- Course Distribution Pie Chart -->
+    <!-- CS Distribution by Year Level -->
     <div class="col-lg-6">
         <div class="card card-outline card-info">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-graduation-cap mr-2"></i>
-                    Survey Distribution by Course
+                    Survey Distribution by Course (CS)
                 </h3>
             </div>
             <div class="card-body">
@@ -380,24 +380,20 @@
                 </div>
                 <div class="row mt-3">
                     @if(count($courseChartData['labels']) > 0)
-                        @php
-                            $courseCount = count($courseChartData['labels']);
-                            $colSize = $courseCount == 1 ? 12 : ($courseCount == 2 ? 6 : ($courseCount == 3 ? 4 : 3));
-                        @endphp
-                        @foreach($courseChartData['labels'] as $index => $course)
-                            <div class="col-{{ $colSize }}">
+                        @foreach($courseChartData['labels'] as $index => $year)
+                            <div class="col-3">
                                 <div class="text-center">
                                     <div class="mb-2" style="color: #17a2b8;">
-                                        <i class="fas fa-graduation-cap fa-2x"></i>
+                                        <i class="fas fa-calendar-alt fa-2x"></i>
                                     </div>
                                     <h5 style="color: #17a2b8;">{{ $courseChartData['data'][$index] }}</h5>
-                                    <small class="text-muted">{{ $course }}</small>
+                                    <small class="text-muted">{{ $year }}</small>
                                 </div>
                             </div>
                         @endforeach
                     @else
                         <div class="col-12">
-                            <p class="text-muted text-center">No course data available</p>
+                            <p class="text-muted text-center">No CS data available</p>
                         </div>
                     @endif
                 </div>
@@ -405,13 +401,13 @@
         </div>
     </div>
 
-    <!-- Year Distribution Pie Chart -->
+    <!-- IT Distribution by Year Level -->
     <div class="col-lg-6">
         <div class="card card-outline card-success">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-calendar-alt mr-2"></i>
-                    Survey Distribution by Year Level
+                    Survey Distribution by Year Level (IT)
                 </h3>
             </div>
             <div class="card-body">
@@ -435,7 +431,7 @@
                         @endforeach
                     @else
                         <div class="col-12">
-                            <p class="text-muted text-center">No year data available</p>
+                            <p class="text-muted text-center">No IT data available</p>
                         </div>
                     @endif
                 </div>
