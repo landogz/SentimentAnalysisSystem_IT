@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Subjects - Student Feedback System')
+@section('title', 'Courses - Student Feedback System')
 
-@section('page-title', 'Subjects Management')
+@section('page-title', 'Course Management')
 @section('icon', 'book')
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-<li class="breadcrumb-item active">Subjects</li>
+<li class="breadcrumb-item active">Courses</li>
 @endsection
 
 @section('content')
@@ -17,11 +17,11 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-book mr-2"></i>
-                    Subjects List
+                    Courses List
                 </h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addSubjectModal">
-                        <i class="fas fa-plus mr-1"></i>Add Subject
+                        <i class="fas fa-plus mr-1"></i>Add Course
                     </button>
                 </div>
             </div>
@@ -33,12 +33,12 @@
                             <span class="input-group-text">
                                 <i class="fas fa-search"></i>
                             </span>
-                            <input type="text" class="form-control search-box" id="searchInput" placeholder="Search subjects...">
+                            <input type="text" class="form-control search-box" id="searchInput" placeholder="Search courses...">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <select class="form-control" id="teacherFilter">
-                            <option value="">All Teachers</option>
+                            <option value="">All Faculty</option>
                             @foreach($teachers as $teacher)
                                 <option value="{{ $teacher->name }}">{{ $teacher->name }}</option>
                             @endforeach

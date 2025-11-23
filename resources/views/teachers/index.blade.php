@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Teachers - Student Feedback System')
+@section('title', 'Faculty - Student Feedback System')
 
-@section('page-title', 'Teachers Management')
+@section('page-title', 'Faculty Management')
 @section('icon', 'chalkboard-teacher')
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-<li class="breadcrumb-item active">Teachers</li>
+<li class="breadcrumb-item active">Faculty</li>
 @endsection
 
 @section('content')
@@ -17,11 +17,11 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-chalkboard-teacher mr-2"></i>
-                    Teachers List
+                    Faculty List
                 </h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addTeacherModal">
-                        <i class="fas fa-plus mr-1"></i>Add Teacher
+                        <i class="fas fa-plus mr-1"></i>Add Faculty
                     </button>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                             <span class="input-group-text">
                                 <i class="fas fa-search"></i>
                             </span>
-                            <input type="text" class="form-control search-box" id="searchInput" placeholder="Search teachers...">
+                            <input type="text" class="form-control search-box" id="searchInput" placeholder="Search faculty...">
                         </div>
                     </div>
                     <div class="col-md-3">

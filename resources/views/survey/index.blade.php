@@ -848,6 +848,18 @@
             </div>
             
             <div class="survey-body">
+                @if(isset($student))
+                <div class="alert alert-info d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <i class="fas fa-user-graduate me-2"></i>
+                        <strong>Logged in as:</strong> {{ $student->name }} ({{ $student->student_number }})
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </button>
+                </div>
+                @endif
+                
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="fas fa-check-circle me-2"></i>
@@ -877,13 +889,21 @@
                             Student Information
                         </h4>
                         
+                        @if(isset($student))
+                        <div class="alert alert-info mb-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Your information has been auto-filled from your account. You can update it if needed.
+                        </div>
+                        @endif
+                        
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="student_name" class="form-label">Full Name (Optional)</label>
+                                    <label for="student_name" class="form-label">Full Name</label>
                                     <input type="text" class="form-control @error('student_name') is-invalid @enderror" 
-                                           id="student_name" name="student_name" value="{{ old('student_name') }}" 
-                                           placeholder="Enter your full name (optional)">
+                                           id="student_name" name="student_name" 
+                                           value="{{ old('student_name', isset($student) ? $student->name : '') }}" 
+                                           placeholder="Enter your full name">
                                     @error('student_name')
                                         <div class="error-feedback">{{ $message }}</div>
                                     @enderror
@@ -891,10 +911,11 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="student_email" class="form-label">Email Address (Optional)</label>
+                                    <label for="student_email" class="form-label">Email Address</label>
                                     <input type="email" class="form-control @error('student_email') is-invalid @enderror" 
-                                           id="student_email" name="student_email" value="{{ old('student_email') }}" 
-                                           placeholder="Enter your email (optional)">
+                                           id="student_email" name="student_email" 
+                                           value="{{ old('student_email', isset($student) ? $student->email : '') }}" 
+                                           placeholder="Enter your email">
                                     @error('student_email')
                                         <div class="error-feedback">{{ $message }}</div>
                                     @enderror
@@ -908,10 +929,10 @@
                                     <select class="form-select @error('year') is-invalid @enderror" 
                                             id="year" name="year" required>
                                         <option value="">Select Year Level...</option>
-                                        <option value="1st Year" {{ old('year') == '1st Year' ? 'selected' : '' }}>1st Year</option>
-                                        <option value="2nd Year" {{ old('year') == '2nd Year' ? 'selected' : '' }}>2nd Year</option>
-                                        <option value="3rd Year" {{ old('year') == '3rd Year' ? 'selected' : '' }}>3rd Year</option>
-                                        <option value="4th Year" {{ old('year') == '4th Year' ? 'selected' : '' }}>4th Year</option>
+                                        <option value="1st Year" {{ old('year', isset($student) ? $student->year : '') == '1st Year' ? 'selected' : '' }}>1st Year</option>
+                                        <option value="2nd Year" {{ old('year', isset($student) ? $student->year : '') == '2nd Year' ? 'selected' : '' }}>2nd Year</option>
+                                        <option value="3rd Year" {{ old('year', isset($student) ? $student->year : '') == '3rd Year' ? 'selected' : '' }}>3rd Year</option>
+                                        <option value="4th Year" {{ old('year', isset($student) ? $student->year : '') == '4th Year' ? 'selected' : '' }}>4th Year</option>
                                     </select>
                                     @error('year')
                                         <div class="error-feedback">{{ $message }}</div>
@@ -920,12 +941,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="course" class="form-label">Course <span class="text-danger">*</span></label>
+                                    <label for="course" class="form-label">Program <span class="text-danger">*</span></label>
                                     <select class="form-select @error('course') is-invalid @enderror" 
                                             id="course" name="course" required>
-                                        <option value="">Select Course...</option>
-                                        <option value="BSIT" {{ old('course') == 'BSIT' ? 'selected' : '' }}>BSIT</option>
-                                        <option value="BSCS" {{ old('course') == 'BSCS' ? 'selected' : '' }}>BSCS</option>
+                                        <option value="">Select Program...</option>
+                                        <option value="BSIT" {{ old('course', isset($student) ? $student->course : '') == 'BSIT' ? 'selected' : '' }}>BSIT</option>
+                                        <option value="BSCS" {{ old('course', isset($student) ? $student->course : '') == 'BSCS' ? 'selected' : '' }}>BSCS</option>
                                     </select>
                                     @error('course')
                                         <div class="error-feedback">{{ $message }}</div>
@@ -938,16 +959,16 @@
                     <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
                             <i class="fas fa-chalkboard-teacher me-2" style="color: var(--light-blue);"></i>
-                            Teacher & Subject Selection
+                            Faculty & Course Selection
                         </h4>
                         
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="teacher_id" class="form-label">Select Teacher</label>
+                                    <label for="teacher_id" class="form-label">Select Faculty</label>
                                     <select class="form-select @error('teacher_id') is-invalid @enderror" 
                                             id="teacher_id" name="teacher_id" required>
-                                        <option value="">Choose a teacher...</option>
+                                        <option value="">Choose a faculty...</option>
                                         @foreach($teachers as $teacher)
                                             <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
                                                 {{ $teacher->name }} - {{ $teacher->department }}
@@ -961,10 +982,10 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="subject_id" class="form-label">Select Subject</label>
+                                    <label for="subject_id" class="form-label">Select Course</label>
                                     <select class="form-select @error('subject_id') is-invalid @enderror" 
                                             id="subject_id" name="subject_id" required disabled>
-                                        <option value="">Choose a subject...</option>
+                                        <option value="">Choose a course...</option>
                                     </select>
                                     @error('subject_id')
                                         <div class="error-feedback">{{ $message }}</div>
@@ -993,12 +1014,12 @@
                             </div>
                         </div>
                         
-                        <!-- Tab 1: Part 1 - Instructor Evaluation -->
+                        <!-- Tab 1: Part 1 - Faculty Evaluation -->
                         <div class="survey-tab active" id="tab1">
                             @if(isset($questionsByPart['part1']))
                             <div class="part-section">
                                 <h5 class="mb-3" style="color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 0.5rem;">
-                                    <i class="fas fa-star me-2"></i>Part 1: Instructor Evaluation
+                                    <i class="fas fa-star me-2"></i>Part 1: Faculty Evaluation
                                 </h5>
                                 <div class="alert alert-info mb-3">
                                     <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Very Satisfactory) | 3 (Satisfactory) | 2 (Fair) | 1 (Poor)
@@ -1385,6 +1406,38 @@
             // Initialize
             updateNavigationButtons();
             
+            // Existing surveys data
+            const existingSurveys = @json($existingSurveys ?? []);
+            
+            // Check if faculty-course combination has been evaluated
+            function checkExistingSurvey() {
+                const teacherId = $('#teacher_id').val();
+                const subjectId = $('#subject_id').val();
+                const submitBtn = $('#btnSubmit');
+                const subjectSelect = $('#subject_id');
+                
+                if (teacherId && subjectId) {
+                    const key = teacherId + '_' + subjectId;
+                    if (existingSurveys[key]) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Already Evaluated',
+                            html: 'You have already submitted a survey for this faculty and course combination.<br><br>You can only submit one survey per faculty-course pair.',
+                            confirmButtonColor: '#F5B445'
+                        }).then(function() {
+                            // Deselect the subject after showing the message
+                            subjectSelect.val('').trigger('change');
+                        });
+                        submitBtn.prop('disabled', true);
+                        return true;
+                    } else {
+                        submitBtn.prop('disabled', false);
+                        return false;
+                    }
+                }
+                return false;
+            }
+            
             // Load subjects when teacher is selected
             $('#teacher_id').change(function() {
                 const teacherId = $(this).val();
@@ -1401,6 +1454,7 @@
                                 subjectSelect.append(`<option value="${subject.id}">${subject.name} (${subject.subject_code})</option>`);
                             });
                             subjectSelect.prop('disabled', false);
+                            checkExistingSurvey();
                         },
                         error: function() {
                             Swal.fire({
@@ -1414,6 +1468,37 @@
                 } else {
                     subjectSelect.empty().append('<option value="">Choose a subject...</option>').prop('disabled', true);
                 }
+            });
+            
+            // Check when subject is selected
+            $('#subject_id').change(function() {
+                checkExistingSurvey();
+            });
+            
+            // Logout button
+            $('#logoutBtn').click(function() {
+                Swal.fire({
+                    title: 'Logout?',
+                    text: 'Are you sure you want to logout?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#F16E70',
+                    cancelButtonColor: '#98AAE7',
+                    confirmButtonText: 'Yes, logout'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{ route("student.logout") }}',
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                window.location.href = '{{ route("student.login") }}';
+                            }
+                        });
+                    }
+                });
             });
             
             // Form submission with AJAX
@@ -1445,7 +1530,9 @@
                     error: function(xhr) {
                         let errorMessage = 'An error occurred while submitting your feedback.';
                         
-                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        } else if (xhr.responseJSON && xhr.responseJSON.errors) {
                             const errors = xhr.responseJSON.errors;
                             errorMessage = Object.values(errors).flat().join('\n');
                         }

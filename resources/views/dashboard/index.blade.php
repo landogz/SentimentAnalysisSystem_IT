@@ -109,7 +109,7 @@
         <div class="small-box" style="background: linear-gradient(135deg, #F16E70 0%, #e55a5c 100%); color: #494850;">
             <div class="inner">
                 <h3>{{ number_format($totalTeachers) }}</h3>
-                <p>Total Teachers</p>
+                <p>Total Faculty</p>
             </div>
             <div class="icon">
                 <i class="fas fa-chalkboard-teacher"></i>
@@ -121,7 +121,7 @@
         <div class="small-box" style="background: linear-gradient(135deg, #F5B445 0%, #e4a23d 100%); color: #494850;">
             <div class="inner">
                 <h3>{{ number_format($totalSubjects) }}</h3>
-                <p>Total Subjects</p>
+                <p>Total Courses</p>
             </div>
             <div class="icon">
                 <i class="fas fa-book"></i>
@@ -197,7 +197,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-trophy mr-2"></i>
-                    Top Rated Teachers
+                    Top Rated Faculty
                 </h3>
             </div>
             <div class="card-body">
@@ -237,7 +237,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-medal mr-2"></i>
-                    Top Rated Subjects
+                    Top Rated Courses
                 </h3>
             </div>
             <div class="card-body">
@@ -287,8 +287,8 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Teacher</th>
-                                <th>Subject</th>
+                                <th>Faculty</th>
+                                <th>Course</th>
                                 <th>Rating</th>
                                 <th>Sentiment</th>
                                 <th>Date</th>
@@ -369,7 +369,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-graduation-cap mr-2"></i>
-                    Survey Distribution by Course (CS)
+                    Survey Distribution by Program (CS)
                 </h3>
             </div>
             <div class="card-body">

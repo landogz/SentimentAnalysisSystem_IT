@@ -25,8 +25,22 @@ class SurveyController extends Controller
      */
     public function index()
     {
+        $student = auth('student')->user();
+        
+        if (!$student) {
+            return redirect()->route('student.login');
+        }
+        
         $teachers = Teacher::active()->get();
         $subjects = Subject::active()->with('teachers')->get();
+        
+        // Get existing surveys for this student
+        $existingSurveys = Survey::where('student_id', $student->id)
+            ->with(['teacher', 'subject'])
+            ->get()
+            ->mapWithKeys(function ($survey) {
+                return [$survey->teacher_id . '_' . $survey->subject_id => true];
+            });
         
         // Load questions organized by parts
         $questions = SurveyQuestion::active()->orderBy('part')->orderBy('section')->orderBy('order_number')->get();
@@ -36,7 +50,7 @@ class SurveyController extends Controller
         $optionQuestions = $questions->where('question_type', 'option');
         $commentQuestions = $questions->where('question_type', 'comment');
         
-        return view('survey.index', compact('teachers', 'subjects', 'questionsByPart', 'optionQuestions', 'commentQuestions'));
+        return view('survey.index', compact('teachers', 'subjects', 'questionsByPart', 'optionQuestions', 'commentQuestions', 'existingSurveys', 'student'));
     }
 
     /**
@@ -64,6 +78,28 @@ class SurveyController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Check if student is authenticated
+        $student = auth('student')->user();
+        if (!$student) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You must be logged in as a student to submit a survey.'
+            ], 401);
+        }
+
+        // Check if student has already submitted survey for this teacher and subject
+        $existingSurvey = Survey::where('student_id', $student->id)
+            ->where('teacher_id', $request->teacher_id)
+            ->where('subject_id', $request->subject_id)
+            ->first();
+
+        if ($existingSurvey) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have already submitted a survey for this teacher and subject. You can only submit one survey per teacher-subject combination.'
             ], 422);
         }
 
@@ -156,16 +192,17 @@ class SurveyController extends Controller
 
             // Use database transaction to ensure data consistency
             try {
-                $survey = \DB::transaction(function() use ($request, $finalRating, $sentiment, $questionResponses) {
+                $survey = \DB::transaction(function() use ($request, $finalRating, $sentiment, $questionResponses, $student) {
                     // Create survey
                     $survey = Survey::create([
                         'teacher_id' => $request->teacher_id,
                         'subject_id' => $request->subject_id,
+                        'student_id' => $student->id,
                         'rating' => $finalRating,
                         'sentiment' => $sentiment,
                         'feedback_text' => $request->feedback_text,
-                        'student_name' => $request->student_name,
-                        'student_email' => $request->student_email,
+                        'student_name' => $student->name,
+                        'student_email' => $student->email ?? $request->student_email,
                         'year' => $request->year,
                         'course' => $request->course,
                         'ip_address' => $request->ip()

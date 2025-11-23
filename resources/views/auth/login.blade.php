@@ -404,6 +404,12 @@
             </div>
             
             <div class="login-body">
+                <div class="text-center mb-3">
+                    <a href="{{ route('student.login') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-user-graduate me-1"></i>Student Login
+                    </a>
+                </div>
+                
                 @if(session('status'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="fas fa-check-circle me-2"></i>
@@ -489,8 +495,14 @@
                 </div>
 
                 <div class="links-section">
-                    <a href="{{ route('survey.index') }}">
-                        <i class="fas fa-external-link-alt me-1"></i>Access Public Survey
+                    <a href="{{ route('student.login') }}">
+                        <i class="fas fa-user-graduate me-1"></i>Student Login
+                    </a>
+                </div>
+                
+                <div class="links-section">
+                    <a href="{{ route('student.register') }}">
+                        <i class="fas fa-user-plus me-1"></i>Student Registration
                     </a>
                 </div>
             </div>

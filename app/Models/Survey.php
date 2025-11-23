@@ -14,6 +14,7 @@ class Survey extends Model
     protected $fillable = [
         'teacher_id',
         'subject_id',
+        'student_id',
         'rating',
         'sentiment',
         'feedback_text',
@@ -44,6 +45,14 @@ class Survey extends Model
     public function subject(): BelongsTo
     {
         return $this->belongsTo(Subject::class);
+    }
+
+    /**
+     * Get the student for this survey
+     */
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
     }
 
     /**

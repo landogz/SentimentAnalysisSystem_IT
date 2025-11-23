@@ -12,6 +12,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SentimentWordController;
+use App\Http\Controllers\Auth\StudentAuthController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +29,13 @@ use App\Http\Controllers\SentimentWordController;
 
 // Public routes
 Route::get('/', function () {
-    return redirect()->route('login');
+    if (auth('student')->check()) {
+        return redirect()->route('survey.index');
+    }
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+    return redirect()->route('student.login');
 });
 
 // Authentication view routes
@@ -79,13 +87,26 @@ Route::middleware('guest')->group(function () {
     })->name('password.reset');
 });
 
-// Public survey routes
-Route::prefix('survey')->name('survey.')->group(function () {
-    Route::get('/', [SurveyController::class, 'index'])->name('index');
-    Route::post('/store', [SurveyController::class, 'store'])->name('store');
-    Route::get('/results', [SurveyController::class, 'results'])->name('results');
-    Route::post('/validate', [SurveyController::class, 'validateForm'])->name('validate');
-    Route::get('/subjects-by-teacher', [SurveyController::class, 'getSubjectsByTeacher'])->name('subjects-by-teacher');
+// Student authentication routes
+Route::middleware('guest:student')->group(function () {
+    Route::get('/student/login', [StudentAuthController::class, 'showLoginForm'])->name('student.login');
+    Route::post('/student/login', [StudentAuthController::class, 'login'])->name('student.login');
+    Route::get('/student/register', [StudentAuthController::class, 'showRegistrationForm'])->name('student.register');
+    Route::post('/student/register', [StudentAuthController::class, 'register'])->name('student.register');
+});
+
+// Student authenticated routes
+Route::middleware(['auth:student'])->group(function () {
+    // Survey routes (require student authentication)
+    Route::prefix('survey')->name('survey.')->group(function () {
+        Route::get('/', [SurveyController::class, 'index'])->name('index');
+        Route::post('/store', [SurveyController::class, 'store'])->name('store');
+        Route::get('/results', [SurveyController::class, 'results'])->name('results');
+        Route::post('/validate', [SurveyController::class, 'validateForm'])->name('validate');
+        Route::get('/subjects-by-teacher', [SurveyController::class, 'getSubjectsByTeacher'])->name('subjects-by-teacher');
+    });
+    
+    Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
 });
 
 // Authentication routes
@@ -105,6 +126,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/subjects-ajax', [SubjectController::class, 'getSubjects'])->name('subjects.ajax');
     Route::get('/subjects/{id}/surveys-ajax', [SubjectController::class, 'getSubjectSurveys'])->name('subjects.surveys-ajax');
     
+    // Student management (Admin only)
+    Route::middleware('admin')->group(function () {
+        Route::resource('students', StudentController::class);
+        Route::get('/students-ajax', [StudentController::class, 'getStudents'])->name('students.ajax');
+    });
+    
     // User management
     Route::resource('users', UserController::class);
     Route::get('/users-ajax', [UserController::class, 'getUsers'])->name('users.ajax');
@@ -117,13 +144,15 @@ Route::middleware(['auth'])->group(function () {
     // Survey responses
     Route::get('/surveys/{survey}/responses', [SurveyController::class, 'getResponses'])->name('surveys.responses');
     
-    // Reports
-    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-    Route::post('/reports/export', [ReportsController::class, 'export'])->name('reports.export');
-    Route::get('/reports/teachers-ajax', [ReportsController::class, 'getTeachersAjax'])->name('reports.teachers-ajax');
-    Route::get('/reports/subjects-ajax', [ReportsController::class, 'getSubjectsAjax'])->name('reports.subjects-ajax');
-    Route::get('/reports/rating-distribution', [ReportsController::class, 'getRatingDistribution'])->name('reports.rating-distribution');
-    Route::get('/reports/filtered-stats', [ReportsController::class, 'getFilteredStats'])->name('reports.filtered-stats');
+    // Reports (Admin only)
+    Route::middleware('admin')->group(function () {
+        Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+        Route::post('/reports/export', [ReportsController::class, 'export'])->name('reports.export');
+        Route::get('/reports/teachers-ajax', [ReportsController::class, 'getTeachersAjax'])->name('reports.teachers-ajax');
+        Route::get('/reports/subjects-ajax', [ReportsController::class, 'getSubjectsAjax'])->name('reports.subjects-ajax');
+        Route::get('/reports/rating-distribution', [ReportsController::class, 'getRatingDistribution'])->name('reports.rating-distribution');
+        Route::get('/reports/filtered-stats', [ReportsController::class, 'getFilteredStats'])->name('reports.filtered-stats');
+    });
     
     // Sentiment Words Management
     Route::prefix('sentiment-words')->name('sentiment-words.')->group(function () {
@@ -142,7 +171,10 @@ Route::middleware(['auth'])->group(function () {
 
 // Fallback route
 Route::fallback(function () {
-    return redirect()->route('survey.index');
+    if (auth('student')->check()) {
+        return redirect()->route('survey.index');
+    }
+    return redirect()->route('student.login');
 });
 
 // Temporary route for adding sample data (remove in production)

@@ -966,13 +966,19 @@
                         <li class="nav-item">
                             <a href="{{ route('teachers.index') }}" class="nav-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
                                 <i class="nav-icon fas fa-chalkboard-teacher" style="color: white; margin-right: 12px;"></i>
-                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Teachers</p>
+                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Faculty</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('subjects.index') }}" class="nav-link {{ request()->routeIs('subjects.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
                                 <i class="nav-icon fas fa-book" style="color: white; margin-right: 12px;"></i>
-                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Subjects</p>
+                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Course Management</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('students.index') }}" class="nav-link {{ request()->routeIs('students.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-user-graduate" style="color: white; margin-right: 12px;"></i>
+                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Student Management</p>
                             </a>
                         </li>
                         <li class="nav-item">
